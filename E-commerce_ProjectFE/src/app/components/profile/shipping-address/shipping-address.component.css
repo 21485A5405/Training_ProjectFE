@@ -1,0 +1,130 @@
+/* Shipping Section */
+.shipping-section {
+    margin-bottom: 40px;
+}
+
+.shipping-section h3 {
+    font-size: 24px;
+    color: #1d2b64;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.shipping-section .address-input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.shipping-section .address-input input {
+    width: calc(100% - 120px);
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #f7f7f7, #ffffff);
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+    color: #333;
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.shipping-section .address-input input::placeholder {
+    color: #aaa;
+}
+
+.shipping-section .address-input input:hover {
+    box-shadow: 0 0 8px rgba(88, 166, 255, 0.2);
+    background: linear-gradient(145deg, #fff, #f0f0f0);
+}
+
+.shipping-section .address-input input:focus {
+    outline: none;
+    background-color: #fff;
+    box-shadow: 0 0 12px rgba(29, 43, 100, 0.3);
+}
+
+/* Add button */
+.shipping-section .address-input button {
+    padding: 12px 20px;
+    font-size: 16px;
+    background: linear-gradient(145deg, #4CAF50, #388E3C); /* Green gradient */
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.shipping-section .address-input button:hover {
+    background: linear-gradient(145deg, #388E3C, #142d15); /* Hover effect */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.shipping-section .address-input button:active {
+    transform: translateY(2px); /* Slight push when clicked */
+}
+
+/* Shipping Address List */
+.shipping-section ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.shipping-section li {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background: linear-gradient(145deg, #f3f4f7, #ffffff);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.shipping-section li span {
+    color: #333;
+    font-size: 16px;
+}
+
+.shipping-section li button {
+    padding: 8px 12px;
+    background: linear-gradient(145deg, #ff512f, #dd2476); /* Red to pink gradient */
+    color: white;
+    font-size: 14px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.shipping-section li button:hover {
+    background: linear-gradient(145deg, #dd2476, #ff512f); /* Hover effect */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.shipping-section li button:active {
+    transform: translateY(2px); /* Slight push when clicked */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .shipping-section .address-input input {
+        width: calc(100% - 100px);
+    }
+    
+    .shipping-section .address-input button {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .shipping-section li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

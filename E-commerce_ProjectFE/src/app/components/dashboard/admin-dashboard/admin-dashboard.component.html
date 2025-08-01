@@ -1,0 +1,65 @@
+<div class="dashboard-container">
+  <!-- Left Sidebar -->
+  <div class="dashboard-left">
+    <ul class="nav-list">
+      <li><button class="nav-link" (click)="goToSalesOverview()">Sales Overview</button></li>
+      <li><button class="nav-link" (click)="goToOrderDetails()">Order Details</button></li>
+      <li><button class="nav-link" (click)="goToProductDetails()">Product Details</button></li>
+      <li><button class="nav-link" (click)="goToUserDetails()">User Details</button></li>
+    </ul>
+  </div>
+
+  <!-- Main Body -->
+  <div class="dashboard-body">
+    <div class="dashboard-header">
+      <h2>Admin Dashboard</h2>
+      
+      <!-- Settings Dropdown -->
+      <div class="icon-wrapper settings-icon-wrapper" (click)="toggleSettingsDropdown()" title="Settings">
+        <i class="fas fa-cog icon-style"></i>
+
+        <div *ngIf="isSettingsDropdownVisible" class="settings-dropdown">
+            <div class="settings-option" (click)="goToProfile()">Profile</div>
+            <div class="settings-option" (click)="goToChangePassword()">Change Password</div>
+            <div class="settings-option" (click)="logout()">
+              {{ isLoggedIn ? 'Logout' : 'Login' }}
+            </div>
+          </div>
+        </div>
+        
+      </div>
+      <!-- Dashboard Summary Section -->
+<div class="dashboard-widgets">
+  <div class="widget-card">
+    <i class="fas fa-rupee-sign widget-icon"></i>
+    <div>
+      <h3>Total Sales</h3>
+      <p>₹2,15,000</p>
+    </div>
+  </div>
+
+  <div class="widget-card">
+    <i class="fas fa-shopping-cart widget-icon"></i>
+    <div>
+      <h3>Total Orders</h3>
+      <p>458</p>
+    </div>
+  </div>
+
+  <div class="widget-card">
+    <i class="fas fa-box-open widget-icon"></i>
+    <div>
+      <h3>Products</h3>
+      <p>128</p>
+    </div>
+  </div>
+
+  <div class="widget-card">
+    <i class="fas fa-users widget-icon"></i>
+    <div>
+      <h3>Users</h3>
+      <p>305</p>
+    </div>
+  </div>
+</div>
+</div>

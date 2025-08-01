@@ -1,0 +1,408 @@
+/* Container and Background */
+.login-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3a1c71, #773339, #385d64);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background-attachment: fixed;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.login-container button {
+  background: linear-gradient(135deg, #7bdcad, #d3d3d3);
+}
+
+/* Toggle Container */
+.toggle-container {
+  margin-bottom: 2rem;
+}
+
+.toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 20px;
+  border-radius: 25px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.toggle-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.toggle-label.active {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.toggle-switch {
+  width: 50px;
+  height: 25px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 25px;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-slider {
+  width: 21px;
+  height: 21px;
+  background: linear-gradient(135deg, #e8d8d8, #f2ffff);
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-slider.admin {
+  transform: translateX(25px);
+  background: linear-gradient(135deg, #e9eef3, #e3eded);
+}
+
+/* Login Form Card */
+.login-form {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(25px);
+  border-radius: 20px;
+  padding: 4rem 2.5rem 3rem 2.5rem;
+  width: 100%;
+  opacity: inherit;
+  max-width: 350px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: visible;
+  height: auto;
+  font-style:normal;
+
+}
+
+/* Custom SweetAlert popup */
+.my-swal-popup {
+  background-color: #fff0f0;
+  border: 2px solid #ff4d4f;
+  border-radius: 16px;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Custom Title */
+.my-swal-title {
+  color: #d9534f;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Custom Icon */
+.my-swal-icon {
+  color: #ff4d4f;
+}
+
+/* Custom Confirm Button */
+.my-swal-confirm {
+  background-color: #ff4d4f !important;
+  color: white !important;
+  font-weight: bold;
+  padding: 8px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+/* User Avatar */
+.login-form::after {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(15px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 24 24'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+  background-size: 40px 40px;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top:50px;
+}
+
+/* Form Title */
+.login-form h2 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  font-weight: 100;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 8px;
+  font-weight: 100;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Input Styling */
+.form-group input {
+  width: 100%;
+  padding: 15px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 100;
+  
+}
+
+.form-group input:focus {
+  border-bottom-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.form-group input:focus::placeholder {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+
+
+/* Login Button */
+.btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
+  
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: 0 15px 40px rgba(79, 172, 254, 0.6);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Error Messages */
+.alert {
+  margin-top: 1rem;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.alert-danger {
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
+  border: 1px solid rgba(255, 107, 107, 0.3);
+  backdrop-filter: blur(10px);
+}
+
+/* Register Link */
+.register-link {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.register-link p {
+  color: rgb(154, 202, 230);
+  margin: 0;
+  font-size: 14px;
+}
+
+.register-link a {
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  font-weight: 600;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.register-link a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+/* Admin Mode Styling */
+.login-form.admin-mode {
+  border: 1px solid rgba(79, 172, 254, 0.3);
+}
+
+.login-form.admin-mode::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23ffffff' viewBox='0 0 24 24'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E");
+  
+  border-color: rgba(105, 117, 128, 0.5);
+  margin-top:50px;
+}
+
+.login-form.admin-mode .btn-primary {
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
+  color: #ffffff;
+  box-shadow: 0 10px 30px rgba(118, 75, 162, 0.4);
+}
+
+.login-form.admin-mode .btn-primary:hover:not(:disabled) {
+  box-shadow: 0 15px 40px rgba(79, 172, 254, 0.6);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .login-container {
+    padding: 15px;
+  }
+  
+  .login-form {
+    padding: 3rem 1.5rem 2rem 1.5rem;
+    margin-top: 1.5rem;
+  }
+  
+  .toggle-wrapper {
+    padding: 6px 16px;
+    gap: 12px;
+  }
+  
+  .toggle-label {
+    font-size: 13px;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-form {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.toggle-container {
+  animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+/* Focus states for accessibility */
+.btn:focus,
+.toggle-switch:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+input:focus {
+  outline: none;
+}
+
+/* Custom scrollbar for any overflow */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.login-form h2{
+  margin-top:35px;
+}
+.input-icon-group {
+  margin-bottom: 20px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: 10px 35px 10px 35px;
+  font-size: 14px;
+}
+
+.input-wrapper .icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 16px;
+}
+
+.input-wrapper .fa-eye,
+.input-wrapper .fa-eye-slash {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #999;
+  font-size: 16px;
+}

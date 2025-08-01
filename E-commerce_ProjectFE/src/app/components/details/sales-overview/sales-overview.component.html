@@ -1,0 +1,54 @@
+<div class="sales-overview-container">
+    <h2 class="section-title">Sales Overview</h2>
+  
+    <div class="overview-grid">
+      <div class="card light-card">
+        <h3>Total Revenue</h3>
+        <p class="metric-value">₹{{ totalRevenue }}</p>
+      </div>
+  
+      <div class="card light-card">
+        <h3>Total Orders</h3>
+        <p class="metric-value">{{ totalOrders }}</p>
+      </div>
+  
+      <div class="card light-card">
+        <h3>Shipped Orders</h3>
+        <p class="metric-value">{{ shippedOrders }}</p>
+      </div>
+  
+      <div class="card light-card">
+        <h3>Cancelled Orders</h3>
+        <p class="metric-value">{{ cancelledOrders }}</p>
+      </div>
+    </div>
+  
+    <!-- Tabbed Charts -->
+    <div class="tabs-module">
+      <div class="tabs">
+        <button [class.active]="activeTab === 'orders'" (click)="activeTab = 'orders'">Orders by Day</button>
+        <button [class.active]="activeTab === 'products'" (click)="activeTab = 'products'">Top Products</button>
+      </div>
+  
+      <div class="tab-content" *ngIf="activeTab === 'orders'">
+        <h3 class="section-subtitle">Orders Per Day</h3>
+        <ul class="chart-list">
+          <li *ngFor="let entry of getSortedOrdersPerDay()">
+            <span class="label">{{ entry[0] }}</span>
+            <span class="value">{{ entry[1] }} orders</span>
+          </li>
+        </ul>
+      </div>
+  
+      <div class="tab-content" *ngIf="activeTab === 'products'">
+        <h3 class="section-subtitle">Top Selling Products</h3>
+        <ul class="chart-list">
+          <li *ngFor="let product of getSortedTopProducts()">
+            <span class="label">Product ID {{ product[0] }}</span>
+            <span class="value">{{ product[1] }} sold</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

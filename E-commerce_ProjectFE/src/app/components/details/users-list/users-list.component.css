@@ -1,0 +1,105 @@
+.users-container {
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+  .users-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #1e1e1e;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    padding: 25px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px;
+  }
+  
+  thead {
+    background-color: #e0f7fa;
+    color: #004d40;
+  }
+  
+  th {
+    padding: 14px 18px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: 2px solid #ccc;
+  }
+  
+  td {
+    padding: 14px 18px;
+    vertical-align: top;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+  }
+  
+  tr:hover {
+    background-color: #f5faff;
+  }
+  
+  /* User Info Styling */
+  .user-info {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .user-name {
+    font-weight: 600;
+    font-size: 15px;
+    color: #000307;
+  }
+  
+  .user-email {
+    font-size: 13px;
+    color: #00a6ff;
+    font-style: italic;
+    margin-top: 3px;
+  }
+  
+  /* User Role Styling */
+  .role-label {
+    color: #2e7d32;
+    font-weight: 600;
+    background-color: #e8f5e9;
+    padding: 5px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    display: inline-block;
+    text-transform: capitalize;
+  }
+  
+  /* Shipping Address Styling */
+  .address-box {
+    background-color: #e3f2fd;
+    border-left: 4px solid #2196f3;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 13.5px;
+    color: #1e1e1e;
+    line-height: 1.4;
+    word-wrap: break-word;
+  }
+  
+  .no-address {
+    font-style: italic;
+    color: #b0b0b0;
+    font-size: 13px;
+  }
+  

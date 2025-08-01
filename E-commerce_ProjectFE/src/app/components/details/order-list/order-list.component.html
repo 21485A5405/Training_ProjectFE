@@ -1,0 +1,89 @@
+<div class="order-management">
+    <h2>All Orders</h2>
+ 
+    <!-- Table Container for styling -->
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User ID</th>
+            <th>Order Date</th>
+            <th>Order Status</th>
+            <th>Payment Status</th>
+            <th>Total Price</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let order of orders" class="fade-in">
+            <td>{{ order.orderId }}</td>
+            <td>{{ order.userId }}</td>
+            <td class="order-date">{{ order.orderDate }}</td>
+ 
+            <!-- Display Order Status with Dynamic Class -->
+            <td>
+              <span [ngClass]="getOrderStatusClass(order.orderStatus)" class="status-badge">
+                {{ order.orderStatus }}
+              </span>
+            </td>
+ 
+            <!-- Display Payment Status with Dynamic Class -->
+            <td>
+              <span [ngClass]="getPaymentStatusClass(order.paymentStatus)" class="status-badge">
+                {{ order.paymentStatus }}
+              </span>
+            </td>
+ 
+            <!-- Display Total Price -->
+            <td class="currency-amount">{{ order.totalPrice | currency }}</td>
+ 
+            <!-- Action Buttons -->
+            <td>
+              <div class="action-buttons">
+                <button
+                  class="btn-update-order"
+                  (click)="toggleOrderStatusDropdown(order.orderId)"
+                  [disabled]="order.orderStatus === 'DELIVERED'">
+                  {{ order.orderStatus === 'DELIVERED' ? 'Delivered' : 'Edit Order' }}
+                </button>
+ 
+                <!-- Order Status Dropdown -->
+                <div *ngIf="showOrderStatusDropdown[order.orderId]" class="dropdown-container fade-in">
+                  <select [(ngModel)]="selectedOrderStatus[order.orderId]" [disabled]="order.orderStatus === 'DELIVERED'">
+                    <option *ngFor="let status of orderStatuses" [value]="status">{{ status }}</option>
+                  </select>
+                  <button
+                    class="btn-apply-order"
+                    (click)="updateOrderStatus(order.orderId, selectedOrderStatus[order.orderId])"
+                    [disabled]="order.orderStatus === 'DELIVERED'">
+                    {{ order.orderStatus === 'DELIVERED' ? 'Delivered' : 'Apply Changes' }}
+                  </button>
+                </div>
+ 
+                <button
+                  class="btn-update-payment"
+                  (click)="togglePaymentStatusDropdown(order.orderId)"
+                  [disabled]="order.paymentStatus === 'PAID'">
+                  {{ order.paymentStatus === 'PAID' ? 'Paid' : 'Edit Payment' }}
+                </button>
+ 
+                <!-- Payment Status Dropdown -->
+                <div *ngIf="showPaymentStatusDropdown[order.orderId]" class="dropdown-container fade-in">
+                  <select [(ngModel)]="selectedPaymentStatus[order.orderId]" [disabled]="order.paymentStatus === 'PAID'">
+                    <option *ngFor="let status of paymentStatuses" [value]="status">{{ status }}</option>
+                  </select>
+                  <button
+                    class="btn-apply-payment"
+                    (click)="updatePaymentStatus(order.orderId, selectedPaymentStatus[order.orderId])"
+                    [disabled]="order.paymentStatus === 'PAID'">
+                    {{ order.paymentStatus === 'PAID' ? 'Paid' : 'Apply Changes' }}
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

@@ -1,0 +1,53 @@
+<div class="container">
+  <div *ngIf="!loading && orders.length > 0; else noOrders">
+    <div *ngFor="let order of orders" class="order-card">
+      <div class="order-card-header">
+        <p class="order-id">Order #{{ order.orderId }}</p>
+        <div class="status-container">
+          <span class="status" [ngClass]="order.orderStatus.toLowerCase()">{{ order.orderStatus }}</span>
+        </div>
+      </div>
+
+      <div class="order-card-body">
+        <div class="order-detail">
+          <div class="detail-row">
+            <span class="detail-label">Order Date:</span>
+            <span class="detail-value">{{ order.orderDate | date: 'medium' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Total Price:</span>
+            <span class="detail-value">{{ order.totalPrice | currency }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Shipping Address:</span>
+            <span class="detail-value">{{ order.shippingAddress }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Payment Status:</span>
+            <span class="detail-value payment-status" [ngClass]="order.paymentStatus.toLowerCase()">{{ order.paymentStatus }}</span>
+          </div>
+        </div>
+
+        <div class="order-items">
+          <div class="order-item">
+            <span class="item-label">Product ID:</span>
+            <span class="item-value">{{ order.productId }}</span>
+          </div>
+          <div class="order-item">
+            <span class="item-label">Quantity:</span>
+            <span class="item-value">{{ order.productQuantity }}</span>
+          </div>
+          <button (click)="cancelOrder(order.orderId, order.productId, order.productQuantity)" class="cancel-btn" [disabled]="order.orderStatus === 'SHIPPED'">
+            Cancel Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noOrders>
+    <div class="no-orders">
+      <p>No orders found for this user.</p>
+    </div>
+  </ng-template>
+</div>

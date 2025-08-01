@@ -1,0 +1,91 @@
+/* Styling for the dialog container */
+::ng-deep .mat-dialog-container {
+  background-color: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the dialog title */
+::ng-deep mat-dialog-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #3f51b5;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Styling for the mat-form-field */
+::ng-deep mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Styling for the form field input */
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Input focus effect */
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex:focus-within {
+  border-color: #3f51b5;
+  box-shadow: 0 0 5px rgba(63, 81, 181, 0.3);
+}
+
+/* Styling for the label */
+::ng-deep .mat-form-field-label {
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Styling for the input field */
+::ng-deep input.mat-input-element {
+  font-size: 1rem;
+  padding: 12px;
+  color: #333;
+  border-radius: 6px;
+}
+
+/* Styling for the dialog actions (buttons) */
+::ng-deep .mat-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px; /* Increased gap between the buttons */
+}
+
+/* Styling for the Cancel button */
+::ng-deep .cancel-btn {
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 1rem;
+  padding: 8px 16px;
+  margin-right: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+::ng-deep .cancel-btn:hover {
+  background-color: #b0bec5;
+}
+
+/* Styling for the Update button */
+::ng-deep .update-btn {
+  background-color: #04295d;
+  color: #fff;
+  font-size: 1rem;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+::ng-deep .update-btn:disabled {
+  background-color: #b0bec5;
+}
+
+::ng-deep .update-btn:hover {
+  background-color: #015b15;
+}

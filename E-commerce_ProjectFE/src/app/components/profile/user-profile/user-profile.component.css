@@ -1,0 +1,442 @@
+/* Profile Container */
+.profile-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #f8fafc;
+  min-height: 100vh;
+  position: relative;
+}
+
+.profile-container h2 {
+  text-align: center;
+  color: #1e293b;
+  font-size: 2.25rem;
+  margin-bottom: 40px;
+  font-weight: 700;
+  position: relative;
+}
+
+.profile-container h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #06b6d4);
+  border-radius: 2px;
+}
+
+/* Dashboard Button */
+.dashboard-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #7d7197 0%, #827598 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(139, 92, 246, 0.2);
+}
+
+.dashboard-btn::before {
+  content: '📊';
+  margin-right: 8px;
+}
+
+.dashboard-btn:hover {
+  background: linear-gradient(135deg, #67597d 0%, #6d28d9 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+/* Main Profile Card */
+.profile-grid {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+/* User Info Section */
+.user-info {
+  background: linear-gradient(135deg, #8c9db9 0%, #8390b3 100%);
+  color: white;
+  padding: 32px;
+  position: relative;
+}
+
+.user-info::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: translate(40px, -40px);
+}
+
+.user-info h3 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-info h3::before {
+  content: '👤';
+  font-size: 1.25rem;
+}
+
+.user-info p {
+  margin: 16px 0;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-info p strong {
+  min-width: 80px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Special Role Styling */
+.user-info p:nth-child(5) {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 20px 0;
+  font-weight: 600;
+  font-size: 1.15rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.user-info p:nth-child(5)::before {
+  margin-right: 8px;
+}
+
+.user-info p:nth-child(5)::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+}
+
+/* Address Section */
+.address-section {
+  padding: 32px;
+  background: #f1f5f9;
+}
+
+.address-section h3 {
+  color: #1e293b;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.address-section h3::before {
+  content: '📍';
+  font-size: 1.1rem;
+}
+
+.address-card {
+  background: white;
+  padding: 20px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  border-left: 4px solid #10b981;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.address-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left-color: #059669;
+}
+
+.address-card p {
+  margin: 8px 0;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.address-card p strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.no-address {
+  background: white;
+  color: #6b7280;
+  padding: 32px;
+  text-align: center;
+  border-radius: 12px;
+  border: 2px dashed #d1d5db;
+  font-size: 1rem;
+}
+
+.no-address::before {
+  content: '📦';
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+/* Payment Section */
+.payment-section {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 32px;
+  margin-bottom: 24px;
+}
+
+.payment-section h3 {
+  color: #1e293b;
+  font-size: 1.25rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.payment-section h3::before {
+  content: '💳';
+  font-size: 1.1rem;
+}
+
+.payment-card {
+  background: linear-gradient(135deg, #a999cc 0%, #8b7ca4 100%);
+  color: white;
+  padding: 20px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(139, 92, 246, 0.3);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.payment-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+}
+
+.payment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+}
+
+.payment-card p {
+  margin: 8px 0;
+  font-size: 0.95rem;
+  position: relative;
+  z-index: 1;
+}
+
+.payment-card strong {
+  font-weight: 600;
+}
+
+.no-payment {
+  background: #f9fafb;
+  color: #6b7280;
+  padding: 32px;
+  text-align: center;
+  border-radius: 12px;
+  border: 2px dashed #d1d5db;
+  font-size: 1rem;
+}
+
+.no-payment::before {
+  content: '💰';
+  display: block;
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+/* Add Payment Form */
+.payment-section > div:last-child {
+  background: #f0f9ff;
+  padding: 24px;
+  border-radius: 12px;
+  margin-top: 24px;
+  border: 1px solid #e0f2fe;
+}
+
+.payment-section > div:last-child h3 {
+  color: #0369a1;
+  margin-bottom: 16px;
+}
+
+.payment-section > div:last-child h3::before {
+  content: '➕';
+}
+
+.payment-section label {
+  display: block;
+  margin-top: 16px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.payment-section input[type="text"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  background: white;
+}
+
+.payment-section input[type="text"]:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Buttons */
+button[mat-button] {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  margin-top: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+button[mat-button]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+button[mat-button]:hover::before {
+  left: 100%;
+}
+
+button[mat-button]:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Edit buttons for addresses */
+.address-card button[mat-button] {
+  background: linear-gradient(135deg, #97a8a2 0%, #7ca89a 100%);
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  margin-top: 12px;
+}
+
+.address-card button[mat-button]:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.user-info button[mat-button] {
+  background: rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(42, 9, 9, 0.3);
+  backdrop-filter: blur(10px);
+  margin-top: 20px;
+}
+
+.user-info button[mat-button]:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 16px;
+  }
+  
+  .profile-container h2 {
+    font-size: 1.875rem;
+    margin-bottom: 32px;
+  }
+  
+  .user-info, .address-section, .payment-section {
+    padding: 24px;
+  }
+  
+  .payment-section > div:last-child {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 12px;
+  }
+  
+  .profile-container h2 {
+    font-size: 1.75rem;
+    margin-bottom: 24px;
+  }
+  
+  .user-info, .address-section, .payment-section {
+    padding: 20px;
+  }
+  
+  .user-info p, .address-card p, .payment-card p {
+    font-size: 0.9rem;
+  }
+  
+  .payment-section > div:last-child {
+    padding: 16px;
+  }
+}

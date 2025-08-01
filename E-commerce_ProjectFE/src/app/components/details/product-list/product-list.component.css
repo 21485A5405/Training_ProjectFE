@@ -1,0 +1,169 @@
+/* Container and product card styling */
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 20px;
+  }
+  
+  .product-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .product-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .product-info h3 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+  }
+  
+  .product-id,
+  .product-description,
+  .product-category,
+  .product-price,
+  .product-quantity {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+  }
+  
+  .product-category span {
+    font-weight: 600;
+  }
+  
+  /* Button styling */
+  .product-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  
+  .btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .update-btn {
+    background-color: #0275d8;
+    color: #fff;
+  }
+  
+  .update-btn:hover {
+    background-color: #025aa5;
+  }
+  
+  .add-btn {
+    background-color: #5cb85c;
+    color: #fff;
+  }
+  
+  .add-btn:hover {
+    background-color: #449d44;
+  }
+  
+  .delete-btn {
+    background-color: #d9534f;
+    color: #fff;
+  }
+  
+  .delete-btn:hover {
+    background-color: #c9302c;
+  }
+  
+  /* Modal styling */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 30px;
+    width: 400px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .modal-content h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #333;
+  }
+  
+  .modal-content form label {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .modal-content form input,
+  .modal-content form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  
+  .modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .save-btn {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .save-btn:hover {
+    background-color: #218838;
+  }
+  
+  .cancel-btn {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .cancel-btn:hover {
+    background-color: #5a6268;
+  }
+  
+  .btn add-btn {
+    text-align: center;
+  }
+  /* Animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  

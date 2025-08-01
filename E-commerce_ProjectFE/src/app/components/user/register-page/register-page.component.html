@@ -1,0 +1,43 @@
+<div class="login-container">
+  <div class="Register-form">
+    <h2>Register</h2>
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+      <!-- Username Field -->
+      <div class="form-group">
+        <label for="username">UserName</label>
+        <input type="text" id="username" placeholder = "enter username" name = "userName" [(ngModel)]="userName" required autocomplete="username" />
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="enter email" name="userEmail" [(ngModel)]="userEmail" required autocomplete="email" />
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="enter password" name="userPassword" [(ngModel)]="userPassword" required
+          autocomplete="new-password" />
+      </div>
+
+      <!-- Register Button -->
+      <button type="submit" class="btn btn-primary" [disabled]="!registerForm.form.valid">
+        Register
+      </button>
+      <!-- ✅ Error Message Block -->
+    <div *ngIf="registerErrorMessage" class="error-message">
+      {{ registerErrorMessage }}
+    </div>
+    </form>
+
+    
+  </div>
+
+  <!-- ✅ Success Dialog Component -->
+  <app-register-success-dialog
+    *ngIf="showDialog"
+    [message]="registerSuccessMessage"
+    (close)="closeSuccessModal()">
+  </app-register-success-dialog>
+</div>

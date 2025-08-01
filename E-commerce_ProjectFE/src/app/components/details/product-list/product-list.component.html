@@ -1,0 +1,88 @@
+<div class="top-bar">
+  <button class="btn add-btn" (click)="openAddModal()">Add Product</button>
+</div>
+
+<div class="product-container">
+  
+    <div *ngFor="let product of products" class="product-card">
+      <div class="product-info">
+        <h4 class="product-id">ID: {{ product.productId }}</h4>
+        <h3 class="product-name">{{ product.productName }}</h3>
+        <p class="product-description">{{ product.productDescription }}</p>
+        <p class="product-category">
+          Category: <span>{{ product.productCategory }}</span>
+        </p>
+        <p class="product-price">₹{{ product.productPrice }}</p>
+        <p class="product-quantity">Available: {{ product.productQuantity }}</p>
+      </div>
+  
+      <div class="product-actions">
+        <button class="btn update-btn" (click)="openUpdateModal(product)">Update</button>
+        <button class="btn delete-btn" (click)="removeProduct(product.productId)">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Product Modal -->
+<div class="modal" *ngIf="showAddModal">
+  <div class="modal-content">
+    <h2>Add New Product</h2>
+    <form (ngSubmit)="submitNewProduct()">
+      <label>Name:</label>
+      <input type="text" [(ngModel)]="newProduct.productName" name="newName" required />
+
+      <label>Description:</label>
+      <textarea [(ngModel)]="newProduct.productDescription" name="newDesc"></textarea>
+
+      <label>Price:</label>
+      <input type="number" [(ngModel)]="newProduct.productPrice" name="newPrice" required />
+
+      <label>Category:</label>
+      <input type="text" [(ngModel)]="newProduct.productCategory" name="newCategory" required />
+
+      <label>Quantity:</label>
+      <input type="number" [(ngModel)]="newProduct.productQuantity" name="newQuantity" required />
+
+      <label>Image URL:</label>
+      <input type="text" [(ngModel)]="newProduct.productImageURL" name="newImage" required />
+
+      <div class="modal-actions">
+        <button type="submit" class="btn save-btn">Add</button>
+        <button type="button" class="btn cancel-btn" (click)="closeAddModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+  
+  <!-- Modal -->
+  <div class="modal" *ngIf="showModal">
+    <div class="modal-content">
+      <h2>Update Product</h2>
+      <form (ngSubmit)="submitUpdate()">
+        <label>Name:</label>
+        <input type="text" [(ngModel)]="selectedProduct.productName" name="name" required />
+  
+        <label>Description:</label>
+        <textarea [(ngModel)]="selectedProduct.productDescription" name="desc"></textarea>
+  
+        <label>Price:</label>
+        <input type="number" [(ngModel)]="selectedProduct.productPrice" name="price" required />
+  
+        <label>Category:</label>
+        <input type="text" [(ngModel)]="selectedProduct.productCategory" name="category" required />
+  
+        <label>Quantity:</label>
+        <input type="number" [(ngModel)]="selectedProduct.productQuantity" name="quantity" required />
+  
+        <label>Image URL:</label>
+        <input type="text" [(ngModel)]="selectedProduct.productImageURL" name="image" required />
+  
+        <div class="modal-actions">
+          <button type="submit" class="btn save-btn">Save</button>
+          <button type="button" class="btn cancel-btn" (click)="closeModal()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

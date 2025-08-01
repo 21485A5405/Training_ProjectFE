@@ -1,0 +1,14 @@
+<div class="shipping-section">
+    <h3>Shipping Addresses</h3>
+    <div class="address-input">
+      <input [(ngModel)]="newAddress" placeholder="Enter new address" />
+      <button (click)="addAddress()">Add</button>
+    </div>
+    <ul>
+      <li *ngFor="let address of shippingAddresses; index as i">
+        {{ address }}
+        <button (click)="removeAddress(i)">Remove</button>
+      </li>
+    </ul>
+  </div>
+  

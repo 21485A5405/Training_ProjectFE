@@ -1,0 +1,83 @@
+<div class="cart-container">
+  <div class="header">
+    <h2>Your Shopping Cart 🛒</h2>
+    <!-- My Orders Button -->
+    <button class="my-orders-btn" (click)="goToMyOrders()">My Orders</button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <p>Loading cart items...</p>
+  </div>
+
+  <!-- Cart Items -->
+  <div *ngIf="!isLoading">
+    <div *ngIf="cartItems && cartItems.length > 0; else emptyCart">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <div class="cart-image">
+          <img [src]="item.product.productImageURL" alt="Product Image" />
+        </div>
+        <div class="cart-details">
+          <h3>{{ item.product.productName }}</h3>
+          <p class="description">{{ item.product.productDescription }}</p>
+          <!-- Display CartItemId -->
+          <p class="cart-item-id">Cart ID: {{ item.cartItemId }}</p> <!-- CartItemId Display -->
+        </div>
+
+        <div class="quantity-price-section">
+          <p class="price">₹{{ item.product.productPrice }}</p>
+          <div class="quantity-controls">
+            <button class="qty-btn" (click)="decreaseQuantity(item)">−</button>
+            <span class="qty-text">{{ item.productQuantity }}</span>
+            <button class="qty-btn" (click)="increaseQuantity(item)">+</button>&nbsp;
+            <!-- Cart Item Delete Button with Trash Icon -->
+            <button (click)="deleteCartItem(item.cartItemId)" class="delete-btn">
+              <i class="fas fa-trash"></i> <!-- Font Awesome Trash Icon -->
+            </button>
+          </div>
+          <p class="total">Total: ₹{{ item.totalPrice }}</p>
+
+          <label>
+            <input type="checkbox" (change)="toggleSelection(item, $event)">
+            Select this item
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty Cart -->
+  <ng-template #emptyCart>
+    <p class="empty-cart-message">Your cart is empty 😕</p>
+  </ng-template>
+
+  <!-- Address Selection -->
+  <div class="form-group mt-3" *ngIf="selectedItems.length > 0">
+    <label for="addressSelect">Select Address</label>
+    <select id="addressSelect" class="form-control" [(ngModel)]="selectedAddressId">
+      <option value="">-- Select an address --</option>
+      <option *ngFor="let address of userAddresses" [value]="address.addressId">
+        {{ address.fullAddress }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Payment Method Dropdown -->
+  <div *ngIf="selectedAddressId" class="payment-method-section">
+    <label for="paymentMethod">Select Payment Method : </label>
+    <select id="paymentMethod" [(ngModel)]="selectedPaymentMethod">
+      <option value="" disabled>Select a method</option>
+      <option *ngFor="let method of paymentMethods" [ngValue]="method">
+        {{ method.type }} - {{ method.value }}
+      </option>
+    </select>
+  </div>
+
+  <!-- Place Order Button -->
+  <div *ngIf="selectedItems.length > 0">
+    <button (click)="placeOrder()" class="place-order-btn"
+      [disabled]="!selectedPaymentMethod || selectedItems.length === 0">
+      Place Order
+    </button>
+  </div>
+</div>

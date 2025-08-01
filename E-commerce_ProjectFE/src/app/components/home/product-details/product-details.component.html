@@ -1,0 +1,47 @@
+<div class="filter-section">
+  <label>Category:</label>
+  <select [(ngModel)]="selectedCategory">
+    <option value="">All</option>
+    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+  </select>
+
+  <label>Min Price:</label>
+  <input type="number" [(ngModel)]="minPrice" min="0">
+
+  <label>Max Price:</label>
+  <input type="number" [(ngModel)]="maxPrice" min="0">
+
+  <button (click)="applyFilters()">Submit</button>
+</div>
+
+<div *ngIf="isLoading" class="loading">Loading products...</div>
+
+<div *ngIf="!isLoading && filteredProducts.length === 0" class="no-products">
+  No products found.
+</div>
+
+<div class="product-grid" *ngIf="!isLoading && filteredProducts.length > 0">
+  <div class="product-card" *ngFor="let product of filteredProducts">
+    <img [src]="product.productImageURL" alt="{{ product.productName }}" />
+    <h4>{{ product.productName }}</h4>
+    <p>{{ product.productDescription }}</p>
+    <p>₹{{ product.productPrice }}</p>
+
+    <!-- Product Availability Status -->
+    <p *ngIf="product.productQuantity > 0" style="color: green; font-weight: bold; margin: 5px 0;">
+       Available
+    </p>
+    <p *ngIf="product.productQuantity > 0 && product.productQuantity <= 3" style="color: orange; font-weight: bold; margin: 5px 0;">
+      Hurry up! Only {{ product.productQuantity }} left
+    </p>
+    <!-- Show "Out of Stock" if quantity is 0 -->
+    <div *ngIf="product.productQuantity === 0">
+      <button disabled style="background-color: #ccc; color: #555; cursor: not-allowed;">Out of Stock</button>
+    </div>
+
+    <!-- Otherwise show Add to Cart -->
+    <div *ngIf="product.productQuantity > 0">
+      <button (click)="addToCart(product)">Add to Cart</button>
+    </div>
+  </div>
+</div>

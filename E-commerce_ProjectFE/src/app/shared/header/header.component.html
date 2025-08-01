@@ -1,0 +1,41 @@
+<div class="header-container">
+  <h2 class="header-title" (click)="goHome()">Plan2Shop</h2>
+
+  <!-- Search -->
+  <div class="search-box">
+    <input type="text" placeholder="Search products..." [(ngModel)]="searchQuery" />
+    <button (click)="onSearch()">Search</button>
+  </div>
+
+  <!-- Icons Row -->
+  <div class="icon-section">
+    <!-- Home Icon -->
+    <div class="icon-wrapper" (click)="goHome()" title="Home">
+      <i class="fas fa-house icon-style"></i>
+    </div>
+
+    <!-- Profile Icon with Dropdown -->
+    <div class="icon-dropdown-wrapper" (mouseenter)="isSettingsDropdownVisible = true"
+      (mouseleave)="isSettingsDropdownVisible = false" title="Profile">
+
+      <!-- Profile Icon -->
+      <div class="icon-wrapper">
+        <i class="fas fa-user icon-style"></i>
+      </div>
+
+      <!-- Dropdown Options -->
+      <div *ngIf="isSettingsDropdownVisible" class="settings-dropdown">
+        <div class="settings-option" (click)="goToProfile()">Profile</div>
+        <div class="settings-option" (click)="logout()">
+          {{ isLoggedIn ? 'Logout' : 'Login' }}
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Cart Icon -->
+    <div class="icon-wrapper" (click)="goToCart()" title="Cart">
+      <i class="fas fa-shopping-cart icon-style"></i>
+    </div>
+  </div>
+</div>
