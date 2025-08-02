@@ -15,10 +15,8 @@
 .dashboard-header {
   color: #5d6a80;
   padding: 24px 32px;
-  color: white;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .header-left {
@@ -28,9 +26,8 @@
 }
 
 .dashboard-btn {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: #384251;
+  color :rgb(185, 196, 208);
   padding: 10px 20px;
   border-radius: 6px;
   cursor: pointer;
@@ -43,25 +40,34 @@
 }
 
 .dashboard-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  color:rgba(185, 209, 221, 0.749); ;
   transform: translateY(-1px);
 }
 
 .dashboard-header h2 {
   font-size: 24px;
+  margin-left: 280px;
   font-weight: 600;
-  margin: 0;
+}
+
+.header-right {
+  display: flex;
+  background-color: #384251;
+  color :black;
+  align-items: center;
+  padding: 2px 2px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-}
-
 .settings-icon-wrapper {
+  color: rgba(255, 255, 255, 0.2);;
   position: relative;
   cursor: pointer;
   padding: 8px;
