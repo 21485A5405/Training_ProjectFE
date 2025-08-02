@@ -46,6 +46,6 @@ export class OrderService {
       Authorization: `${token}`, // Pass the token in the header
     });
 
-    return this.http.delete<any>(`${this.apiUrl}/cancel-order/${orderId}`, { headers });
+    return this.http.post<any>(`${this.apiUrl}/cancel-order/${orderId}`,null, { headers });
   }
 }

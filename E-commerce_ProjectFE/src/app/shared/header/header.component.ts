@@ -78,6 +78,22 @@ export class HeaderComponent {
     }
     this.router.navigate(['/user-profile']);
   }
+  goToOrders(): void {
+    if (!this.isLoggedIn) {
+      Swal.fire({
+        title: 'Login Required!',
+        text: 'Please login to view your Orders.',
+        icon: 'warning',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.router.navigate(['/login']);
+        }
+      });
+      return;
+    }
+    this.router.navigate(['/orders-page']);
+  }
 
   logout(): void {
     if (!this.isLoggedIn) {

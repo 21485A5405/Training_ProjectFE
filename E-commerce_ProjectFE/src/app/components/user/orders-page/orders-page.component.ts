@@ -46,6 +46,15 @@ export class OrderPageComponent implements OnInit, OnDestroy {
       this.routerSub.unsubscribe();
     }
   }
+  expandedOrderId: number | null = null;
+
+  toggleOrderDetails(orderId: number): void {
+    this.expandedOrderId = this.expandedOrderId === orderId ? null : orderId;
+  }
+  
+  getProductNames(order: any): string {
+    return order.products.map((p: any) => p.productName).join(', ');
+  }
 
   // Method to get order details by user ID
   getOrderDetails() {
@@ -89,7 +98,7 @@ export class OrderPageComponent implements OnInit, OnDestroy {
     return sessionStorage.getItem('userId');
   }
 
-  cancelOrder(orderId: number, productId: number, quantity: number) {
+  cancelOrder(orderId: number) {
     // SweetAlert2 Confirmation
     Swal.fire({
       title: 'Are you sure?',

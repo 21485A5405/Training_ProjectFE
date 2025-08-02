@@ -1,77 +1,131 @@
-
 <div class="profile-container">
   <div class="dashboard-header">
-    <h2>User Profile</h2>
-  
-    <!-- Settings Dropdown -->
-    <div class="icon-wrapper settings-icon-wrapper" title="Settings">
-      <i class="fas fa-cog icon-style" (click)="toggleDropdown()"></i>
-  
-      <div *ngIf="showDropdown" class="settings-dropdown">
-        <div class="settings-option" (click)="navigateToChangePassword()">Change Password</div>
-      </div>
+    <div class="header-left">
+      <!-- Conditionally show button - properly positioned -->
+      <button *ngIf="userDetails.userRole === 'ADMIN'" (click)="goToDashboard()" class="dashboard-btn">
+        <i class="fas fa-tachometer-alt"></i> Go to Dashboard
+      </button>
+      <h2><i class="fas fa-user-circle"></i> User Profile</h2>
     </div>
-  </div>
- 
-  <div class="profile-grid">
-    <!-- Left: User Info -->
-    <div class="user-info" *ngIf="userDetails">
-      <h3>Basic Information</h3>
-      <p><strong>User ID : </strong> {{ userDetails.userId }}</p>
-      <p><strong>Name : </strong> {{ userDetails.userName }}</p>
-      <p><strong>Email : </strong> {{ userDetails.userEmail }}</p>
-      <p><strong>Role : </strong>{{ userDetails.userRole }}</p>
-      <button mat-button (click)="updateUserDetails()">Update Profile</button>
-    </div>
-    <!-- Right: Address Cards -->
-    <div class="address-section">
-      <h3>Shipping Addresses</h3>
-      <div *ngFor="let address of shippingAddresses" class="address-card">
-        <p><strong>Address ID:</strong> {{ address.addressId }}</p>
-        <p><strong>Address:</strong> {{ address.fullAddress }}</p>
-        <button mat-button (click)="editAddress(address.addressId)">Edit</button>
-      </div>
-      <div *ngIf="shippingAddresses.length === 0" class="no-address">
-        No shipping addresses found.
+    
+    <div class="header-right">
+      <!-- Settings Dropdown -->
+      <div class="icon-wrapper settings-icon-wrapper" title="Settings">
+        <i class="fas fa-cog icon-style" (click)="toggleDropdown()"></i>
+        <div *ngIf="showDropdown" class="settings-dropdown">
+          <div class="settings-option" (click)="navigateToChangePassword()">
+            <i class="fas fa-key"></i> Change Password
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- Add New Address -->
-  <h3>Add New Shipping Address</h3>
-  <div class="add-address-form">
-    <label for="newAddress">Address</label>
-    <input
-      type="text"
-      id="newAddress"
-      [(ngModel)]="newAddress"
-      placeholder="e.g., Vijayawada, Gandhi Nagar"
-    />
-  
-    <button mat-button (click)="addNewAddress()">Add Address</button>
-  </div>
-  
-  <!-- Payment Methods Section -->
-  <div class="payment-section">
-    <h3>User Payment Methods</h3>
-    <div *ngFor="let payment of userPayments" class="payment-card">
-      <p><strong>Payment Method:</strong> {{ payment.paymentMethod }}</p>
-      <p><strong>Account Details:</strong> {{ payment.accountDetails }}</p>
+  <div class="profile-content">
+    <div class="profile-grid">
+      <!-- Left: User Info -->
+      <div class="user-info" *ngIf="userDetails">
+        <h3 class="section-title">
+          <i class="fas fa-info-circle"></i>
+          Basic Information
+        </h3>
+        <div class="info-item">
+          <span class="info-label">User ID:</span>
+          <span class="info-value">{{ userDetails.userId }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Name:</span>
+          <span class="info-value">{{ userDetails.userName }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Email:</span>
+          <span class="info-value">{{ userDetails.userEmail }}</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Role:</span>
+          <span class="info-value">{{ userDetails.userRole }}</span>
+        </div>
+        <button mat-button class="btn-primary" (click)="updateUserDetails()">
+          <i class="fas fa-edit"></i> Update Profile
+        </button>
+      </div>
+
+      <!-- Right: Address Cards -->
+      <div class="address-section">
+        <h3 class="section-title">
+          <i class="fas fa-map-marker-alt"></i>
+          Shipping Addresses
+        </h3>
+        <div *ngFor="let address of shippingAddresses" class="address-card">
+          <div class="card-title">Address ID: {{ address.addressId }}</div>
+          <div class="card-content">{{ address.fullAddress }}</div>
+          <button mat-button class="btn-secondary" (click)="editAddress(address.addressId)">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+        </div>
+        <div *ngIf="shippingAddresses.length === 0" class="no-items">
+          <i class="fas fa-map-marker-alt"></i>
+          <p>No shipping addresses found.</p>
+        </div>
+      </div>
     </div>
-    <div *ngIf="userPayments.length === 0" class="no-payment">
-      No payment methods found.
+
+    <!-- Add New Address -->
+    <div class="form-section">
+      <h3 class="section-title">
+        <i class="fas fa-plus-circle"></i>
+        Add New Shipping Address
+      </h3>
+      <div class="form-group">
+        <label class="form-label" for="newAddress">Address</label>
+        <input
+          type="text"
+          id="newAddress"
+          class="form-input"
+          [(ngModel)]="newAddress"
+          placeholder="e.g., Vijayawada, Gandhi Nagar"
+        />
+      </div>
+      <button mat-button class="btn-primary" (click)="addNewAddress()">
+        <i class="fas fa-plus"></i> Add Address
+      </button>
     </div>
 
-    <!-- Add New Payment Form -->
-    <h3>Add New Payment Method</h3>
-    <div>
-      <label for="paymentMethod">Payment Method</label>
-      <input type="text" id="paymentMethod" [(ngModel)]="newPaymentMethod" placeholder="e.g., DEBIT_CARD" />
+    <!-- Payment Methods Section -->
+    <div class="payment-section">
+      <h3 class="section-title">
+        <i class="fas fa-credit-card"></i>
+        User Payment Methods
+      </h3>
+      
+      <div *ngFor="let payment of userPayments" class="payment-card">
+        <div class="card-title">Payment Method: {{ payment.paymentMethod }}</div>
+        <div class="card-content">Account Details: {{ payment.accountDetails }}</div>
+      </div>
+      
+      <div *ngIf="userPayments.length === 0" class="no-items">
+        <i class="fas fa-credit-card"></i>
+        <p>No payment methods found.</p>
+      </div>
 
-      <label for="accountDetails">Account Details</label>
-      <input type="text" id="accountDetails" [(ngModel)]="newAccountDetails" placeholder="e.g., XXXX-XXXX-XXXX-0987" />
-
-      <button mat-button (click)="addPaymentMethod()">Add Payment</button>
+      <!-- Add New Payment Form -->
+      <h3 class="section-title add-payment-title">
+        <i class="fas fa-plus-circle"></i>
+        Add New Payment Method
+      </h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="paymentMethod">Payment Method</label>
+          <input type="text" id="paymentMethod" class="form-input" [(ngModel)]="newPaymentMethod" placeholder="e.g., DEBIT_CARD" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="accountDetails">Account Details</label>
+          <input type="text" id="accountDetails" class="form-input" [(ngModel)]="newAccountDetails" placeholder="e.g., XXXX-XXXX-XXXX-0987" />
+        </div>
+      </div>
+      <button mat-button class="btn-primary" (click)="addPaymentMethod()">
+        <i class="fas fa-plus"></i> Add Payment
+      </button>
     </div>
   </div>
 </div>

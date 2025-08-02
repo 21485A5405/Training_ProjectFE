@@ -1,53 +1,121 @@
-<div class="container">
+<!-- ordercomponent.html -->
+<div class="orders-container">
   <div *ngIf="!loading && orders.length > 0; else noOrders">
-    <div *ngFor="let order of orders" class="order-card">
-      <div class="order-card-header">
-        <p class="order-id">Order #{{ order.orderId }}</p>
-        <div class="status-container">
-          <span class="status" [ngClass]="order.orderStatus.toLowerCase()">{{ order.orderStatus }}</span>
-        </div>
+    <!-- Orders Table Header -->
+    <div class="orders-table">
+      <div class="table-header">
+        <div class="header-cell order-id-col">Order ID</div>
+        <div class="header-cell customer-col">Customer</div>
+        <div class="header-cell location-col">Location</div>
+        <div class="header-cell payment-status-col">Payment Status</div>
+        <div class="header-cell date-col">Date</div>
+        <div class="header-cell order-status-col">Order Status</div>
+        <div class="header-cell total-col">Total</div>
+        <div class="header-cell action-col">Action</div>
       </div>
 
-      <div class="order-card-body">
-        <div class="order-detail">
-          <div class="detail-row">
-            <span class="detail-label">Order Date:</span>
-            <span class="detail-value">{{ order.orderDate | date: 'medium' }}</span>
+      <!-- Orders Table Body -->
+      <div class="table-body">
+        <ng-container *ngFor="let order of orders">
+          <!-- Order Summary Row -->
+          <div class="table-row">
+            <!-- Order ID with Product Count -->
+            <div class="table-cell order-id-col">
+              <div class="order-id-container">
+                <div class="order-info">
+                  <div class="order-number">Order ID : {{ order.orderId }}</div>
+                  <div class="item-count" [title]="getProductNames(order)">
+                    {{ order.products.length }} items
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Customer -->
+            <div class="table-cell customer-col">
+              <span class="customer-name">User {{ order.userId }}</span>
+            </div>
+            <!-- Location -->
+            <div class="table-cell location-col">
+              <div class="location-info">
+                <span class="location-text">{{ order.shippingAddress }}</span>
+                <i class="location-icon">📍</i>
+              </div>
+            </div>
+            <!-- Payment Status -->
+            <div class="table-cell payment-status-col">
+              <span class="status-badge payment-status" [ngClass]="order.paymentStatus.toLowerCase()">
+                {{ order.paymentStatus }}
+              </span>
+            </div>
+            <!-- Date -->
+            <div class="table-cell date-col">
+              <span class="order-date">{{ order.orderDate | date: 'dd MMM, yyyy' }}</span>
+            </div>
+            <!-- Order Status -->
+            <div class="table-cell order-status-col">
+              <span class="status-badge order-status" [ngClass]="order.orderStatus.toLowerCase()">
+                <span class="status-dot"></span>
+                {{ order.orderStatus }}
+              </span>
+            </div>
+            <!-- Total -->
+            <div class="table-cell total-col">
+              <span class="total-amount">{{ order.totalPrice | currency }}</span>
+            </div>
+            <!-- Action -->
+            <div class="table-cell action-col">
+              <div class="action-buttons">
+                <button
+                  (click)="cancelOrder(order.orderId)"
+                  class="cancel-btn"
+                  [disabled]="order.orderStatus === 'DELIVERED' || order.orderStatus === 'CANCELLED'"
+                  [class.disabled]="order.orderStatus === 'DELIVERED' || order.orderStatus === 'CANCELLED'">
+                  Cancel Order
+                </button>
+                <button
+                  class="details-btn"
+                  (click)="toggleOrderDetails(order.orderId)">
+                  {{ expandedOrderId === order.orderId ? 'Hide Details' : 'View Details' }}
+                </button>
+              </div>
+            </div>
           </div>
-          <div class="detail-row">
-            <span class="detail-label">Total Price:</span>
-            <span class="detail-value">{{ order.totalPrice | currency }}</span>
+          <!-- Expanded Product Details Row -->
+          <div *ngIf="expandedOrderId === order.orderId" class="expanded-details">
+            <div class="product-details-container">
+              <h4 class="details-title">Order Details</h4>
+              <table class="product-details-table">
+                <thead>
+                  <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of order.products">
+                    <td class="product-name">{{ product.productName }}</td>
+                    <td class="product-price">{{ product.productPrice | currency }}</td>
+                    <td class="product-quantity">{{ product.quantity }}</td>
+                    <td class="product-subtotal">{{ (product.productPrice * product.quantity) | currency }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div class="detail-row">
-            <span class="detail-label">Shipping Address:</span>
-            <span class="detail-value">{{ order.shippingAddress }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Payment Status:</span>
-            <span class="detail-value payment-status" [ngClass]="order.paymentStatus.toLowerCase()">{{ order.paymentStatus }}</span>
-          </div>
-        </div>
-
-        <div class="order-items">
-          <div class="order-item">
-            <span class="item-label">Product ID:</span>
-            <span class="item-value">{{ order.productId }}</span>
-          </div>
-          <div class="order-item">
-            <span class="item-label">Quantity:</span>
-            <span class="item-value">{{ order.productQuantity }}</span>
-          </div>
-          <button (click)="cancelOrder(order.orderId, order.productId, order.productQuantity)" class="cancel-btn" [disabled]="order.orderStatus === 'SHIPPED'">
-            Cancel Order
-          </button>
-        </div>
+        </ng-container>
       </div>
     </div>
   </div>
 
   <ng-template #noOrders>
     <div class="no-orders">
-      <p>No orders found for this user.</p>
+      <div class="no-orders-content">
+        <i class="no-orders-icon">📦</i>
+        <h3>No orders found</h3>
+        <p>You haven't placed any orders yet.</p>
+      </div>
     </div>
   </ng-template>
 </div>

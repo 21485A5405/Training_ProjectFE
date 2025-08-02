@@ -71,7 +71,7 @@ export class CartPageComponent implements OnInit {
     return this.totalPrice + this.shippingCost;
   }
 
-  goToMyOrders(): void {
+  navigateToOrders(): void {
     this.router.navigate(['/orders-page']);
   }
 

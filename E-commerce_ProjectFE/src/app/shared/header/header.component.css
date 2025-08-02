@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(to right, #4e54c8, #8f94fb);
+  background: linear-gradient(to right, #5d6a80, #838b99);
   padding: 15px 25px;
   color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -91,6 +91,24 @@
   overflow: hidden;
   z-index: 100;
   animation: fadeIn 0.3s ease-in-out;
+}
+
+.order-setting {
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid #eaeaea;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.order-setting:hover {
+  background-color: #e8eaff;
+  transform: translateX(4px);
+  color: #1f2f98;
+}
+
+.order-setting:last-child {
+  border-bottom: none;
 }
 
 .settings-option {

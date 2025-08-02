@@ -26,6 +26,7 @@
       <!-- Dropdown Options -->
       <div *ngIf="isSettingsDropdownVisible" class="settings-dropdown">
         <div class="settings-option" (click)="goToProfile()">Profile</div>
+        <div class = "order-setting" (click)="goToOrders()">My Orders</div>
         <div class="settings-option" (click)="logout()">
           {{ isLoggedIn ? 'Logout' : 'Login' }}
         </div>
