@@ -6,6 +6,7 @@ import { AuthService } from '../../../auth.service';
 import { NgZone } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 import { RegisterSuccessDialogComponent } from '../../../shared/register-success-dialog/register-success-dialog.component';
+import { ProfileService } from '../../../services/profileservice';
 
 @Component({
   selector: 'app-register-page',
@@ -14,7 +15,7 @@ import { RegisterSuccessDialogComponent } from '../../../shared/register-success
     CommonModule,
     FormsModule,
     RouterModule,
-    RegisterSuccessDialogComponent 
+    RegisterSuccessDialogComponent
   ],
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.css']
@@ -26,15 +27,17 @@ export class RegisterPageComponent {
   registerErrorMessage: string = '';
   registerSuccessMessage = '';
   isSubmitting = false;
-  showDialog = false; // ✅ Controls dialog visibility
-  
+  showDialog = false;
+  emailExists: boolean = false;
+
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private ngZone: NgZone,
-    private cdRef: ChangeDetectorRef
-  ) {}
+    private cdRef: ChangeDetectorRef,
+    private profileService:ProfileService
+  ) { }
 
   onRegister() {
     this.isSubmitting = true;
@@ -64,6 +67,24 @@ export class RegisterPageComponent {
         console.error('Registration error:', error);
       }
     });
+  }
+
+  checkIfEmailExists() {
+    if (this.userEmail.trim()) {
+      this.profileService.checkEmailExists(this.userEmail).subscribe({
+        next: (exists) => {
+          this.emailExists = exists;
+          if (exists) {
+            this.registerErrorMessage = 'Email is already registered.';
+          } else {
+            this.registerErrorMessage = '';
+          }
+        },
+        error: (err) => {
+          console.error('Email check failed:', err);
+        }
+      });
+    }
   }
 
   closeSuccessModal() {

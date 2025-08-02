@@ -14,8 +14,9 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .login-container button {
-  background: linear-gradient(135deg, #7bdcad, #d3d3d3);
-}
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
+  }
+  
 
 /* Toggle Container */
 .toggle-container {
@@ -161,7 +162,7 @@
 
 .form-group label {
   display: block;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(49, 60, 67, 0.9);
   margin-bottom: 8px;
   font-weight: 100;
   font-size: 14px;
@@ -214,19 +215,6 @@
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 50%, #f093fb 100%);
-  
-}
-
-.btn-primary:hover:not(:disabled) {
-  box-shadow: 0 15px 40px rgba(79, 172, 254, 0.6);
-}
-
-.btn-primary:active {
-  transform: translateY(-1px);
 }
 
 .btn:disabled {

@@ -1,13 +1,17 @@
 
 <div class="profile-container">
-
-  <h2>User Profile</h2>
-  <button *ngIf="userDetails?.userRole === 'ADMIN'" 
-  (click)="goToDashboard()" 
-  class="dashboard-btn">
-  Go to Dashboard
-  </button>
+  <div class="dashboard-header">
+    <h2>User Profile</h2>
   
+    <!-- Settings Dropdown -->
+    <div class="icon-wrapper settings-icon-wrapper" title="Settings">
+      <i class="fas fa-cog icon-style" (click)="toggleDropdown()"></i>
+  
+      <div *ngIf="showDropdown" class="settings-dropdown">
+        <div class="settings-option" (click)="navigateToChangePassword()">Change Password</div>
+      </div>
+    </div>
+  </div>
  
   <div class="profile-grid">
     <!-- Left: User Info -->
@@ -33,6 +37,20 @@
     </div>
   </div>
 
+  <!-- Add New Address -->
+  <h3>Add New Shipping Address</h3>
+  <div class="add-address-form">
+    <label for="newAddress">Address</label>
+    <input
+      type="text"
+      id="newAddress"
+      [(ngModel)]="newAddress"
+      placeholder="e.g., Vijayawada, Gandhi Nagar"
+    />
+  
+    <button mat-button (click)="addNewAddress()">Add Address</button>
+  </div>
+  
   <!-- Payment Methods Section -->
   <div class="payment-section">
     <h3>User Payment Methods</h3>

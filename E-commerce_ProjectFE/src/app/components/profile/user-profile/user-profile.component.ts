@@ -20,6 +20,7 @@ export class UserProfileComponent implements OnInit {
   newPaymentMethod: string = '';  // New payment method input
   newAccountDetails: string = '';
   userId: string = sessionStorage.getItem('userId') || ''; // Get userId from sessionStorage
+  newAddress: string = '';
 
   constructor(private http: HttpClient, private router: Router
     ,private cdr :ChangeDetectorRef, private dialog: MatDialog){}
@@ -50,6 +51,7 @@ export class UserProfileComponent implements OnInit {
       }
     );
   }
+  
   
   addPaymentMethod() {
     if (!this.newPaymentMethod || !this.newAccountDetails) {
@@ -110,6 +112,17 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['/admin-dashboard']);
   }
   
+  showDropdown: boolean = false;
+
+  toggleDropdown() {
+    this.showDropdown = !this.showDropdown;
+  }
+  
+  navigateToChangePassword() {
+    this.showDropdown = false;
+    this.router.navigate(['/change-password']);
+  }
+  
   updateUserDetails() {
     const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
       width: '400px',
@@ -144,6 +157,41 @@ export class UserProfileComponent implements OnInit {
       }
     );
   }
+
+  addNewAddress() {
+    if (!this.newAddress.trim()) {
+      Swal.fire('Error', 'Please enter a valid address.', 'error');
+      return;
+    }
+  
+    const token = sessionStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({
+      Authorization: `${token}`,
+      'Content-Type': 'application/json'
+    });
+  
+    const addressData = {
+      fullAddress: this.newAddress
+    };
+  
+    this.http.post(`http://localhost:8080/users/add-address`, addressData, { headers, responseType: 'text' }).subscribe({
+      next: (response) => {
+        // response will be: "Address Added Successfully"
+        if (response === 'Address Added Successfully') {
+          Swal.fire('Success', response, 'success');
+          this.newAddress = '';
+          this.getUserAddresses(); // Refresh address list
+        } else {
+          Swal.fire('Warning', 'Unexpected response from server.', 'warning');
+        }
+      },
+      error: (err) => {
+        console.error('Error adding address:', err);
+        Swal.fire('Error', 'Failed to add address.', 'error');
+      }
+    });
+  }  
+  
   // Fetch shipping addresses of the user with token authorization
   getUserAddresses() {
     const token = sessionStorage.getItem('authToken') || ''; // Get token from sessionStorage

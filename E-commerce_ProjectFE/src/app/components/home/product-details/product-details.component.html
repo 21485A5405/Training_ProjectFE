@@ -23,6 +23,7 @@
 <div class="product-grid" *ngIf="!isLoading && filteredProducts.length > 0">
   <div class="product-card" *ngFor="let product of filteredProducts">
     <img [src]="product.productImageURL" alt="{{ product.productName }}" />
+    <p>{{ product.productId }}</p>
     <h4>{{ product.productName }}</h4>
     <p>{{ product.productDescription }}</p>
     <p>₹{{ product.productPrice }}</p>

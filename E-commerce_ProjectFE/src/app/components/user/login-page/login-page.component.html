@@ -53,10 +53,6 @@
       </div>
 
       <button type="submit" class="btn btn-primary" [disabled]="!adminLoginForm.form.valid">Login</button>
-
-      <ng-container *ngIf="adminerrorMessage">
-        <div class="alert alert-danger">{{ adminerrorMessage }}</div>
-      </ng-container>
     </form>
 
     <!-- Customer Login -->
@@ -95,11 +91,6 @@
       </div>
 
       <button type="submit" class="btn btn-primary" [disabled]="!customerLoginForm.form.valid">Login</button>
-
-      <ng-container *ngIf="usererrorMessage">
-        <div class="alert alert-danger">{{ usererrorMessage }}</div>
-      </ng-container>
-
       <div class="register-link">
         <p>Don't have an account?&nbsp; &nbsp; <a routerLink="/register"> Register Here</a></p>
       </div>

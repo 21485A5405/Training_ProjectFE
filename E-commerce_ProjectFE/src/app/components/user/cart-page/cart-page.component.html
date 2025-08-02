@@ -1,83 +1,151 @@
 <div class="cart-container">
-  <div class="header">
-    <h2>Your Shopping Cart 🛒</h2>
-    <!-- My Orders Button -->
-    <button class="my-orders-btn" (click)="goToMyOrders()">My Orders</button>
-  </div>
+  <div class="cart-content">
+    <!-- Left Side - Cart Items -->
+    <div class="cart-items-section">
+      <div class="cart-header">
+        <h2>Shopping Cart</h2>
+        <span class="item-count">{{ totalItemsCount }} Items</span>
+      </div>
 
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="loading-state">
-    <p>Loading cart items...</p>
-  </div>
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-state">
+        <p>Loading cart items...</p>
+      </div>
 
-  <!-- Cart Items -->
-  <div *ngIf="!isLoading">
-    <div *ngIf="cartItems && cartItems.length > 0; else emptyCart">
-      <div *ngFor="let item of cartItems" class="cart-item">
-        <div class="cart-image">
-          <img [src]="item.product.productImageURL" alt="Product Image" />
-        </div>
-        <div class="cart-details">
-          <h3>{{ item.product.productName }}</h3>
-          <p class="description">{{ item.product.productDescription }}</p>
-          <!-- Display CartItemId -->
-          <p class="cart-item-id">Cart ID: {{ item.cartItemId }}</p> <!-- CartItemId Display -->
-        </div>
+      <!-- Column Headers -->
+      <div class="column-headers" *ngIf="!isLoading && cartItems.length > 0">
+        <div class="product-header">PRODUCT DETAILS</div>
+        <div class="quantity-header">QUANTITY</div>
+        <div class="price-header">PRICE</div>
+        <div class="total-header">TOTAL</div>
+      </div>
 
-        <div class="quantity-price-section">
-          <p class="price">₹{{ item.product.productPrice }}</p>
-          <div class="quantity-controls">
-            <button class="qty-btn" (click)="decreaseQuantity(item)">−</button>
-            <span class="qty-text">{{ item.productQuantity }}</span>
-            <button class="qty-btn" (click)="increaseQuantity(item)">+</button>&nbsp;
-            <!-- Cart Item Delete Button with Trash Icon -->
-            <button (click)="deleteCartItem(item.cartItemId)" class="delete-btn">
-              <i class="fas fa-trash"></i> <!-- Font Awesome Trash Icon -->
-            </button>
+      <!-- Cart Items -->
+      <div class="cart-items-list" *ngIf="!isLoading">
+        <div *ngIf="cartItems && cartItems.length > 0; else emptyCart">
+          <div *ngFor="let item of cartItems" class="cart-item">
+            
+            <div class="product-details">
+              <img [src]="item.product.productImageURL" [alt]="item.product.productName" class="product-image">
+              <div class="product-info">
+                <h3>{{ item.product.productName }}</h3>
+                <p class="product-category">{{ item.product.productDescription }}</p>
+            
+                <!-- Enhanced ID Display with badges -->
+                <div class="product-meta">
+                  <div class="id-badges">
+                    <span class="id-badge cart-id">
+                      <i class="fas fa-shopping-cart"></i>
+                      Cart ID : {{ item.cartItemId }}
+                    </span>
+                    <span class="id-badge product-id">
+                      <i class="fas fa-box"></i>
+                      Product ID : {{ item.product.productId }}
+                    </span>
+                  </div>
+                </div>
+            
+                <button class="remove-btn" (click)="deleteCartItem(item.cartItemId)">
+                  <i class="fas fa-trash-alt"></i> Remove
+                </button>
+              </div>
+            </div>
+            
+            <div class="quantity-controls">
+              <button class="qty-btn minus" (click)="decreaseQuantity(item)">−</button>
+              <span class="qty-display">{{ item.productQuantity }}</span>
+              <button class="qty-btn plus" (click)="increaseQuantity(item)">+</button>
+            </div>
+            <div class="item-price">₹{{ item.product.productPrice }}</div>
+            <div class="item-total">₹{{ item.totalPrice }}</div>
+            <div class="item-selection">
+              <label>
+                <input type="checkbox" (change)="toggleSelection(item, $event)">
+                Select
+              </label>
+            </div>
           </div>
-          <p class="total">Total: ₹{{ item.totalPrice }}</p>
-
-          <label>
-            <input type="checkbox" (change)="toggleSelection(item, $event)">
-            Select this item
-          </label>
         </div>
       </div>
+
+      <!-- Empty Cart -->
+      <ng-template #emptyCart>
+        <div class="empty-cart-message">
+          <p>Your cart is empty 😕</p>
+        </div>
+      </ng-template>
+
+      <!-- Continue Shopping -->
+      <div class="continue-shopping" *ngIf="!isLoading && cartItems.length > 0">
+        <button class="continue-btn" (click)="goToHome()">
+          <i class="fas fa-arrow-left" ></i> Continue Shopping
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Empty Cart -->
-  <ng-template #emptyCart>
-    <p class="empty-cart-message">Your cart is empty 😕</p>
-  </ng-template>
+    <!-- Right Side - Order Summary -->
+    <div class="order-summary" *ngIf="!isLoading && cartItems.length > 0">
+      <h3>Order Summary</h3>
+      
+      <div class="summary-row">
+        <span>ITEMS {{ selectedItemsCount > 0 ? selectedItemsCount : totalItemsCount }}</span>
+        <span>₹{{ selectedItemsCount > 0 ? selectedItemsTotal.toFixed(2) : totalPrice.toFixed(2) }}</span>
+      </div>
 
-  <!-- Address Selection -->
-  <div class="form-group mt-3" *ngIf="selectedItems.length > 0">
-    <label for="addressSelect">Select Address</label>
-    <select id="addressSelect" class="form-control" [(ngModel)]="selectedAddressId">
-      <option value="">-- Select an address --</option>
-      <option *ngFor="let address of userAddresses" [value]="address.addressId">
-        {{ address.fullAddress }}
-      </option>
-    </select>
-  </div>
+      <!-- Address Selection -->
+      <div class="address-section" *ngIf="selectedItems.length > 0">
+        <div class="summary-row">
+          <span>SHIPPING ADDRESS</span>
+        </div>
+        <div class="address-dropdown">
+          <select class="form-control" [(ngModel)]="selectedAddressId">
+            <option value="">-- Select an address --</option>
+            <option *ngFor="let address of userAddresses" [value]="address.addressId">
+              {{ address.fullAddress }}
+            </option>
+          </select>
+        </div>
+      </div>
 
-  <!-- Payment Method Dropdown -->
-  <div *ngIf="selectedAddressId" class="payment-method-section">
-    <label for="paymentMethod">Select Payment Method : </label>
-    <select id="paymentMethod" [(ngModel)]="selectedPaymentMethod">
-      <option value="" disabled>Select a method</option>
-      <option *ngFor="let method of paymentMethods" [ngValue]="method">
-        {{ method.type }} - {{ method.value }}
-      </option>
-    </select>
-  </div>
+      <div class="shipping-section">
+        <div class="summary-row">
+          <span>SHIPPING</span>
+        </div>
+        <div class="shipping-option">
+          <select class="shipping-select" (change)="onShippingChange($event)">
+            <option value="5">Standard Delivery - ₹5.00</option>
+            <option value="10">Express Delivery - ₹10.00</option>
+            <option value="15">Overnight Delivery - ₹15.00</option>
+          </select>
+        </div>
+      </div>
 
-  <!-- Place Order Button -->
-  <div *ngIf="selectedItems.length > 0">
-    <button (click)="placeOrder()" class="place-order-btn"
-      [disabled]="!selectedPaymentMethod || selectedItems.length === 0">
-      Place Order
-    </button>
+      <!-- Payment Method Dropdown -->
+      <div class="payment-section" *ngIf="selectedAddressId">
+        <div class="summary-row">
+          <span>PAYMENT METHOD</span>
+        </div>
+        <div class="payment-dropdown">
+          <select [(ngModel)]="selectedPaymentMethod">
+            <option value="" disabled>Select a method</option>
+            <option *ngFor="let method of paymentMethods" [ngValue]="method">
+              {{ method.type }} - {{ method.value }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="total-section">
+        <div class="summary-row total-row">
+          <span>TOTAL COST</span>
+          <span>₹{{ selectedItemsCount > 0 ? getFinalTotal().toFixed(2) : getAllItemsTotal().toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <button class="checkout-btn" 
+              (click)="placeOrder()" 
+              [disabled]="!selectedPaymentMethod || selectedItems.length === 0">
+        CHECKOUT
+      </button>
+    </div>
   </div>
 </div>

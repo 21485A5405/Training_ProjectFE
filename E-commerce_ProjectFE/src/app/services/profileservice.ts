@@ -52,6 +52,9 @@ export class ProfileService {
 
     return this.http.get<any>(`${this.adminUrl}/get-details/${userId}`, { headers });
   }
+  checkEmailExists(email: string) {
+    return this.http.get<boolean>(`http://localhost:8080/users/check-email?email=${email}`);
+  }
 
   // Method to update the user profile by user ID
   updateAdminProfile(userId: number, user: any): Observable<any> {
@@ -82,14 +85,14 @@ export class ProfileService {
   addNewAddress(address: any, headers: HttpHeaders): Observable<any> {
     return this.http.post<any>(`${this.userUrl}/add-address`, address, { headers });
   }
-
+  
   updateUser(userId: string, body: { userName: string; userEmail: string }) {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({
       Authorization: `${token}`,
       'Content-Type': 'application/json'
     });
-    const url = `http://localhost:8080/admins/update-admin/${userId}`;
+    const url = `http://localhost:8080/users/update-user/${userId}`;
     return this.http.put(url, body, { headers });
   }
 }
