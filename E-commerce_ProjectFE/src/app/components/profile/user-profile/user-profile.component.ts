@@ -1,15 +1,18 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import Swal from 'sweetalert2';
+
 import { EditAddressDialogComponent } from '../../dialog/edit-address-dialog/edit-address-dialog.component';
 import { UpdateUserDialogComponent } from '../../dialog/update-user-dialogcomponent/update-user-dialog.component';
-import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-user-profile',
-  imports : [CommonModule, FormsModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
@@ -17,13 +20,19 @@ export class UserProfileComponent implements OnInit {
   userDetails: any;
   shippingAddresses: any[] = [];
   userPayments: any[] = [];
-  newPaymentMethod: string = '';  // New payment method input
-  newAccountDetails: string = '';
-  userId: string = sessionStorage.getItem('userId') || ''; // Get userId from sessionStorage
-  newAddress: string = '';
+  newAddress = '';
+  newPaymentMethod = '';
+  newAccountDetails = '';
+  isSettingsDropdownVisible = false;
 
-  constructor(private http: HttpClient, private router: Router
-    ,private cdr :ChangeDetectorRef, private dialog: MatDialog){}
+  userId = sessionStorage.getItem('userId') || '';
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.getUserDetails();
@@ -31,199 +40,204 @@ export class UserProfileComponent implements OnInit {
     this.getUserPayments();
   }
 
-  sendUpdatedUserDetails(username: string, useremail: string) {
-    const token = sessionStorage.getItem('authToken') || '';
-    const headers = new HttpHeaders({
-      Authorization: `${token}`,
-      'Content-Type': 'application/json'
-    });
-  
-    const updateUrl = `http://localhost:8080/update-user/${this.userId}`;
-    const body = { username, useremail };
-  
-    this.http.put(updateUrl, body, { headers }).subscribe(
-      (response) => {
-        console.log('User updated successfully:', response);
-        this.getUserDetails(); // Refresh user details
-      },
-      (error) => {
-        console.error('Error updating user:', error);
-      }
-    );
-  }
-  
-  
-  addPaymentMethod() {
-    if (!this.newPaymentMethod || !this.newAccountDetails) {
-      Swal.fire('Error', 'Please fill in all fields for the new payment method.', 'error');
-      return;
-    }
-  
-    const token = sessionStorage.getItem('authToken') || '';
-    const headers = new HttpHeaders({
-      Authorization: `${token}`,
-      'Content-Type': 'application/json'
-    });
-  
-    const paymentData = {
-      paymentMethod: this.newPaymentMethod,
-      accountDetails: this.newAccountDetails
-    };
-  
-    // Construct the URL with userId as path variable
-    const addPaymentUrl = `http://localhost:8080/users/add-payment/${this.userId}`;
+  // Close dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    const settingsDropdown = target.closest('.settings-dropdown');
     
-    // Send the payment data in the request body
-    this.http.post(addPaymentUrl, paymentData, { headers }).subscribe({
-      next: (response) => {
-        console.log('Payment method added successfully:', response); // Log successful response
-        Swal.fire('Success', 'Payment method added successfully!', 'success');
-        this.getUserPayments(); // Refresh the payment methods
-        this.newPaymentMethod = ''; // Clear input fields
-        this.newAccountDetails = '';
-      },
-      error: (err) => {
-        console.error('Error adding payment method:', err); // Log any error details
-        Swal.fire('Error', 'Failed to add payment method', 'error');
+    if (!settingsDropdown && this.isSettingsDropdownVisible) {
+      this.isSettingsDropdownVisible = false;
+    }
+  }
+
+  // Toggle settings dropdown
+  toggleSettingsDropdown(): void {
+    this.isSettingsDropdownVisible = !this.isSettingsDropdownVisible;
+  }
+
+  // Navigate to change password and close dropdown
+  navigateToChangePassword(): void {
+    this.isSettingsDropdownVisible = false;
+    this.router.navigate(['/change-password']);
+  }
+
+  // Dashboard navigation
+  goToDashboard(): void {
+    this.router.navigate(['/admin-dashboard']);
+  }
+
+  // Delete account functionality
+  deleteAccount(): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This action will permanently delete your account and cannot be undone!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, delete my account',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const token = sessionStorage.getItem('authToken') || '';
+        const headers = new HttpHeaders({ Authorization: token });
+  
+        this.http.delete(`http://localhost:8080/users/delete-user-by-id/${this.userId}`, { headers }).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted!',
+              text: 'Your account has been deleted.',
+              confirmButtonColor: '#007bff'
+            }).then(() => {
+              sessionStorage.clear();
+              this.router.navigate(['/register']);
+            });
+          },
+          error: (err) => {
+            console.error('Error deleting account:', err);
+            Swal.fire({
+              icon: 'error',
+              title: 'Deletion Failed',
+              text: 'Something went wrong while deleting your account.',
+              confirmButtonColor: '#007bff'
+            });
+          }
+        });
       }
     });
   }  
-  // Fetch user details with token authorization
-  getUserDetails() {
-    const token = sessionStorage.getItem('authToken') || ''; // Get token from sessionStorage
-    const headers = new HttpHeaders({
-      Authorization: `${token}` // Add 'Bearer ' prefix to token
-    });
 
-    const userDetailsUrl = `http://localhost:8080/admins/get-details/${this.userId}`;
-    this.http.get<any>(userDetailsUrl, { headers }).subscribe(
-      (response) => {
-        console.log(response);
-        this.userDetails = response;
+  // Get user details
+  getUserDetails(): void {
+    const token = sessionStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({ Authorization: token });
+
+    this.http.get<any>(`http://localhost:8080/admins/get-details/${this.userId}`, { headers }).subscribe({
+      next: (res) => {
+        this.userDetails = res;
         this.cdr.detectChanges();
       },
-      (error) => {
-        console.error('Error fetching user details:', error);
-      }
-    );
-  }
-
-  goToDashboard() {
-    this.router.navigate(['/admin-dashboard']);
-  }
-  
-  showDropdown: boolean = false;
-
-  toggleDropdown() {
-    this.showDropdown = !this.showDropdown;
-  }
-  
-  navigateToChangePassword() {
-    this.showDropdown = false;
-    this.router.navigate(['/change-password']);
-  }
-  
-  updateUserDetails() {
-    const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
-      width: '400px',
-      data: {
-        userId: this.userId,
-        username: this.userDetails.username,
-        useremail: this.userDetails.useremail
-      }
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getUserDetails(); // Refresh updated data
-      }
+      error: (err) => console.error('Error fetching user details:', err)
     });
   }
-  
-  getUserPayments() {
-    const token = sessionStorage.getItem('authToken') || ''; // Get token from sessionStorage
-    const headers = new HttpHeaders({
-      Authorization: `${token}` // Add 'Bearer ' prefix to token
-    });
 
-    const paymentUrl = `http://localhost:8080/users/get-user-payments/${this.userId}`;
-    this.http.get<any[]>(paymentUrl, { headers }).subscribe(
-      (response) => {
-        this.userPayments = response; // Store user payment methods
+  // Get user addresses
+  getUserAddresses(): void {
+    const token = sessionStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({ Authorization: token });
+
+    this.http.get<any[]>(`http://localhost:8080/users/get-address/${this.userId}`, { headers }).subscribe({
+      next: (res) => {
+        this.shippingAddresses = res;
         this.cdr.detectChanges();
       },
-      (error) => {
-        console.error('Error fetching user payments:', error);
-      }
-    );
+      error: (err) => console.error('Error fetching addresses:', err)
+    });
   }
 
-  addNewAddress() {
+  // Add new address
+  addNewAddress(): void {
     if (!this.newAddress.trim()) {
       Swal.fire('Error', 'Please enter a valid address.', 'error');
       return;
     }
-  
+
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({
-      Authorization: `${token}`,
+      Authorization: token,
       'Content-Type': 'application/json'
     });
-  
-    const addressData = {
-      fullAddress: this.newAddress
-    };
-  
-    this.http.post(`http://localhost:8080/users/add-address`, addressData, { headers, responseType: 'text' }).subscribe({
-      next: (response) => {
-        // response will be: "Address Added Successfully"
-        if (response === 'Address Added Successfully') {
-          Swal.fire('Success', response, 'success');
+
+    const addressData = { fullAddress: this.newAddress };
+
+    this.http.post(`http://localhost:8080/users/add-address`, addressData, {
+      headers,
+      responseType: 'text'
+    }).subscribe({
+      next: (res) => {
+        if (res === 'Address Added Successfully') {
+          Swal.fire('Success', res, 'success');
           this.newAddress = '';
-          this.getUserAddresses(); // Refresh address list
+          this.getUserAddresses();
         } else {
           Swal.fire('Warning', 'Unexpected response from server.', 'warning');
         }
       },
-      error: (err) => {
-        console.error('Error adding address:', err);
-        Swal.fire('Error', 'Failed to add address.', 'error');
-      }
+      error: () => Swal.fire('Error', 'Failed to add address.', 'error')
     });
-  }  
-  
-  // Fetch shipping addresses of the user with token authorization
-  getUserAddresses() {
-    const token = sessionStorage.getItem('authToken') || ''; // Get token from sessionStorage
-    const headers = new HttpHeaders({
-      Authorization: `${token}` // Add 'Bearer ' prefix to token
-    });
-
-    const addressUrl = `http://localhost:8080/users/get-address/${this.userId}`;
-    this.http.get<any[]>(addressUrl, { headers }).subscribe(
-      (response) => {
-        console.log('Shipping Addresses:', response); 
-        this.shippingAddresses = response;
-        this.cdr.detectChanges();
-      },
-      (error) => {
-        console.error('Error fetching user addresses:', error);
-      }
-    );
   }
-  
-  editAddress(addressId: number) {
+
+  // Edit address
+  editAddress(addressId: number): void {
     const address = this.shippingAddresses.find(a => a.addressId === addressId);
     const dialogRef = this.dialog.open(EditAddressDialogComponent, {
       width: '400px',
       data: { addressId, currentAddress: address.fullAddress }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getUserAddresses(); // Refresh after update
-      }
+      if (result) this.getUserAddresses();
     });
   }
-  
+
+  // Get user payments
+  getUserPayments(): void {
+    const token = sessionStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({ Authorization: token });
+
+    this.http.get<any[]>(`http://localhost:8080/users/get-user-payments/${this.userId}`, { headers }).subscribe({
+      next: (res) => {
+        this.userPayments = res;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error fetching payments:', err)
+    });
+  }
+
+  // Add payment method
+  addPaymentMethod(): void {
+    if (!this.newPaymentMethod || !this.newAccountDetails) {
+      Swal.fire('Error', 'Please fill in all fields for the new payment method.', 'error');
+      return;
+    }
+
+    const token = sessionStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({
+      Authorization: token,
+      'Content-Type': 'application/json'
+    });
+
+    const paymentData = {
+      paymentMethod: this.newPaymentMethod,
+      accountDetails: this.newAccountDetails
+    };
+
+    this.http.post(`http://localhost:8080/users/add-payment/${this.userId}`, paymentData, { headers }).subscribe({
+      next: () => {
+        Swal.fire('Success', 'Payment method added successfully!', 'success');
+        this.getUserPayments();
+        this.newPaymentMethod = '';
+        this.newAccountDetails = '';
+      },
+      error: () => Swal.fire('Error', 'Failed to add payment method', 'error')
+    });
+  }
+
+  // Update user details
+  updateUserDetails(): void {
+    const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
+      width: '400px',
+      data: {
+        userId: this.userId,
+        username: this.userDetails.userName,
+        useremail: this.userDetails.userEmail
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.getUserDetails();
+    });
+  }
 }

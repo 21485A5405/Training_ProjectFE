@@ -68,6 +68,21 @@ export class OrderListComponent implements OnInit {
     });
   }
 
+  canEditOrderStatus(order: any): boolean {
+    return order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED';
+  }
+  
+  canEditPaymentStatus(order: any): boolean {
+    // Allow editing only if status is not PAID or REFUNDED
+    return order.paymentStatus !== 'PAID' && order.paymentStatus !== 'REFUNDED';
+  }
+  
+  canSetDelivered(order: any): boolean {
+    // Only allow DELIVERED if payment is PAID
+    return order.paymentStatus === 'PAID';
+  }
+
+  
   // Method to update order status
   updateOrderStatus(orderId: number, newStatus: string) {
     const token = sessionStorage.getItem('authToken');
@@ -76,7 +91,11 @@ export class OrderListComponent implements OnInit {
     // Log for debugging
     console.log('Order ID:', orderId);
     console.log('New Status:', newStatus);
-  
+      const order = this.orders.find(o => o.orderId === orderId);
+      if (newStatus === 'DELIVERED' && !this.canSetDelivered(order)) {
+        Swal.fire('Error', 'Cannot mark as DELIVERED unless payment is PAID.', 'warning');
+        return;
+      }
     const url = `http://localhost:8080/orders/update-orderstatus/${orderId}/${newStatus}`;
   
     this.http.put(url, {}, { headers }).subscribe({
@@ -128,23 +147,22 @@ export class OrderListComponent implements OnInit {
     });
   }  
 
-  // Toggle the visibility of the order status dropdown for each order
   toggleOrderStatusDropdown(orderId: number) {
-    this.showOrderStatusDropdown[orderId] = !this.showOrderStatusDropdown[orderId];
-    // Save the selected order status temporarily when dropdown is opened
     const order = this.orders.find(o => o.orderId === orderId);
-    this.selectedOrderStatus[orderId] = order?.orderStatus || '';
+    if (this.canEditOrderStatus(order)) {
+      this.showOrderStatusDropdown[orderId] = !this.showOrderStatusDropdown[orderId];
+      this.selectedOrderStatus[orderId] = order?.orderStatus || '';
+    }
   }
-
-  // Toggle the visibility of the payment status dropdown for each order, but disable for 'PAID' status
+  
   togglePaymentStatusDropdown(orderId: number) {
     const order = this.orders.find(o => o.orderId === orderId);
-    if (order?.paymentStatus !== 'PAID') {
+    if (this.canEditPaymentStatus(order)) {
       this.showPaymentStatusDropdown[orderId] = !this.showPaymentStatusDropdown[orderId];
-      // Save the selected payment status temporarily when dropdown is opened
       this.selectedPaymentStatus[orderId] = order?.paymentStatus || '';
     }
   }
+  
 
   // Disable Update Order Status button when the status is 'Shipped'
   isOrderStatusButtonDisabled(orderStatus: string): boolean {

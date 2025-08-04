@@ -1,105 +1,241 @@
+/* Modern User List Component Styles */
 .users-container {
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: auto;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Header Section */
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.users-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+  color: #1a202c;
+  letter-spacing: -0.5px;
+}
+
+.users-count {
+  background: #edf2f7;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+/* Grid Layout */
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 24px;
+}
+
+/* User Card */
+.user-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.user-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.user-id-badge {
+  background: #2d3748;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+.role-badge {
+  background: #2d3748;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: 1px solid #cbd5e0;
+}
+
+/* Card Body */
+.card-body {
+  padding: 24px;
+}
+
+/* User Details */
+.user-details {
+  margin-bottom: 24px;
+}
+
+.user-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.user-email {
+  color: #718096;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* Address Section */
+.address-section {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.address-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.address-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.2s ease;
+}
+
+.address-item:hover {
+  border-color: #cbd5e0;
+  background: #f9fafb;
+}
+
+.address-text {
+  font-size: 14px;
+  color: #2d3748;
+  line-height: 1.5;
+}
+
+.no-address {
+  color: #a0aec0;
+  font-style: italic;
+  font-size: 14px;
+  text-align: center;
+  padding: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .users-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .users-container {
+    padding: 16px;
+  }
+  
+  .header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
   }
   
   .users-title {
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 30px;
-    color: #1e1e1e;
-    font-weight: 700;
-    letter-spacing: 1px;
+    font-size: 28px;
   }
   
-  .table-container {
-    overflow-x: auto;
-    background: #fff;
+  .users-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .user-card {
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    padding: 25px;
   }
   
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    min-width: 900px;
+  .card-header {
+    padding: 16px 20px 12px;
   }
   
-  thead {
-    background-color: #e0f7fa;
-    color: #004d40;
-  }
-  
-  th {
-    padding: 14px 18px;
-    text-align: left;
-    font-weight: 700;
-    font-size: 15px;
-    border-bottom: 2px solid #ccc;
-  }
-  
-  td {
-    padding: 14px 18px;
-    vertical-align: top;
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-  }
-  
-  tr:hover {
-    background-color: #f5faff;
-  }
-  
-  /* User Info Styling */
-  .user-info {
-    display: flex;
-    flex-direction: column;
+  .card-body {
+    padding: 20px;
   }
   
   .user-name {
-    font-weight: 600;
-    font-size: 15px;
-    color: #000307;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .users-container {
+    padding: 12px;
   }
   
-  .user-email {
-    font-size: 13px;
-    color: #00a6ff;
-    font-style: italic;
-    margin-top: 3px;
+  .users-title {
+    font-size: 24px;
   }
   
-  /* User Role Styling */
-  .role-label {
-    color: #2e7d32;
-    font-weight: 600;
-    background-color: #e8f5e9;
-    padding: 5px 12px;
-    border-radius: 16px;
-    font-size: 13px;
-    display: inline-block;
-    text-transform: capitalize;
+  .card-header {
+    padding: 14px 16px 10px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
   
-  /* Shipping Address Styling */
-  .address-box {
-    background-color: #e3f2fd;
-    border-left: 4px solid #2196f3;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin-bottom: 6px;
-    font-size: 13.5px;
-    color: #1e1e1e;
-    line-height: 1.4;
-    word-wrap: break-word;
+  .card-body {
+    padding: 16px;
   }
   
-  .no-address {
-    font-style: italic;
-    color: #b0b0b0;
-    font-size: 13px;
+  .user-details {
+    margin-bottom: 20px;
   }
   
+  .address-section {
+    padding: 14px;
+  }
+}

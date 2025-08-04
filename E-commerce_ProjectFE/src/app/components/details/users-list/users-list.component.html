@@ -1,38 +1,36 @@
 <div class="users-container">
+  <div class="header-section">
     <h2 class="users-title">All Users</h2>
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>User ID</th>
-            <th>User Info</th>
-            <th>Role</th>
-            <th>Shipping Address</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of users">
-            <td style ="font-weight: 700;color: maroon;">{{ user.userId }}</td>
-            <td>
-              <div class="user-info">
-                <div class="user-name">{{ user.userName }}</div>
-                <div class="user-email">{{ user.userEmail }}</div>
-              </div>
-            </td>
-            <td><span class="role-label">{{ user.userRole }}</span></td>
-            <td>
-              <ng-container *ngIf="user.shippingAddress?.length > 0; else noAddress">
-                <div *ngFor="let addr of user.shippingAddress" class="address-box">
-                  {{ addr.fullAddress }}
-                </div>
-              </ng-container>
-              <ng-template #noAddress>
-                <span class="no-address">No Address</span>
-              </ng-template>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <div class="users-count">{{ users.length }} Users</div>
   </div>
   
+  <div class="users-grid">
+    <div class="user-card" *ngFor="let user of users">
+      <div class="card-header">
+        <div class="user-id-badge">ID : {{ user.userId }}</div>
+        <div class="role-badge">{{ user.userRole }}</div>
+      </div>
+      
+      <div class="card-body">
+        <div class="user-details">
+          <div class="user-name">{{ user.userName }}</div>
+          <div class="user-email">{{ user.userEmail }}</div>
+        </div>
+        
+        <div class="address-section">
+          <div class="section-label">Shipping Address</div>
+          <div class="address-content">
+            <ng-container *ngIf="user.shippingAddress?.length > 0; else noAddress">
+              <div class="address-item" *ngFor="let addr of user.shippingAddress">
+                <div class="address-text">{{ addr.fullAddress }}</div>
+              </div>
+            </ng-container>
+            <ng-template #noAddress>
+              <div class="no-address">No shipping address available</div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

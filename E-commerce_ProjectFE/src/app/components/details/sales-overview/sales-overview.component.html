@@ -1,54 +1,214 @@
 <div class="sales-overview-container">
-    <h2 class="section-title">Sales Overview</h2>
-  
-    <div class="overview-grid">
-      <div class="card light-card">
-        <h3>Total Revenue</h3>
-        <p class="metric-value">₹{{ totalRevenue }}</p>
+  <!-- Header Section -->
+  <div class="section-header">
+    <h2 class="section-title">
+      <i class="fas fa-chart-line"></i>
+      Sales Dashboard
+    </h2>
+    <div class="header-actions">
+      <select class="period-selector">
+        <option value="today">Today</option>
+        <option value="week">This Week</option>
+        <option value="month" selected>This Month</option>
+        <option value="year">This Year</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Key Metrics Grid -->
+  <div class="metrics-grid">
+    <div class="metric-card revenue-card">
+      <div class="metric-icon">
+        <i class="fas fa-rupee-sign"></i>
       </div>
-  
-      <div class="card light-card">
-        <h3>Total Orders</h3>
-        <p class="metric-value">{{ totalOrders }}</p>
-      </div>
-  
-      <div class="card light-card">
-        <h3>Shipped Orders</h3>
-        <p class="metric-value">{{ shippedOrders }}</p>
-      </div>
-  
-      <div class="card light-card">
-        <h3>Cancelled Orders</h3>
-        <p class="metric-value">{{ cancelledOrders }}</p>
+      <div class="metric-content">
+        <h3 class="metric-label">Total Revenue</h3>
+        <p class="metric-value">₹{{ totalRevenue | number:'1.0-0' }}</p>
+        <span class="metric-change positive">
+          <i class="fas fa-arrow-up"></i>
+          +12.5% from last month
+        </span>
       </div>
     </div>
-  
-    <!-- Tabbed Charts -->
-    <div class="tabs-module">
-      <div class="tabs">
-        <button [class.active]="activeTab === 'orders'" (click)="activeTab = 'orders'">Orders by Day</button>
-        <button [class.active]="activeTab === 'products'" (click)="activeTab = 'products'">Top Products</button>
+
+    <div class="metric-card orders-card">
+      <div class="metric-icon">
+        <i class="fas fa-shopping-cart"></i>
       </div>
-  
-      <div class="tab-content" *ngIf="activeTab === 'orders'">
-        <h3 class="section-subtitle">Orders Per Day</h3>
-        <ul class="chart-list">
-          <li *ngFor="let entry of getSortedOrdersPerDay()">
-            <span class="label">{{ entry[0] }}</span>
-            <span class="value">{{ entry[1] }} orders</span>
-          </li>
-        </ul>
+      <div class="metric-content">
+        <h3 class="metric-label">Total Orders</h3>
+        <p class="metric-value">{{ totalOrders | number }}</p>
+        <span class="metric-change positive">
+          <i class="fas fa-arrow-up"></i>
+          +8.3% from last month
+        </span>
       </div>
-  
-      <div class="tab-content" *ngIf="activeTab === 'products'">
-        <h3 class="section-subtitle">Top Selling Products</h3>
-        <ul class="chart-list">
-          <li *ngFor="let product of getSortedTopProducts()">
-            <span class="label">Product ID {{ product[0] }}</span>
-            <span class="value">{{ product[1] }} sold</span>
-          </li>
-        </ul>
+    </div>
+
+    <div class="metric-card shipped-card">
+      <div class="metric-icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <div class="metric-content">
+        <h3 class="metric-label">Shipped Orders</h3>
+        <p class="metric-value">{{ shippedOrders | number }}</p>
+        <div class="metric-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="(shippedOrders / totalOrders) * 100"></div>
+          </div>
+          <span class="progress-text">{{ (shippedOrders / totalOrders * 100) | number:'1.1-1' }}% of total</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-card cancelled-card">
+      <div class="metric-icon">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="metric-content">
+        <h3 class="metric-label">Cancelled Orders</h3>
+        <p class="metric-value">{{ cancelledOrders | number }}</p>
+        <div class="metric-progress">
+          <div class="progress-bar danger">
+            <div class="progress-fill" [style.width.%]="(cancelledOrders / totalOrders) * 100"></div>
+          </div>
+          <span class="progress-text">{{ (cancelledOrders / totalOrders * 100) | number:'1.1-1' }}% of total</span>
+        </div>
       </div>
     </div>
   </div>
-  
+
+  <!-- Charts Section -->
+  <div class="charts-section">
+    <div class="chart-container">
+      <div class="chart-header">
+        <h3 class="chart-title">
+          <i class="fas fa-calendar-alt"></i>
+          Daily Sales Trend
+        </h3>
+        <div class="chart-tabs">
+          <button 
+            class="tab-btn" 
+            [class.active]="activeTab === 'orders'" 
+            (click)="activeTab = 'orders'">
+            Orders
+          </button>
+          <button 
+            class="tab-btn" 
+            [class.active]="activeTab === 'revenue'" 
+            (click)="activeTab = 'revenue'">
+            Revenue
+          </button>
+        </div>
+      </div>
+
+      <div class="chart-content">
+        <div class="tab-panel" *ngIf="activeTab === 'orders'">
+          <div class="chart-stats">
+            <div class="stat-item">
+              <span class="stat-label">Peak Day</span>
+              <span class="stat-value">{{ getPeakOrderDay() }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Average Daily</span>
+              <span class="stat-value">{{ getAverageOrdersPerDay() | number:'1.0-0' }}</span>
+            </div>
+          </div>
+          
+          <div class="chart-list-container">
+            <ul class="chart-list">
+              <li *ngFor="let entry of getSortedOrdersPerDay()" class="chart-item">
+                <div class="item-info">
+                  <span class="item-label">{{ entry[0] | date:'EEE, MMM d' }}</span>
+                  <span class="item-value">{{ entry[1] }} orders</span>
+                </div>
+                <div class="item-bar">
+                  <div class="bar-fill" [style.width.%]="(entry[1] / getMaxOrdersPerDay()) * 100"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tab-panel" *ngIf="activeTab === 'revenue'">
+          <div class="chart-stats">
+            <div class="stat-item">
+              <span class="stat-label">Best Day</span>
+              <span class="stat-value">₹{{ getMaxDailyRevenue() | number:'1.0-0' }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Average Daily</span>
+              <span class="stat-value">₹{{ getAverageDailyRevenue() | number:'1.0-0' }}</span>
+            </div>
+          </div>
+          
+          <div class="chart-list-container">
+            <ul class="chart-list">
+              <li *ngFor="let entry of getSortedDailyRevenue()" class="chart-item">
+                <div class="item-info">
+                  <span class="item-label">{{ entry[0] | date:'EEE, MMM d' }}</span>
+                  <span class="item-value">₹{{ entry[1] | number:'1.0-0' }}</span>
+                </div>
+                <div class="item-bar revenue-bar">
+                  <div class="bar-fill" [style.width.%]="(entry[1] / getMaxDailyRevenue()) * 100"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Products Section -->
+    <div class="products-container">
+      <div class="products-header">
+        <h3 class="products-title">
+          <i class="fas fa-star"></i>
+          Top Performing Products
+        </h3>
+        <button class="view-all-btn">View All</button>
+      </div>
+
+      <div class="products-list">
+        <div *ngFor="let product of getSortedTopProducts().slice(0, 5)" class="product-item">
+          <div class="product-rank">{{ getSortedTopProducts().indexOf(product) + 1 }}</div>
+          <div class="product-info">
+            <div class="product-name">Product #{{ product[0] }}</div>
+            <div class="product-details">
+              <span class="units-sold">{{ product[1] }} units sold</span>
+              <span class="revenue-amount">₹{{ (product[1] * 1299) | number:'1.0-0' }}</span>
+            </div>
+          </div>
+          <div class="product-progress">
+            <div class="progress-circle">
+              <span class="progress-percent">{{ (product[1] / getSortedTopProducts()[0][1] * 100) | number:'1.0-0' }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="actions-section">
+    <h3 class="actions-title">Quick Actions</h3>
+    <div class="actions-grid">
+      <button class="action-card">
+        <i class="fas fa-download"></i>
+        <span>Export Report</span>
+      </button>
+      <button class="action-card">
+        <i class="fas fa-chart-bar"></i>
+        <span>Detailed Analytics</span>
+      </button>
+      <button class="action-card">
+        <i class="fas fa-bell"></i>
+        <span>Set Alerts</span>
+      </button>
+      <button class="action-card">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </button>
+    </div>
+  </div>
+</div>

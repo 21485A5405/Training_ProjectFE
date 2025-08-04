@@ -36,7 +36,7 @@ export class ProductListComponent implements OnInit {
     const token = sessionStorage.getItem('authToken');
     const headers = new HttpHeaders({ Authorization: `${token}` });
 
-    this.http.get<any>('http://localhost:8080/admins/get-all-products', { headers }).subscribe({
+    this.http.get<any>('http://localhost:8080/products/getall', { headers }).subscribe({
       next: (response) => {
         this.products = response.data;
         this.cdRef.detectChanges();

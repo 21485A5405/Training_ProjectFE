@@ -5,8 +5,8 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../auth.service';
 import { NgZone } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
-import { RegisterSuccessDialogComponent } from '../../../shared/register-success-dialog/register-success-dialog.component';
 import { ProfileService } from '../../../services/profileservice';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register-page',
@@ -15,7 +15,6 @@ import { ProfileService } from '../../../services/profileservice';
     CommonModule,
     FormsModule,
     RouterModule,
-    RegisterSuccessDialogComponent
   ],
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.css']
@@ -46,7 +45,7 @@ export class RegisterPageComponent {
       userEmail: this.userEmail,
       userPassword: this.userPassword
     };
-
+  
     this.authService.customerRegister(customerData).subscribe({
       next: (response) => {
         this.ngZone.run(() => {
@@ -55,6 +54,16 @@ export class RegisterPageComponent {
           this.isSubmitting = false;
           this.showDialog = true;
           this.cdRef.detectChanges();
+          
+          Swal.fire({
+            icon: 'success',
+            title: 'Registration Successful!',
+            text: this.registerSuccessMessage,
+            confirmButtonText: 'OK'
+          }).then(() => {
+            // Optional: redirect to login page
+            this.router.navigate(['/login']);
+          });
         });
       },
       error: (error) => {
@@ -67,7 +76,7 @@ export class RegisterPageComponent {
         console.error('Registration error:', error);
       }
     });
-  }
+  }  
 
   checkIfEmailExists() {
     if (this.userEmail.trim()) {
@@ -85,11 +94,5 @@ export class RegisterPageComponent {
         }
       });
     }
-  }
-
-  closeSuccessModal() {
-    this.showDialog = false;
-    this.registerSuccessMessage = '';
-    this.router.navigate(['/login']);
   }
 }
