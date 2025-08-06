@@ -17,7 +17,7 @@ body {
   padding: 20px;
 }
 
-/* My Orders Button Section */
+
 .my-orders-section {
   display: flex;
   justify-content: flex-end;
@@ -59,7 +59,7 @@ body {
   gap: 30px;
 }
 
-/* Left Side - Cart Items */
+
 .cart-items-section {
   flex: 2;
   background-color: white;
@@ -88,7 +88,7 @@ body {
   font-weight: 500;
 }
 
-/* Loading State */
+
 .loading-state {
   text-align: center;
   padding: 60px 20px;
@@ -96,7 +96,7 @@ body {
   font-size: 18px;
 }
 
-/* Column Headers */
+
 .column-headers {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 100px;
@@ -111,7 +111,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-/* Cart Items List */
+
 .cart-items-list {
   padding: 0;
 }
@@ -134,7 +134,7 @@ body {
   border-bottom: none;
 }
 
-/* Product Details */
+
 .product-details {
   display: flex;
   align-items: flex-start;
@@ -170,7 +170,7 @@ body {
   line-height: 1.2;
 }
 
-/* Enhanced Product Meta with ID Badges */
+
 .product-meta {
   margin-bottom: 12px;
 }
@@ -235,7 +235,7 @@ body {
   font-size: 11px;
 }
 
-/* Quantity Controls */
+
 .quantity-controls {
   display: flex;
   align-items: center;
@@ -271,7 +271,7 @@ body {
   color: #333;
 }
 
-/* Price and Total */
+
 .item-price, .item-total {
   font-size: 16px;
   font-weight: 600;
@@ -279,7 +279,7 @@ body {
   text-align: center;
 }
 
-/* Item Selection */
+
 .item-selection {
   display: flex;
   justify-content: center;
@@ -301,7 +301,7 @@ body {
   cursor: pointer;
 }
 
-/* Empty Cart Message */
+
 .empty-cart-message {
   text-align: center;
   color: #6c757d;
@@ -313,7 +313,7 @@ body {
   margin: 0;
 }
 
-/* Continue Shopping */
+
 .continue-shopping {
   padding: 25px 30px;
 }
@@ -334,7 +334,7 @@ body {
   color: #5a4fcf;
 }
 
-/* Right Side - Order Summary */
+
 .order-summary {
   flex: 1;
   background-color: white;
@@ -374,7 +374,7 @@ body {
   font-size: 16px;
 }
 
-/* Address Section */
+
 .address-section {
   margin-bottom: 25px;
 }
@@ -400,7 +400,7 @@ body {
   box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.1);
 }
 
-/* Shipping Section */
+
 .shipping-section {
   margin-bottom: 25px;
 }
@@ -426,7 +426,7 @@ body {
   box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.1);
 }
 
-/* Payment Section */
+
 .payment-section {
   margin-bottom: 25px;
 }
@@ -452,7 +452,7 @@ body {
   box-shadow: 0 0 0 2px rgba(108, 92, 231, 0.1);
 }
 
-/* Total Section */
+
 .total-section {
   border-top: 1px solid #e0e0e0;
   padding-top: 20px;
@@ -469,7 +469,7 @@ body {
   color: #333;
 }
 
-/* Checkout Button */
+
 .checkout-btn {
   width: 100%;
   background-color: #6c5ce7;
@@ -495,7 +495,7 @@ body {
   opacity: 0.6;
 }
 
-/* Responsive Design */
+
 @media (max-width: 992px) {
   .cart-content {
       flex-direction: column;
@@ -568,7 +568,7 @@ body {
       padding: 20px;
   }
 
-  /* Mobile adjustments for ID badges */
+  
   .id-badges {
       margin-bottom: 8px;
   }
@@ -617,13 +617,13 @@ body {
       width: 100%;
   }
 
-  /* Adjust badges for very small screens */
+  
   .id-badges {
       justify-content: center;
   }
 }
 
-/* Additional styling for better mobile experience */
+
 @media (max-width: 768px) {
   .cart-item {
       border: 1px solid #f0f0f0;

@@ -1,25 +1,25 @@
-<!-- ordercomponent.html -->
 <div class="orders-container">
   <div *ngIf="!loading && orders.length > 0; else noOrders">
-    <!-- Orders Table Header -->
+    
     <div class="orders-table">
       <div class="table-header">
         <div class="header-cell order-id-col">Order ID</div>
         <div class="header-cell customer-col">Customer</div>
         <div class="header-cell location-col">Location</div>
         <div class="header-cell payment-status-col">Payment Status</div>
-        <div class="header-cell date-col">Date</div>
+        <div class="header-cell date-col">Order Date</div>
+        <div class="header-cell delivery-col">Delivery Info</div>
         <div class="header-cell order-status-col">Order Status</div>
         <div class="header-cell total-col">Total</div>
         <div class="header-cell action-col">Action</div>
       </div>
 
-      <!-- Orders Table Body -->
+      
       <div class="table-body">
         <ng-container *ngFor="let order of orders">
-          <!-- Order Summary Row -->
+          
           <div class="table-row">
-            <!-- Order ID with Product Count -->
+            
             <div class="table-cell order-id-col">
               <div class="order-id-container">
                 <div class="order-info">
@@ -30,39 +30,56 @@
                 </div>
               </div>
             </div>
-            <!-- Customer -->
+            
             <div class="table-cell customer-col">
               <span class="customer-name">User {{ order.userId }}</span>
             </div>
-            <!-- Location -->
+            
             <div class="table-cell location-col">
               <div class="location-info">
                 <span class="location-text">{{ order.shippingAddress }}</span>
                 <i class="location-icon">📍</i>
               </div>
             </div>
-            <!-- Payment Status -->
+            
             <div class="table-cell payment-status-col">
               <span class="status-badge payment-status" [ngClass]="order.paymentStatus.toLowerCase()">
                 {{ order.paymentStatus }}
               </span>
             </div>
-            <!-- Date -->
+            
             <div class="table-cell date-col">
               <span class="order-date">{{ order.orderDate | date: 'dd MMM, yyyy' }}</span>
             </div>
-            <!-- Order Status -->
+            
+            <!-- New Delivery Info Column -->
+            <div class="table-cell delivery-col">
+              <div class="delivery-info">
+                <div class="delivery-date">
+                  <strong>{{ getDeliveryDate(order.orderDate) }}</strong>
+                </div>
+                <div class="delivery-status" 
+                     [ngClass]="{
+                       'status-delivered': order.orderStatus === 'DELIVERED',
+                       'status-cancelled': order.orderStatus === 'CANCELLED',
+                       'status-pending': order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED'
+                     }">
+                  {{ getDeliveryStatus(order.orderDate, order.orderStatus) }}
+                </div>
+              </div>
+            </div>
+            
             <div class="table-cell order-status-col">
               <span class="status-badge order-status" [ngClass]="order.orderStatus.toLowerCase()">
                 <span class="status-dot"></span>
                 {{ order.orderStatus }}
               </span>
             </div>
-            <!-- Total -->
+            
             <div class="table-cell total-col">
-              <span class="total-amount">₹{{ order.totalPrice}}</span>
+              <span class="total-amount">{{ order.totalPrice | currency:'INR'}}</span>
             </div>
-            <!-- Action -->
+            
             <div class="table-cell action-col">
               <div class="action-buttons">
                 <button
@@ -80,10 +97,28 @@
               </div>
             </div>
           </div>
-          <!-- Expanded Product Details Row -->
+          
           <div *ngIf="expandedOrderId === order.orderId" class="expanded-details">
             <div class="product-details-container">
-              <h4 class="details-title">Order Details</h4>
+              <div class="details-header">
+                <h4 class="details-title">Order Details</h4>
+                <!-- Enhanced delivery information in expanded view -->
+                <div class="delivery-summary">
+                  <div class="delivery-summary-item">
+                    <span class="delivery-label">📅 Order Date:</span>
+                    <span class="delivery-value">{{ order.orderDate | date: 'dd MMM, yyyy' }}</span>
+                  </div>
+                  <div class="delivery-summary-item">
+                    <span class="delivery-label">🚚 Expected Delivery:</span>
+                    <span class="delivery-value delivery-highlight">{{ getDeliveryDate(order.orderDate) }}</span>
+                  </div>
+                  <div class="delivery-summary-item">
+                    <span class="delivery-label">📦 Status:</span>
+                    <span class="delivery-value">{{ getDeliveryStatus(order.orderDate, order.orderStatus) }}</span>
+                  </div>
+                </div>
+              </div>
+              
               <table class="product-details-table">
                 <thead>
                   <tr>
@@ -96,9 +131,9 @@
                 <tbody>
                   <tr *ngFor="let product of order.products">
                     <td class="product-name">{{ product.productName }}</td>
-                    <td class="product-price">{{ product.productPrice | currency }}</td>
+                    <td class="product-price">{{ product.productPrice | currency:'INR'}}</td>
                     <td class="product-quantity">{{ product.quantity }}</td>
-                    <td class="product-subtotal">{{ (product.productPrice * product.quantity) | currency }}</td>
+                    <td class="product-subtotal">{{ (product.productPrice * product.quantity) | currency:'INR'}}</td>
                   </tr>
                 </tbody>
               </table>

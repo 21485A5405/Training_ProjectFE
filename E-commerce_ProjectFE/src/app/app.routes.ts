@@ -13,22 +13,27 @@ import { ChangePasswordComponent } from './components/profile/change-password/ch
 import { AdminProfileComponent } from './components/profile/admin-profile/admin-profile.component';
 import { UserProfileComponent } from './components/profile/user-profile/user-profile.component';
 import { Welcomecomponent } from './components/user/welcomecomponent/welcome.component';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { AuthGuard } from './auth-guard';
 
 export const routes: Routes = [ 
-{ path : '', component : ProductDetailsComponent },
-{ path : 'login', component: LoginPageComponent },
-{ path : 'register', component: RegisterPageComponent },
-{ path : 'product-details', component : ProductDetailsComponent },
-{ path : 'admin-dashboard', component : AdminDashboardComponent },
-{ path : 'cart-page', component : CartPageComponent},
-{ path : 'order-list', component : OrderListComponent },
-{ path : 'product-list', component:ProductListComponent},
-{ path : 'user-list', component : UsersListComponent},
-{ path : 'sales-overview', component : SalesOverviewComponent },
-{ path : 'orders-page', component: OrderPageComponent},
-{ path : 'cart-page', component : CartPageComponent},
-{ path : 'change-password', component : ChangePasswordComponent},
-{ path : 'admin-profile', component:AdminProfileComponent},
-{ path : 'user-profile', component : UserProfileComponent},
-{ path : 'welcome', component :Welcomecomponent}
+  { path: '', component: ProductDetailsComponent },
+  { path: 'login', component: LoginPageComponent },
+  { path: 'register', component: RegisterPageComponent },
+  { path: 'product-details', component: ProductDetailsComponent },
+
+  { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [AuthGuard] },
+  { path: 'cart-page', component: CartPageComponent, canActivate: [AuthGuard] },
+  { path: 'order-list', component: OrderListComponent, canActivate: [AuthGuard] },
+  { path: 'product-list', component: ProductListComponent, canActivate: [AuthGuard] },
+  { path: 'user-list', component: UsersListComponent, canActivate: [AuthGuard] },
+  { path: 'sales-overview', component: SalesOverviewComponent, canActivate: [AuthGuard] },
+  { path: 'orders-page', component: OrderPageComponent, canActivate: [AuthGuard] },
+  { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
+  { path: 'admin-profile', component: AdminProfileComponent, canActivate: [AuthGuard] },
+  { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
+  { path: 'welcome', component: Welcomecomponent, canActivate: [AuthGuard] },
+
+  { path: '404', component: PageNotFoundComponent },
+  { path: '**', redirectTo: '404' }
 ];

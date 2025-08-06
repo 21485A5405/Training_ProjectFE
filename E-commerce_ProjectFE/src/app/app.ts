@@ -1,4 +1,3 @@
-// app.ts
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common'; 
@@ -29,20 +28,6 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class App {
   protected readonly title = signal('E-commerce_ProjectFE');
-  isDarkTheme: boolean = false;
 
   constructor(public router: Router) {}
-
-  toggleTheme() {
-    this.isDarkTheme = !this.isDarkTheme;
-    if (this.isDarkTheme) {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
-  }
-  shouldShowHeader(): boolean {
-    const hiddenRoutes = ['/login', '/register'];
-    return !hiddenRoutes.includes(this.router.url);
-  }
 }

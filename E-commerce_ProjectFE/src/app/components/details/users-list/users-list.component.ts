@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
 @Component({
   selector: 'app-users-list',
+  standalone:true,
   imports :[CommonModule],
   templateUrl: './users-list.component.html',
   styleUrls: ['./users-list.component.css']

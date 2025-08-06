@@ -1,12 +1,7 @@
-/* ========================================
-   SIMPLE ADMIN DASHBOARD CSS
-   Clean, Modern Design - No Advanced CSS
-======================================== */
 
-/* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap');
 
-/* Reset and Base */
+
 * {
   margin: 0;
   padding: 0;
@@ -21,10 +16,6 @@ body {
   line-height: 1.6;
   padding: 20px;
 }
-
-/* ========================================
-   PRODUCT LIST STYLES
-======================================== */
 
 .product-container {
   max-width: 1400px;
@@ -143,10 +134,6 @@ body {
   gap: 12px;
 }
 
-/* ========================================
-   BUTTONS
-======================================== */
-
 .btn {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
@@ -212,9 +199,6 @@ body {
   background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
 }
 
-/* ========================================
-   MODAL STYLES
-======================================== */
 
 .modal {
   position: fixed;
@@ -331,9 +315,6 @@ textarea {
   margin-top: 16px;
 }
 
-/* ========================================
-   ORDER MANAGEMENT STYLES
-======================================== */
 
 .order-management {
   max-width: 1600px;
@@ -423,10 +404,6 @@ textarea {
   color: #10b981;
 }
 
-/* ========================================
-   STATUS BADGES
-======================================== */
-
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -445,7 +422,7 @@ textarea {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Order Status Colors */
+
 .status-pending {
   background: #fef3c7;
   color: #92400e;
@@ -515,7 +492,7 @@ textarea {
   font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 12px;
-  padding: 8px 16px;
+  padding: 1px 1px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -566,6 +543,64 @@ textarea {
   background: #9ca3af;
   cursor: not-allowed;
   opacity: 0.6;
+}
+/* Add these styles to your admin dashboard CSS */
+
+.delivery-info-cell {
+  min-width: 150px;
+}
+
+.delivery-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+
+.delivery-date {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+}
+
+.delivery-status {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  text-align: center;
+  min-width: 80px;
+}
+
+.delivery-status.status-delivered {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+}
+
+.delivery-status.status-cancelled {
+  background-color: #ffeaea;
+  color: #d32f2f;
+}
+
+.delivery-status.status-pending {
+  background-color: #fff3e0;
+  color: #f57c00;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .delivery-info-cell {
+    min-width: 120px;
+  }
+  
+  .delivery-date {
+    font-size: 13px;
+  }
+  
+  .delivery-status {
+    font-size: 11px;
+    padding: 1px 6px;
+  }
 }
 
 .dropdown-container {

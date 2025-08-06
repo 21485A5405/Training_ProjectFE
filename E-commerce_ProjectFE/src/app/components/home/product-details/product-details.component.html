@@ -26,21 +26,21 @@
     <p><strong>ID : {{ product.productId }}</strong></p>
     <h4>{{ product.productName }}</h4>
     <p>{{ product.productDescription }}</p>
-    <p>₹{{ product.productPrice }}</p>
+    <p>{{ product.productPrice |currency:'INR' }}</p>
 
-    <!-- Product Availability Status -->
+    
     <p *ngIf="product.productQuantity > 0" style="color: green; font-weight: bold; margin: 5px 0;">
        Available
     </p>
     <p *ngIf="product.productQuantity > 0 && product.productQuantity <= 3" style="color: orange; font-weight: bold; margin: 5px 0;">
       Hurry up! Only {{ product.productQuantity }} left
     </p>
-    <!-- Show "Out of Stock" if quantity is 0 -->
+    
     <div *ngIf="product.productQuantity === 0">
       <button disabled style="background-color: #ccc; color: #555; cursor: not-allowed;">Out of Stock</button>
     </div>
 
-    <!-- Otherwise show Add to Cart -->
+    
     <div *ngIf="product.productQuantity > 0">
       <button (click)="addToCart(product)">Add to Cart</button>
     </div>

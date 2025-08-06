@@ -1,4 +1,4 @@
-/* Header Container */
+
 .header-container {
   display: flex;
   align-items: center;
@@ -10,14 +10,14 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Title */
+
 .header-title {
   font-size: 24px;
   font-weight: bold;
   cursor: pointer;
 }
 
-/* Search Box */
+
 .search-box {
   display: flex;
   align-items: center;
@@ -58,14 +58,14 @@
   color: #2e3192;
 }
 
-/* Icon Section */
+
 .icon-section {
   display: flex;
   align-items: center;
   gap: 20px;
 }
 
-/* Icon Wrapper */
+
 .icon-wrapper {
   cursor: pointer;
   position: relative;
@@ -78,7 +78,7 @@
   transform: scale(1.15);
 }
 
-/* Dropdown under profile icon */
+
 .settings-dropdown {
   position: absolute;
   top: 40px;

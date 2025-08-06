@@ -1,4 +1,4 @@
-/* Layout */
+
 .dashboard-container {
   display: flex;
   height: 100vh;
@@ -35,7 +35,7 @@
   background-color: #34495e;
 }
 
-/* Main Body */
+
 .dashboard-body {
   flex-grow: 1;
   padding: 20px;
@@ -57,7 +57,7 @@
   font-weight: 600;
 }
 
-/* Settings Dropdown */
+
 .icon-wrapper {
   position: relative;
   cursor: pointer;

@@ -11,7 +11,7 @@ import { ProfileService } from '../../../services/profileservice';
   styleUrls: ['./payment-details.component.css']
 })
 export class PaymentDetailsComponent implements OnInit {
-  @Input() paymentDetails: any = {}; // Initialize to avoid undefined error
+  @Input() paymentDetails: any = {}; 
 
   paymentMethods: string[] = [];
 

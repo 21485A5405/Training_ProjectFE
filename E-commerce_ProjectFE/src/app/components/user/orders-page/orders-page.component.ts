@@ -56,6 +56,38 @@ export class OrderPageComponent implements OnInit, OnDestroy {
     return order.products.map((p: any) => p.productName).join(', ');
   }
 
+  // Helper method to calculate delivery date (7 days from order date)
+  getDeliveryDate(orderDate: string): string {
+    const order = new Date(orderDate);
+    const deliveryDate = new Date(order);
+    deliveryDate.setDate(order.getDate() + 7); // Add 7 days
+    
+    return deliveryDate.toLocaleDateString('en-IN', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  // Helper method to get delivery status based on order date
+  getDeliveryStatus(orderDate: string, orderStatus: string): string {
+    if (orderStatus === 'DELIVERED') return 'Delivered';
+    if (orderStatus === 'CANCELLED') return 'Cancelled';
+    
+    const order = new Date(orderDate);
+    const deliveryDate = new Date(order);
+    deliveryDate.setDate(order.getDate() + 7);
+    const today = new Date();
+    
+    if (today >= deliveryDate) {
+      return 'Ready for Delivery';
+    } else {
+      const daysLeft = Math.ceil((deliveryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+      return `Arriving in ${daysLeft} day${daysLeft !== 1 ? 's' : ''}`;
+    }
+  }
+
   // Method to get order details by user ID
   getOrderDetails() {
     this.loading = true; // Set loading to true while data is being fetched

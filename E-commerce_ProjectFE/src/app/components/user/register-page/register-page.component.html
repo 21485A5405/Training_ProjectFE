@@ -4,33 +4,33 @@
 
     <form (ngSubmit)="onRegister()" #registerForm="ngForm">
 
-      <!-- Username Field -->
+      
       <div class="form-group input-icon-group">
         <i class="fa fa-user icon"></i>
         <input type="text" id="username" placeholder="Enter username" name="userName" [(ngModel)]="userName" required
           autocomplete="username" />
       </div>
 
-      <!-- Email Field -->
+      
       <div class="form-group input-icon-group">
         <i class="fa fa-envelope icon"></i>
         <input type="email" id="email" placeholder="Enter email" name="userEmail" [(ngModel)]="userEmail" required
           autocomplete="email" />
       </div>
 
-      <!-- Password Field -->
+      
       <div class="form-group input-icon-group">
         <i class="fa fa-lock icon"></i>
         <input type="password" id="password" placeholder="Enter password" name="userPassword" [(ngModel)]="userPassword"
           required autocomplete="new-password" />
       </div>
 
-      <!-- Register Button -->
+      
       <button type="submit" class="btn btn-primary" [disabled]="!registerForm.form.valid">
         Register
       </button>
 
-      <!-- Error Message -->
+      
       <div *ngIf="registerErrorMessage" class="error-message">
         {{ registerErrorMessage }}
       </div>

@@ -13,7 +13,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: 'app-cart-page',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Add AddressModalComponent to the imports array
+  imports: [CommonModule, FormsModule], 
   templateUrl: './cart-page.component.html',
   styleUrls: ['./cart-page.component.css'],
 })
@@ -27,12 +27,12 @@ export class CartPageComponent implements OnInit {
   paymentMethods: { type: string; value: string }[] = [];
   selectedPaymentMethod: { type: string; value: string } | null = null;
 
-  // New properties for totals
+  
   totalItemsCount: number = 0;
   totalPrice: number = 0;
   selectedItemsCount: number = 0;
   selectedItemsTotal: number = 0;
-  shippingCost: number = 5.00; // Default shipping cost
+  shippingCost: number = 5.00; 
 
   constructor(
     private cartService: CartService,
@@ -51,24 +51,36 @@ export class CartPageComponent implements OnInit {
     this.loadUserPaymentMethods();
   }
 
-  // Calculate total items count and total price
+  
   calculateTotals(): void {
     this.totalItemsCount = this.cartItems.reduce((total, item) => total + item.productQuantity, 0);
     this.totalPrice = this.cartItems.reduce((total, item) => total + item.totalPrice, 0);
     
-    // Calculate selected items totals
+    
     this.selectedItemsCount = this.selectedItems.reduce((total, item) => total + item.productQuantity, 0);
     this.selectedItemsTotal = this.selectedItems.reduce((total, item) => total + item.totalPrice, 0);
   }
 
-  // Get final total including shipping
+  
   getFinalTotal(): number {
     return this.selectedItemsTotal + this.shippingCost;
   }
 
-  // Get total for all cart items including shipping
+  
   getAllItemsTotal(): number {
     return this.totalPrice + this.shippingCost;
+  }
+
+  // Helper method to calculate delivery date (1 week from now)
+  getDeliveryDate(): string {
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + 7); // Add 7 days
+    return deliveryDate.toLocaleDateString('en-IN', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   }
 
   navigateToOrders(): void {
@@ -93,17 +105,17 @@ export class CartPageComponent implements OnInit {
       'Content-Type': 'application/json',
     });
   
-    // Send the request to delete the cart item by its cartItemId
+    
     this.cartService.deleteCartItem(cartItemId).subscribe({
       next: (response) => {
         console.log('Cart item deleted successfully', response);
-        // Update the cart items array by removing the deleted item using cartItemId
+        
         this.cartItems = this.cartItems.filter(item => item.cartItemId !== cartItemId);
         
-        // Remove from selected items if it was selected
+        
         this.selectedItems = this.selectedItems.filter(item => item.cartItemId !== cartItemId);
         
-        // Recalculate totals after deletion
+        
         this.calculateTotals();
         
         Swal.fire('Success', 'Cart item deleted successfully', 'success');
@@ -123,7 +135,7 @@ export class CartPageComponent implements OnInit {
         this.cartItems = response.data;
         this.isLoading = false;
         
-        // Calculate totals after fetching cart items
+        
         this.calculateTotals();
         
         this.cdr.detectChanges();
@@ -143,28 +155,28 @@ export class CartPageComponent implements OnInit {
       this.selectedItems = this.selectedItems.filter(i => i.cartItemId !== item.cartItemId); 
     }
     
-    // Recalculate totals when selection changes
+    
     this.calculateTotals();
   }
 
   increaseQuantity(item: any): void {
     const prevQuantity = item.productQuantity;
-    item.productQuantity += 1; // Optimistic UI
+    item.productQuantity += 1; 
     item.totalPrice = item.productQuantity * item.product.productPrice;
 
-    // Recalculate totals immediately for UI update
+    
     this.calculateTotals();
 
     this.cartService
       .increaseCartQuantity(this.userId, item.product.productId)
       .subscribe({
         next: () => {
-          // Recalculate totals on success
+          
           this.calculateTotals();
         },
         error: (err) => {
           console.error('Error increasing quantity', err);
-          // Revert on failure
+          
           item.productQuantity = prevQuantity;
           item.totalPrice = prevQuantity * item.product.productPrice;
           this.calculateTotals();
@@ -176,22 +188,22 @@ export class CartPageComponent implements OnInit {
     if (item.productQuantity <= 1) return;
 
     const prevQuantity = item.productQuantity;
-    item.productQuantity -= 1; // Optimistic UI
+    item.productQuantity -= 1; 
     item.totalPrice = item.productQuantity * item.product.productPrice;
 
-    // Recalculate totals immediately for UI update
+    
     this.calculateTotals();
 
     this.cartService
       .decreaseCartQuantity(this.userId, item.product.productId)
       .subscribe({
         next: () => {
-          // Recalculate totals on success
+          
           this.calculateTotals();
         },
         error: (err) => {
           console.error('Error decreasing quantity', err);
-          // Revert on failure
+          
           item.productQuantity = prevQuantity;
           item.totalPrice = prevQuantity * item.product.productPrice;
           this.calculateTotals();
@@ -216,7 +228,7 @@ export class CartPageComponent implements OnInit {
       return;
     }
   
-    // Construct payload
+    
     const orderData = this.selectedItems.map(item => ({
       userId: this.userId,
       addressId: this.selectedAddressId,
@@ -230,16 +242,41 @@ export class CartPageComponent implements OnInit {
       return;
     }
   
-    // Send request to backend
+    // Get delivery date
+    const deliveryDate = this.getDeliveryDate();
+    
     this.orderService.placeOrder(orderData).subscribe({
       next: () => {
-        Swal.fire('Success', 'Order placed successfully!', 'success');
+        // Enhanced success alert with delivery date
+        Swal.fire({
+          icon: 'success',
+          title: 'Order Placed Successfully!',
+          html: `
+            <div style="text-align: left; margin: 20px 0;">
+              <p><strong>Order Total:</strong> ${this.formatCurrency(this.getFinalTotal())}</p>
+              <p><strong>Items Ordered:</strong> ${this.selectedItemsCount} items</p>
+              <p><strong>Expected Delivery:</strong> <span style="color: #28a745; font-weight: bold;">${deliveryDate}</span></p>
+              <p style="margin-top: 15px; color: #666; font-size: 14px;">
+                📦 Your order will be delivered within 7 business days
+              </p>
+            </div>
+          `,
+          confirmButtonText: 'View Orders',
+          showCancelButton: true,
+          cancelButtonText: 'Continue Shopping',
+          confirmButtonColor: '#28a745',
+          cancelButtonColor: '#6c757d'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToOrders();
+          }
+        });
         
-        // Refresh cart items after successful order
+        
         this.cartService.getCartItems(this.userId).subscribe((updatedCart) => {
           this.cartItems = updatedCart.data;
-          this.selectedItems = []; // Clear selected items
-          this.calculateTotals(); // Recalculate totals
+          this.selectedItems = []; 
+          this.calculateTotals(); 
           this.cdr.detectChanges();
         });
       },
@@ -265,18 +302,18 @@ export class CartPageComponent implements OnInit {
   goToHome():void {
     this.router.navigate(['/product-details'])
   }
-  // Utility method to format currency
+  
   formatCurrency(amount: number): string {
     return `₹${amount.toFixed(2)}`;
   }
 
-  // Method to update shipping cost when user changes shipping option
+  
   updateShippingCost(event: any): void {
     this.shippingCost = +event.target.value;
-    this.calculateTotals(); // Recalculate when shipping changes
+    this.calculateTotals(); 
   }
 
-  // Alternative method with proper typing
+  
   onShippingChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.shippingCost = +target.value;

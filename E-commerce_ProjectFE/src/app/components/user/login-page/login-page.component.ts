@@ -15,11 +15,10 @@ import Swal from 'sweetalert2';
     FormsModule,  
     RouterModule,  
   ],
-  templateUrl: './login-page.component.html',  // Path to your template
-  styleUrls: ['./login-page.component.css'],  // Path to your styles
+  templateUrl: './login-page.component.html',  
+  styleUrls: ['./login-page.component.css'],  
 })
 export class LoginPageComponent {
-  // Toggle state for switching between admin and customer login
   isAdminLogin: boolean = false;
   showUserPassword: boolean = false;
 
@@ -44,13 +43,10 @@ export class LoginPageComponent {
     private cdRef: ChangeDetectorRef
   ) {}
 
-  // Method to toggle between admin and customer login
   toggleLoginMode() {
     this.isAdminLogin = !this.isAdminLogin;
-    // Clear error messages when switching
     this.adminerrorMessage = '';
     this.usererrorMessage = '';
-    // Clear form fields when switching
     this.adminEmail = '';
     this.adminPassword = '';
     this.userEmail = '';

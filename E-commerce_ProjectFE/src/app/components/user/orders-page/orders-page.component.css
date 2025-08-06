@@ -1,4 +1,3 @@
-/* ordercomponent.css */
 .orders-container {
   background: #b2c5d7;
   color: #475569;
@@ -16,12 +15,12 @@
   border: 1px solid #e5e7eb;
 }
 
-/* Table Header */
+/* Updated grid to include delivery column */
 .table-header {
   background: #b2c5d7;
   color: #475569;
   display: grid;
-  grid-template-columns: 200px 150px 200px 140px 120px 140px 100px 120px;
+  grid-template-columns: 180px 130px 180px 120px 100px 160px 120px 90px 120px;
   background: #f9fafb;
   border-bottom: 1px solid #e5e7eb;
   font-weight: 600;
@@ -37,7 +36,6 @@
   align-items: center;
 }
 
-/* Table Body */
 .table-body {
   max-height: 600px;
   overflow-y: auto;
@@ -45,7 +43,7 @@
 
 .table-row {
   display: grid;
-  grid-template-columns: 200px 150px 200px 140px 120px 140px 100px 120px;
+  grid-template-columns: 180px 130px 180px 120px 100px 160px 120px 90px 120px;
   border-bottom: 1px solid #f3f4f6;
   transition: background-color 0.2s ease;
 }
@@ -66,7 +64,7 @@
   color: #374151;
 }
 
-/* Order ID Column */
+/* Order ID Styles */
 .order-id-container {
   display: flex;
   align-items: center;
@@ -108,18 +106,18 @@
   color: #6b7280;
 }
 
-/* Customer Column */
+/* Customer Styles */
 .customer-name {
   font-weight: 500;
   color: #111827;
 }
 
-/* Location Column */
+/* Location Styles */
 .location-info {
   display: flex;
   align-items: center;
   gap: 8px;
-  max-width: 180px;
+  max-width: 160px;
 }
 
 .location-text {
@@ -136,7 +134,51 @@
   opacity: 0.6;
 }
 
-/* Status Badges */
+/* Delivery Column Styles */
+.delivery-col {
+  min-width: 160px;
+}
+
+.delivery-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.delivery-date {
+  font-size: 13px;
+  color: #333;
+  font-weight: 600;
+}
+
+.delivery-status {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.status-delivered {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.status-cancelled {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #fde047;
+}
+
+/* Status Badge Styles */
 .status-badge {
   padding: 6px 12px;
   border-radius: 20px;
@@ -195,17 +237,17 @@
 .order-status.pending {
   background-color: #fef3c7;
   color: #92400e;
-  border: 1px solid #fde68a;
+  border: 1px solid #78651d;
 }
 
 .order-status.processing .status-dot {
-  background-color: #f59e0b;
+  background-color: #023fcd;
 }
 
 .order-status.processing {
-  background-color: #fef3c7;
-  color: #92400e;
-  border: 1px solid #fde68a;
+  background-color: #6d96cf;
+  color: white;
+  border: 1px solid #fbfbfb;
 }
 
 .order-status.shipped .status-dot {
@@ -258,37 +300,45 @@
   border: 1px solid #fca5a5;
 }
 
-/* Date Column */
+/* Date Styles */
 .order-date {
   color: #374151;
   font-size: 14px;
 }
 
-/* Total Column */
+/* Total Amount Styles */
 .total-amount {
   font-weight: 600;
   color: #111827;
   font-size: 14px;
 }
 
-/* Action Buttons */
+/* Action Buttons - Merged Design */
 .action-buttons {
   display: flex;
-  gap: 8px;
-  flex-direction: column;
+  gap: 6px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.cancel-btn {
-  background: #bfad25;
-  color: white;
+.cancel-btn,
+.details-btn {
   border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 6px 10px;
+  border-radius: 6px;
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  min-width: 80px;
+  text-align: center;
+}
+
+.cancel-btn {
+  background: #ef4444;
+  color: white;
 }
 
 .cancel-btn:hover:not(.disabled) {
@@ -307,16 +357,8 @@
 }
 
 .details-btn {
-  background: #4d91ff;
+  background: #3b82f6;
   color: white;
-  border: none;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
 }
 
 .details-btn:hover {
@@ -328,7 +370,7 @@
   transform: translateY(0);
 }
 
-/* Expanded Details */
+/* Expanded Details Styles */
 .expanded-details {
   grid-column: 1 / -1;
   background: #f9fafb;
@@ -352,11 +394,55 @@
   padding: 20px;
 }
 
+/* Enhanced expanded details styles */
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9ecef;
+}
+
 .details-title {
-  margin: 0 0 16px 0;
-  font-size: 16px;
+  margin: 0;
+  color: #333;
+  font-size: 18px;
   font-weight: 600;
-  color: #111827;
+}
+
+.delivery-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  border-left: 4px solid #28a745;
+  max-width: 300px;
+}
+
+.delivery-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.delivery-label {
+  font-weight: 500;
+  color: #666;
+  min-width: 120px;
+}
+
+.delivery-value {
+  font-weight: 600;
+  color: #333;
+}
+
+.delivery-highlight {
+  color: #28a745 !important;
+  font-size: 15px;
 }
 
 .product-details-table {
@@ -416,7 +502,7 @@
   text-align: center;
 }
 
-/* No Orders State */
+/* No Orders Styles */
 .no-orders {
   display: flex;
   justify-content: center;
@@ -455,12 +541,30 @@
 @media (max-width: 1200px) {
   .table-header,
   .table-row {
-    grid-template-columns: 180px 130px 180px 120px 100px 120px 90px 100px;
+    grid-template-columns: 160px 120px 160px 110px 90px 140px 110px 80px 100px;
   }
   
   .header-cell,
   .table-cell {
     padding: 12px 8px;
+  }
+  
+  .delivery-col {
+    min-width: 140px;
+  }
+  
+  .delivery-summary {
+    max-width: 250px;
+  }
+  
+  .details-header {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
   }
 }
 
@@ -475,8 +579,8 @@
   
   .table-header,
   .table-row {
-    grid-template-columns: 160px 120px 160px 110px 90px 110px 80px 90px;
-    min-width: 920px;
+    grid-template-columns: 140px 100px 140px 100px 80px 120px 100px 70px 90px;
+    min-width: 940px;
   }
   
   .header-cell,
@@ -497,18 +601,49 @@
     font-size: 11px;
   }
   
+  .delivery-col {
+    min-width: 120px;
+  }
+  
+  .delivery-info {
+    font-size: 11px;
+  }
+  
+  .delivery-date {
+    font-size: 11px;
+  }
+  
+  .delivery-status {
+    font-size: 10px;
+    padding: 2px 6px;
+  }
+  
   .action-buttons {
-    gap: 4px;
+    gap: 3px;
+    flex-direction: column;
   }
   
   .cancel-btn,
   .details-btn {
-    padding: 3px 6px;
+    padding: 4px 6px;
     font-size: 10px;
+    min-width: 70px;
   }
   
   .product-details-container {
     padding: 15px;
+  }
+  
+  .delivery-summary {
+    max-width: 100%;
+  }
+  
+  .delivery-summary-item {
+    font-size: 12px;
+  }
+  
+  .delivery-label {
+    min-width: 100px;
   }
   
   .product-details-table th,

@@ -1,5 +1,4 @@
 <div class="login-container">
-  <!-- Toggle Switch -->
   <div class="toggle-container">
     <div class="toggle-wrapper">
       <span class="toggle-label" [class.active]="!isAdminLogin">Customer</span>
@@ -10,80 +9,47 @@
     </div>
   </div>
 
-  <!-- Login Form -->
   <div class="login-form" [class.admin-mode]="isAdminLogin">
     <h2>{{ isAdminLogin ? 'Admin Login' : 'Customer Login' }}</h2>
 
-    <!-- Admin Login -->
     <form *ngIf="isAdminLogin" (ngSubmit)="onAdminSubmit()" #adminLoginForm="ngForm">
       <div class="form-group input-icon-group">
         <div class="input-wrapper">
           <i class="fa fa-envelope icon"></i>
-          <input
-            type="text"
-            id="admin-username"
-            placeholder="Email ID"
-            name="username"
-            [(ngModel)]="adminEmail"
-            required
-          />
+          <input type="text" id="admin-username" placeholder="Email ID" name="username" [(ngModel)]="adminEmail"
+            required />
         </div>
       </div>
 
       <div class="form-group input-icon-group">
         <div class="input-wrapper">
           <i class="fa fa-lock icon"></i>
-          <input
-            [type]="showAdminPassword ? 'text' : 'password'"
-            id="admin-password"
-            placeholder="Password"
-            name="password"
-            [(ngModel)]="adminPassword"
-            required
-          />
-          <i
-            class="fa"
-            [ngClass]="showAdminPassword ? 'fa-eye-slash' : 'fa-eye'"
-            (click)="toggleAdminPasswordVisibility()"
-          ></i>
+          <input [type]="showAdminPassword ? 'text' : 'password'" id="admin-password" placeholder="Password"
+            name="password" [(ngModel)]="adminPassword" required />
+          <i class="fa" [ngClass]="showAdminPassword ? 'fa-eye-slash' : 'fa-eye'"
+            (click)="toggleAdminPasswordVisibility()"></i>
         </div>
       </div>
 
       <button type="submit" class="btn btn-primary" [disabled]="!adminLoginForm.form.valid">Login</button>
     </form>
 
-    <!-- Customer Login -->
     <form *ngIf="!isAdminLogin" (ngSubmit)="onCustomerSubmit()" #customerLoginForm="ngForm">
       <div class="form-group input-icon-group">
         <div class="input-wrapper">
           <i class="fa fa-envelope icon"></i>
-          <input
-            type="email"
-            id="customer-username"
-            placeholder="Email ID"
-            name="loginEmail"
-            [(ngModel)]="userEmail"
-            required
-          />
+          <input type="email" id="customer-username" placeholder="Email ID" name="loginEmail" [(ngModel)]="userEmail"
+            required />
         </div>
       </div>
 
       <div class="form-group input-icon-group">
         <div class="input-wrapper">
           <i class="fa fa-lock icon"></i>
-          <input
-            [type]="showUserPassword ? 'text' : 'password'"
-            id="customer-password"
-            placeholder="Password"
-            name="loginPassword"
-            [(ngModel)]="userPassword"
-            required
-          />
-          <i
-            class="fa"
-            [ngClass]="showUserPassword ? 'fa-eye-slash' : 'fa-eye'"
-            (click)="toggleUserPasswordVisibility()"
-          ></i>
+          <input [type]="showUserPassword ? 'text' : 'password'" id="customer-password" placeholder="Password"
+            name="loginPassword" [(ngModel)]="userPassword" required />
+          <i class="fa" [ngClass]="showUserPassword ? 'fa-eye-slash' : 'fa-eye'"
+            (click)="toggleUserPasswordVisibility()"></i>
         </div>
       </div>
 

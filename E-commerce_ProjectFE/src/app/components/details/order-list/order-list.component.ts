@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ProfileService } from '../../../services/profileservice'; // For payment methods
+import { ProfileService } from '../../../services/profileservice';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,10 +16,10 @@ export class OrderListComponent implements OnInit {
   orders: any[] = [];
   orderStatuses: string[] = [];
   paymentStatuses: string[] = [];
-  showOrderStatusDropdown: { [key: number]: boolean } = {}; // Tracks which order has order status dropdown visible
-  showPaymentStatusDropdown: { [key: number]: boolean } = {}; // Tracks which order has payment status dropdown visible
-  selectedOrderStatus: { [key: number]: string } = {}; // To store temporary selected order status
-  selectedPaymentStatus: { [key: number]: string } = {}; // To store temporary selected payment status
+  showOrderStatusDropdown: { [key: number]: boolean } = {}; 
+  showPaymentStatusDropdown: { [key: number]: boolean } = {}; 
+  selectedOrderStatus: { [key: number]: string } = {}; 
+  selectedPaymentStatus: { [key: number]: string } = {}; 
 
   constructor(
     private http: HttpClient,
@@ -31,7 +31,6 @@ export class OrderListComponent implements OnInit {
     const token = sessionStorage.getItem('authToken');
     const headers = new HttpHeaders({ Authorization: `${token}` });
 
-    // Fetch orders
     this.http.get<any>('http://localhost:8080/orders/get-all', { headers }).subscribe({
       next: (response) => {
         this.orders = response.data;
@@ -43,7 +42,6 @@ export class OrderListComponent implements OnInit {
       }
     });
 
-    // Fetch order statuses
     this.http.get<string[]>('http://localhost:8080/orders/get-orderstatus', { headers }).subscribe({
       next: (response) => {
         this.orderStatuses = response;
@@ -55,7 +53,6 @@ export class OrderListComponent implements OnInit {
       }
     });
 
-    // Fetch payment statuses from profile service
     this.profileService.getPaymentStatus().subscribe({
       next: (data: string[]) => {
         this.paymentStatuses = data;
@@ -73,22 +70,17 @@ export class OrderListComponent implements OnInit {
   }
   
   canEditPaymentStatus(order: any): boolean {
-    // Allow editing only if status is not PAID or REFUNDED
     return order.paymentStatus !== 'PAID' && order.paymentStatus !== 'REFUNDED';
   }
   
   canSetDelivered(order: any): boolean {
-    // Only allow DELIVERED if payment is PAID
     return order.paymentStatus === 'PAID';
   }
 
-  
-  // Method to update order status
   updateOrderStatus(orderId: number, newStatus: string) {
     const token = sessionStorage.getItem('authToken');
     const headers = new HttpHeaders({ Authorization: `${token}` });
     
-    // Log for debugging
     console.log('Order ID:', orderId);
     console.log('New Status:', newStatus);
       const order = this.orders.find(o => o.orderId === orderId);
@@ -101,12 +93,11 @@ export class OrderListComponent implements OnInit {
     this.http.put(url, {}, { headers }).subscribe({
       next: (response: any) => {
         Swal.fire('Updated', 'Order status updated successfully!', 'success');
-        // Update the local list of orders after successful update
         this.orders = this.orders.map(order =>
           order.orderId === orderId ? { ...order, orderStatus: newStatus } : order
         );
         this.cdRef.detectChanges();
-        this.showOrderStatusDropdown[orderId] = false; // Close dropdown after update
+        this.showOrderStatusDropdown[orderId] = false;
       },
       error: () => {
         Swal.fire('Error', 'Failed to update order status', 'error');
@@ -114,9 +105,7 @@ export class OrderListComponent implements OnInit {
     });
   }  
 
-  // Method to update payment status
   updatePaymentStatus(orderId: number, paymentStatus: string) {
-    // Debugging logs
     console.log('Debug - updatePaymentStatus called with:');
     console.log('Order ID:', orderId);
     console.log('Payment Status:', paymentStatus);
@@ -124,21 +113,18 @@ export class OrderListComponent implements OnInit {
     const token = sessionStorage.getItem('authToken');
     const headers = new HttpHeaders({ Authorization: `${token}` });
   
-    // Construct the URL with both orderId and paymentStatus as path variables
     const url = `http://localhost:8080/orders/update-paymentstatus/${orderId}/${paymentStatus}`;
   
-    // Log the URL for debugging
     console.log('Constructed URL:', url);
   
-    // Send the PUT request to update the payment status
     this.http.put(url, {}, { headers }).subscribe({
       next: (response: any) => {
         Swal.fire('Updated', 'Payment status updated successfully!', 'success');
-        // Update the local list of orders after successful update
+
         this.orders = this.orders.map(order =>
           order.orderId === orderId ? { ...order, paymentStatus } : order
         );
-        this.showPaymentStatusDropdown[orderId] = false; // Close dropdown after update
+        this.showPaymentStatusDropdown[orderId] = false; 
       },
       error: (err) => {
         console.error('Error occurred while updating payment status:', err);
@@ -162,49 +148,83 @@ export class OrderListComponent implements OnInit {
       this.selectedPaymentStatus[orderId] = order?.paymentStatus || '';
     }
   }
-  
-
-  // Disable Update Order Status button when the status is 'Shipped'
   isOrderStatusButtonDisabled(orderStatus: string): boolean {
     return orderStatus === 'DELIVERED';
   }
 
-  // Disable Apply Payment Status button when the status is 'PAID'
   isPaymentStatusButtonDisabled(paymentStatus: string): boolean {
     return paymentStatus === 'PAID';
   }
 
-  // Add these methods to your component class
-
-getOrderStatusClass(status: string): string {
-  switch (status?.toUpperCase()) {
-    case 'PENDING':
-      return 'status-pending';
-    case 'PROCESSING':
-      return 'status-processing';
-    case 'SHIPPED':
-      return 'status-shipped';
-    case 'DELIVERED':
-      return 'status-delivered';
-    case 'CANCELLED':
-      return 'status-cancelled';
-    default:
-      return 'status-pending';
+  getOrderStatusClass(status: string): string {
+    switch (status?.toUpperCase()) {
+      case 'PENDING':
+        return 'status-pending';
+      case 'PROCESSING':
+        return 'status-processing';
+      case 'SHIPPED':
+        return 'status-shipped';
+      case 'DELIVERED':
+        return 'status-delivered';
+      case 'CANCELLED':
+        return 'status-cancelled';
+      default:
+        return 'status-pending';
+    }
   }
-}
 
-getPaymentStatusClass(status: string): string {
-  switch (status?.toUpperCase()) {
-    case 'PENDING':
-      return 'payment-pending';
-    case 'PAID':
-      return 'payment-paid';
-    case 'FAILED':
-      return 'payment-failed';
-    case 'REFUNDED':
-      return 'payment-refunded';
-    default:
-      return 'payment-pending';
+  getPaymentStatusClass(status: string): string {
+    switch (status?.toUpperCase()) {
+      case 'PENDING':
+        return 'payment-pending';
+      case 'PAID':
+        return 'payment-paid';
+      case 'FAILED':
+        return 'payment-failed';
+      case 'REFUNDED':
+        return 'payment-refunded';
+      default:
+        return 'payment-pending';
+    }
   }
-}
+
+  getDeliveryDate(orderDate: string): string {
+    const order = new Date(orderDate);
+    const delivery = new Date(order);
+    delivery.setDate(order.getDate() + 7);
+    
+    return delivery.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+
+  getDeliveryStatus(orderDate: string, orderStatus: string): string {
+    if (orderStatus === 'DELIVERED') {
+      return 'Delivered';
+    }
+    
+    if (orderStatus === 'CANCELLED') {
+      return 'Cancelled';
+    }
+    
+    const orderDateObj = new Date(orderDate);
+    const deliveryDate = new Date(orderDateObj);
+    deliveryDate.setDate(orderDateObj.getDate() + 7);
+    
+    const today = new Date();
+    const timeDiff = deliveryDate.getTime() - today.getTime();
+    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    
+    if (daysDiff < 0) {
+      return 'Overdue';
+    } else if (daysDiff === 0) {
+      return 'Delivering Today';
+    } else if (daysDiff === 1) {
+      return 'Delivering Tomorrow';
+    } else {
+      return `${daysDiff} days to delivery`;
+    }
+  }
 }

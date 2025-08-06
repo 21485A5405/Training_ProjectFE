@@ -40,7 +40,7 @@ export class UserProfileComponent implements OnInit {
     this.getUserPayments();
   }
 
-  // Close dropdown when clicking outside
+  
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
@@ -51,23 +51,22 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
-  // Toggle settings dropdown
+  
   toggleSettingsDropdown(): void {
     this.isSettingsDropdownVisible = !this.isSettingsDropdownVisible;
   }
 
-  // Navigate to change password and close dropdown
+  
   navigateToChangePassword(): void {
     this.isSettingsDropdownVisible = false;
     this.router.navigate(['/change-password']);
   }
 
-  // Dashboard navigation
+  
   goToDashboard(): void {
     this.router.navigate(['/admin-dashboard']);
   }
 
-  // Delete account functionality
   deleteAccount(): void {
     Swal.fire({
       title: 'Are you sure?',
@@ -83,12 +82,16 @@ export class UserProfileComponent implements OnInit {
         const token = sessionStorage.getItem('authToken') || '';
         const headers = new HttpHeaders({ Authorization: token });
   
-        this.http.delete(`http://localhost:8080/users/delete-user-by-id/${this.userId}`, { headers }).subscribe({
-          next: () => {
+        this.http.delete(`http://localhost:8080/users/delete-user-by-id/${this.userId}`, {
+          headers,
+          responseType: 'text' // 👈 Accept plain text response
+        }).subscribe({
+          next: (res: string) => {
+            const message = res || 'Your account has been deleted.';
             Swal.fire({
               icon: 'success',
               title: 'Deleted!',
-              text: 'Your account has been deleted.',
+              text: message,
               confirmButtonColor: '#007bff'
             }).then(() => {
               sessionStorage.clear();
@@ -100,7 +103,7 @@ export class UserProfileComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: 'Deletion Failed',
-              text: 'Something went wrong while deleting your account.',
+              text: err?.error?.message || 'Something went wrong while deleting your account.',
               confirmButtonColor: '#007bff'
             });
           }
@@ -108,8 +111,7 @@ export class UserProfileComponent implements OnInit {
       }
     });
   }  
-
-  // Get user details
+  
   getUserDetails(): void {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({ Authorization: token });
@@ -123,7 +125,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Get user addresses
+  
   getUserAddresses(): void {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({ Authorization: token });
@@ -137,7 +139,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Add new address
+  
   addNewAddress(): void {
     if (!this.newAddress.trim()) {
       Swal.fire('Error', 'Please enter a valid address.', 'error');
@@ -169,7 +171,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Edit address
+  
   editAddress(addressId: number): void {
     const address = this.shippingAddresses.find(a => a.addressId === addressId);
     const dialogRef = this.dialog.open(EditAddressDialogComponent, {
@@ -182,7 +184,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Get user payments
+  
   getUserPayments(): void {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({ Authorization: token });
@@ -196,7 +198,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Add payment method
+  
   addPaymentMethod(): void {
     if (!this.newPaymentMethod || !this.newAccountDetails) {
       Swal.fire('Error', 'Please fill in all fields for the new payment method.', 'error');
@@ -225,7 +227,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  // Update user details
+  
   updateUserDetails(): void {
     const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
       width: '400px',

@@ -1,4 +1,4 @@
-/* Container and product card styling */
+
 .product-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -38,7 +38,7 @@
     font-weight: 600;
   }
   
-  /* Button styling */
+  
   .product-actions {
     display: flex;
     justify-content: space-between;
@@ -82,7 +82,7 @@
     background-color: #c9302c;
   }
   
-  /* Modal styling */
+  
   .modal {
     position: fixed;
     top: 0;
@@ -155,7 +155,7 @@
   .btn add-btn {
     text-align: center;
   }
-  /* Animation */
+  
   @keyframes fadeIn {
     from {
       opacity: 0;

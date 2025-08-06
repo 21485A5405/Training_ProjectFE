@@ -44,7 +44,7 @@ export class ProductDetailsComponent implements OnInit {
         product.productName.toLowerCase().includes(searchQuery)
       );
     } else {
-      this.filteredProducts = [...this.products]; // Show all if no search
+      this.filteredProducts = [...this.products]; 
     }
   }
   
@@ -115,6 +115,7 @@ export class ProductDetailsComponent implements OnInit {
       }
     });
   }
+
   extractUniqueCategories(products: any[]): void {
     const uniqueSet = new Set<string>();
     for (let product of products) {
