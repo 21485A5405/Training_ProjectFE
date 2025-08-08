@@ -11,12 +11,12 @@ import Swal from 'sweetalert2';
   selector: 'app-login-page',
   standalone: true,
   imports: [
-    CommonModule,  
-    FormsModule,  
-    RouterModule,  
+    CommonModule,
+    FormsModule,
+    RouterModule,
   ],
-  templateUrl: './login-page.component.html',  
-  styleUrls: ['./login-page.component.css'],  
+  templateUrl: './login-page.component.html',
+  styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent {
   isAdminLogin: boolean = false;
@@ -41,7 +41,7 @@ export class LoginPageComponent {
     private authService: AuthService,
     private ngZone: NgZone,
     private cdRef: ChangeDetectorRef
-  ) {}
+  ) { }
 
   toggleLoginMode() {
     this.isAdminLogin = !this.isAdminLogin;
@@ -82,7 +82,7 @@ export class LoginPageComponent {
       }
     });
   }
- 
+
   onCustomerSubmit() {
     const userData = {
       loginEmail: this.userEmail,
@@ -94,7 +94,7 @@ export class LoginPageComponent {
         sessionStorage.setItem('userId', response?.userId);
         this.usererrorMessage = '';
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.router.navigate(['/product-details']).then(() => {
+        this.router.navigate(['/home-page']).then(() => {
           window.location.reload();
         });
       },

@@ -29,12 +29,12 @@ export class HeaderComponent {
   }
 
   goHome(): void {
-    this.router.navigate(['/product-details']);
+    this.router.navigate(['/home-page']);
   }
 
   onSearch(): void {
     if (this.searchQuery.trim()) {
-      this.router.navigate(['/product-details'], {
+      this.router.navigate(['/home-page'], {
         queryParams: { q: this.searchQuery.trim() 
         }
       });

@@ -6,7 +6,7 @@ import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-sales-overview',
-  standalone:true,
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './sales-overview.component.html',
   styleUrls: ['./sales-overview.component.css']
@@ -28,13 +28,12 @@ export class SalesOverviewComponent implements OnInit {
   previousPeriodOrders: number = 0;
   totalVisitors: number = 0;
   previousPeriodVisitors: number = 0;
-  
+
   Math = Math;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
+  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.cdr.detectChanges();
     this.fetchSalesData();
   }
 
@@ -114,18 +113,18 @@ export class SalesOverviewComponent implements OnInit {
   getPeakOrderDay(): string {
     const sortedOrders = this.getSortedOrdersPerDay();
     if (sortedOrders.length === 0) return 'N/A';
-    
-    const peakDay = sortedOrders.reduce((max, current) => 
+
+    const peakDay = sortedOrders.reduce((max, current) =>
       current[1] > max[1] ? current : max
     );
-    
+
     return peakDay[0];
   }
 
   getAverageOrdersPerDay(): number {
     const orders = Object.values(this.ordersPerDay);
     if (orders.length === 0) return 0;
-    
+
     const total = orders.reduce((sum, count) => sum + count, 0);
     return total / orders.length;
   }
@@ -147,7 +146,7 @@ export class SalesOverviewComponent implements OnInit {
   getAverageDailyRevenue(): number {
     const revenues = Object.values(this.dailyRevenue);
     if (revenues.length === 0) return 0;
-    
+
     const total = revenues.reduce((sum, amount) => sum + amount, 0);
     return total / revenues.length;
   }
@@ -250,10 +249,10 @@ export class SalesOverviewComponent implements OnInit {
   getDailyGrowthRate(): number {
     const revenues = this.getSortedDailyRevenue();
     if (revenues.length < 2) return 0;
-    
+
     const firstDay = revenues[0][1];
     const lastDay = revenues[revenues.length - 1][1];
-    
+
     if (firstDay === 0) return 0;
     return ((lastDay - firstDay) / firstDay) * 100;
   }

@@ -10,7 +10,7 @@ export class PageNotFoundComponent {
   constructor(private router: Router) {}
 
   goHome() {
-    this.router.navigate(['product-details']);
+    this.router.navigate(['home-page']);
 }
 
 goBack() {

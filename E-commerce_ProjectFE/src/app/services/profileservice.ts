@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class ProfileService {
 
-  private adminUrl = 'http://localhost:8080/admins'; // Replace with the correct API endpoint
+  private adminUrl = 'http://localhost:8080/admins'; 
 
   private ordersUrl = 'http://localhost:8080/orders/get-payments'
   private userUrl = 'http://localhost:8080/users'
@@ -15,21 +15,21 @@ export class ProfileService {
   constructor(private http: HttpClient) {}
 
   private getAuthToken(): string | null {
-    return sessionStorage.getItem('authToken'); // Retrieve token from sessionStorage
+    return sessionStorage.getItem('authToken'); 
   }
 
-  // Create headers with token
+  
   private createHeaders(): HttpHeaders {
     const token = this.getAuthToken();
     return new HttpHeaders({
-      'Authorization': token ? `${token}` : '',  // Add token if available
-      'Content-Type': 'application/json'  // Ensure content type is set
+      'Authorization': token ? `${token}` : '',  
+      'Content-Type': 'application/json'  
     });
   }
 
-  // Fetch user addresses
+  
   getUserAddresses(userId: number): Observable<any[]> {
-    const headers = this.createHeaders();  // Create headers with token
+    const headers = this.createHeaders();  
     return this.http.get<any[]>(`${this.userUrl}/get-address/${userId}`, { headers });
   }
 
@@ -38,14 +38,14 @@ export class ProfileService {
     return this.http.get<{ [key: string]: string }[]>(`${this.userUrl}/get-user-payment/${userId}`, { headers });
   }  
 
-  // Get profile
+  
   getProfile(userId: number): Observable<any> {
-    const token = sessionStorage.getItem('authToken'); // Get token from sessionStorage
+    const token = sessionStorage.getItem('authToken'); 
     if (!token) {
       throw new Error('No authentication token found');
     }
     
-    // Set headers with the token
+    
     const headers = new HttpHeaders({
       'Authorization': `${token}`
     });
@@ -56,14 +56,14 @@ export class ProfileService {
     return this.http.get<boolean>(`http://localhost:8080/users/check-email?email=${email}`);
   }
 
-  // Method to update the user profile by user ID
+  
   updateAdminProfile(userId: number, user: any): Observable<any> {
-    const token = sessionStorage.getItem('authToken'); // Get token from sessionStorage
+    const token = sessionStorage.getItem('authToken'); 
     if (!token) {
       throw new Error('No authentication token found');
     }
 
-    // Set headers with the token
+    
     const headers = new HttpHeaders({
       'Authorization': `${token}`
     });
@@ -76,9 +76,9 @@ export class ProfileService {
   getPaymentStatus() :Observable<string[]> {
     return this.http.get<string[]>(this.ordersUrl);
   }
-  // Update address
+  
   updateAddress(addressId: number, updatedAddress: any): Observable<any> {
-    const headers = this.createHeaders();  // Create headers with token
+    const headers = this.createHeaders();  
     return this.http.put<any>(`${this.baseUrl}/edit-address/${addressId}`, updatedAddress, { headers });
   }
 

@@ -10,7 +10,6 @@ import { ProductListComponent } from './components/details/product-list/product-
 import { OrderListComponent } from './components/details/order-list/order-list.component';
 import { SalesOverviewComponent } from './components/details/sales-overview/sales-overview.component';
 import { ChangePasswordComponent } from './components/profile/change-password/change-password.component';
-import { AdminProfileComponent } from './components/profile/admin-profile/admin-profile.component';
 import { UserProfileComponent } from './components/profile/user-profile/user-profile.component';
 import { Welcomecomponent } from './components/user/welcomecomponent/welcome.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -20,7 +19,7 @@ export const routes: Routes = [
   { path: '', component: ProductDetailsComponent },
   { path: 'login', component: LoginPageComponent },
   { path: 'register', component: RegisterPageComponent },
-  { path: 'product-details', component: ProductDetailsComponent },
+  { path: 'home-page', component: ProductDetailsComponent },
 
   { path: 'admin-dashboard', component: AdminDashboardComponent, canActivate: [AuthGuard] },
   { path: 'cart-page', component: CartPageComponent, canActivate: [AuthGuard] },
@@ -30,7 +29,6 @@ export const routes: Routes = [
   { path: 'sales-overview', component: SalesOverviewComponent, canActivate: [AuthGuard] },
   { path: 'orders-page', component: OrderPageComponent, canActivate: [AuthGuard] },
   { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
-  { path: 'admin-profile', component: AdminProfileComponent, canActivate: [AuthGuard] },
   { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
   { path: 'welcome', component: Welcomecomponent, canActivate: [AuthGuard] },
 

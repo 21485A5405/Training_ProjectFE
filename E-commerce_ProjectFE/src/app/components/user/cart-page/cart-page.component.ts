@@ -71,10 +71,10 @@ export class CartPageComponent implements OnInit {
     return this.totalPrice + this.shippingCost;
   }
 
-  // Helper method to calculate delivery date (1 week from now)
+  
   getDeliveryDate(): string {
     const deliveryDate = new Date();
-    deliveryDate.setDate(deliveryDate.getDate() + 7); // Add 7 days
+    deliveryDate.setDate(deliveryDate.getDate() + 7); 
     return deliveryDate.toLocaleDateString('en-IN', {
       weekday: 'long',
       year: 'numeric',
@@ -227,7 +227,6 @@ export class CartPageComponent implements OnInit {
       Swal.fire('Error', 'Please select a payment method.', 'error');
       return;
     }
-  
     
     const orderData = this.selectedItems.map(item => ({
       userId: this.userId,
@@ -242,12 +241,12 @@ export class CartPageComponent implements OnInit {
       return;
     }
   
-    // Get delivery date
+    
     const deliveryDate = this.getDeliveryDate();
     
     this.orderService.placeOrder(orderData).subscribe({
       next: () => {
-        // Enhanced success alert with delivery date
+        
         Swal.fire({
           icon: 'success',
           title: 'Order Placed Successfully!',
@@ -300,20 +299,18 @@ export class CartPageComponent implements OnInit {
   }
 
   goToHome():void {
-    this.router.navigate(['/product-details'])
+    this.router.navigate(['/home-page'])
   }
   
   formatCurrency(amount: number): string {
     return `₹${amount.toFixed(2)}`;
   }
 
-  
   updateShippingCost(event: any): void {
     this.shippingCost = +event.target.value;
     this.calculateTotals(); 
   }
 
-  
   onShippingChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     this.shippingCost = +target.value;

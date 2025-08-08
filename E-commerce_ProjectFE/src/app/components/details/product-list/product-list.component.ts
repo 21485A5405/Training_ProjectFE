@@ -30,7 +30,7 @@ export class ProductListComponent implements OnInit {
     private http: HttpClient,
     private cdRef: ChangeDetectorRef,
     private productService: ProductService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const token = sessionStorage.getItem('authToken');
@@ -56,6 +56,12 @@ export class ProductListComponent implements OnInit {
   closeModal() {
     this.showModal = false;
     this.selectedProduct = null;
+  }
+
+  getStockStatus(quantity: number): string {
+    if (quantity === 0) return 'Sold Out';
+    if (quantity <= 15) return 'Low Stock';
+    return 'In Stock';
   }
 
   submitUpdate() {
@@ -118,7 +124,7 @@ export class ProductListComponent implements OnInit {
       }
     });
   }
-  
+
   addQuantity(product: any) {
     const addAmount = 1;
     this.productService.updateQuantity(product.productId, addAmount).subscribe({

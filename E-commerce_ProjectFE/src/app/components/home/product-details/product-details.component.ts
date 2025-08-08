@@ -53,7 +53,7 @@ export class ProductDetailsComponent implements OnInit {
     this.productService.getAllProducts().subscribe({
       next: (data) => {
         this.products = data;
-        this.filteredProducts = [...this.products]; // Show all initially
+        this.filteredProducts = [...this.products]; 
         this.extractUniqueCategories(this.products);
         this.filterByHeaderSearch();
         this.isLoading = false;
