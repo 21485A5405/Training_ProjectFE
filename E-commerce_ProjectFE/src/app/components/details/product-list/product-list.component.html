@@ -7,7 +7,6 @@
     <thead>
       <tr>
         <th>
-          <input type="checkbox" class="select-all-checkbox">
         </th>
         <th>Product ID</th>
         <th>Product Name</th>
@@ -20,7 +19,6 @@
     <tbody>
       <tr *ngFor="let product of products" class="product-row">
         <td>
-          <input type="checkbox" class="row-checkbox">
         </td>
         <td class="product-id">{{ product.productId }}</td>
         <td class="product-name-cell">

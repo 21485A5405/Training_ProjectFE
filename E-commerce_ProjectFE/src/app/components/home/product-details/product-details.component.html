@@ -29,7 +29,7 @@
     <p>{{ product.productPrice |currency:'INR' }}</p>
 
     
-    <p *ngIf="product.productQuantity > 0" style="color: green; font-weight: bold; margin: 5px 0;">
+    <p *ngIf="product.productQuantity > 3" style="color: green; font-weight: bold; margin: 5px 0;">
        Available
     </p>
     <p *ngIf="product.productQuantity > 0 && product.productQuantity <= 3" style="color: orange; font-weight: bold; margin: 5px 0;">

@@ -1,5 +1,5 @@
 <div class="profile-wrapper">
-  
+
   <div class="profile-header">
     <div class="header-content">
       <div class="header-left">
@@ -11,16 +11,16 @@
           <p class="profile-subtitle">Manage your account settings and preferences</p>
         </div>
       </div>
-      
+
       <div class="header-actions">
-        
+
         <div class="settings-dropdown">
           <button class="action-btn settings-btn" (click)="toggleSettingsDropdown()">
             <i class="fas fa-cog"></i>
             <span>Settings</span>
             <i class="fas fa-chevron-down dropdown-arrow" [class.rotated]="isSettingsDropdownVisible"></i>
           </button>
-          
+
           <div class="dropdown-menu" [class.show]="isSettingsDropdownVisible">
             <button class="dropdown-item" (click)="navigateToChangePassword()">
               <i class="fas fa-key"></i>
@@ -37,9 +37,9 @@
     </div>
   </div>
 
-  
+
   <div class="profile-main">
-    
+
     <div class="card info-card" *ngIf="userDetails">
       <div class="card-header">
         <h2 class="card-title">
@@ -75,9 +75,9 @@
       </div>
     </div>
 
-    
+
     <div class="content-grid">
-      
+
       <div class="card addresses-card">
         <div class="card-header">
           <h2 class="card-title">
@@ -96,23 +96,18 @@
                 <i class="fas fa-edit"></i>
               </button>
             </div>
-            
+
             <div *ngIf="shippingAddresses.length === 0" class="empty-state">
               <i class="fas fa-map-marker-alt"></i>
               <p>No shipping addresses added yet</p>
             </div>
           </div>
 
-          
+
           <div class="add-form">
             <h3 class="form-title">Add New Address</h3>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                [(ngModel)]="newAddress"
-                placeholder="Enter complete address"
-              />
+              <input type="text" class="form-input" [(ngModel)]="newAddress" placeholder="Enter complete address" />
               <button class="form-submit-btn" (click)="addNewAddress()">
                 <i class="fas fa-plus"></i>
                 Add
@@ -122,7 +117,7 @@
         </div>
       </div>
 
-      
+
       <div class="card payments-card">
         <div class="card-header">
           <h2 class="card-title">
@@ -141,21 +136,18 @@
                 <i class="fas fa-credit-card"></i>
               </div>
             </div>
-            
+
             <div *ngIf="userPayments.length === 0" class="empty-state">
               <i class="fas fa-credit-card"></i>
               <p>No payment methods added yet</p>
             </div>
           </div>
 
-          
+
           <div class="add-form">
             <h3 class="form-title">Add Payment Method</h3>
             <div class="form-group">
-              <select
-                class="form-input form-select"
-                [(ngModel)]="newPaymentMethod"
-                required>
+              <select class="form-input form-select" [(ngModel)]="newPaymentMethod" required>
                 <option value="" disabled>Select payment method</option>
                 <option *ngFor="let enumValue of paymentEnums" [value]="enumValue">
                   {{ enumValue }}
@@ -163,12 +155,8 @@
               </select>
             </div>
             <div class="form-group">
-              <input
-                type="text"
-                class="form-input"
-                [(ngModel)]="newAccountDetails"
-                placeholder="Account details (e.g., ****-****-****-1234)"
-              />
+              <input type="text" class="form-input" [(ngModel)]="newAccountDetails"
+                placeholder="Account details (e.g., ****-****-****-1234)" />
             </div>
             <button class="form-submit-btn" (click)="addPaymentMethod()">
               <i class="fas fa-plus"></i>
@@ -179,7 +167,7 @@
       </div>
     </div>
 
-    
+
     <div class="card danger-card">
       <div class="card-header">
         <h2 class="card-title danger-title">

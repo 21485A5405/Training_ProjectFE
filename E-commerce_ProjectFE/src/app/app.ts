@@ -15,10 +15,9 @@ import { MatButtonModule } from '@angular/material/button';
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
-    FormsModule,
     RouterOutlet,
-    HeaderComponent, MatDialogModule,
+    HeaderComponent,
+    MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,

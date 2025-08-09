@@ -103,14 +103,39 @@
       <div class="address-section" *ngIf="selectedItems.length > 0">
         <div class="summary-row">
           <span>SHIPPING ADDRESS</span>
+          <button class="add-new-btn" (click)="toggleAddAddressForm()" type="button">
+            <i class="fas fa-plus"></i> Add New
+          </button>
         </div>
-        <div class="address-dropdown">
+        
+        <!-- Address Selection Dropdown -->
+        <div class="address-dropdown" *ngIf="!showAddAddressForm">
           <select class="form-control" [(ngModel)]="selectedAddressId">
             <option value="">-- Select an address --</option>
             <option *ngFor="let address of userAddresses" [value]="address.addressId">
               {{ address.fullAddress }}
             </option>
           </select>
+        </div>
+
+        <!-- Add New Address Form -->
+        <div class="add-form-section" *ngIf="showAddAddressForm">
+          <div class="form-group">
+            <input 
+              type="text" 
+              class="form-input" 
+              [(ngModel)]="newAddress" 
+              placeholder="Enter complete address" 
+            />
+          </div>
+          <div class="form-actions">
+            <button class="form-submit-btn" (click)="addNewAddress()">
+              <i class="fas fa-plus"></i> Add Address
+            </button>
+            <button class="form-cancel-btn" (click)="toggleAddAddressForm()">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+          </div>
         </div>
       </div>
 
@@ -131,8 +156,13 @@
       <div class="payment-section" *ngIf="selectedAddressId">
         <div class="summary-row">
           <span>PAYMENT METHOD</span>
+          <button class="add-new-btn" (click)="toggleAddPaymentForm()" type="button">
+            <i class="fas fa-plus"></i> Add New
+          </button>
         </div>
-        <div class="payment-dropdown">
+        
+        <!-- Payment Method Selection Dropdown -->
+        <div class="payment-dropdown" *ngIf="!showAddPaymentForm">
           <select [(ngModel)]="selectedPaymentMethod">
             <option value="" disabled>Select a method</option>
             <option *ngFor="let method of paymentMethods" [ngValue]="method">
@@ -140,14 +170,42 @@
             </option>
           </select>
         </div>
+
+        <!-- Add New Payment Method Form -->
+        <div class="add-form-section" *ngIf="showAddPaymentForm">
+          <div class="form-group">
+            <select class="form-input form-select" [(ngModel)]="newPaymentMethod" required>
+              <option value="" disabled>Select payment method</option>
+              <option *ngFor="let enumValue of paymentEnums" [value]="enumValue">
+                {{ enumValue }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input 
+              type="text" 
+              class="form-input" 
+              [(ngModel)]="newAccountDetails"
+              placeholder="Account details (e.g., ****-****-****-1234)" 
+            />
+          </div>
+          <div class="form-actions">
+            <button class="form-submit-btn" (click)="addPaymentMethod()">
+              <i class="fas fa-plus"></i> Add Payment
+            </button>
+            <button class="form-cancel-btn" (click)="toggleAddPaymentForm()">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+          </div>
+        </div>
       </div>
+
       <div class="total-section">
         <div class="summary-row total-row">
           <span>TOTAL COST</span>
           <span>{{ selectedItemsCount > 0 ? getFinalTotal().toFixed(2) : getAllItemsTotal().toFixed(2) |currency:'INR' }}</span>
         </div>
       </div>
-
       <button class="checkout-btn" 
               (click)="placeOrder()" 
               [disabled]="!selectedPaymentMethod || selectedItems.length === 0">

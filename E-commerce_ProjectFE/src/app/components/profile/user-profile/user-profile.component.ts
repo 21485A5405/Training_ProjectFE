@@ -47,14 +47,6 @@ export class UserProfileComponent implements OnInit {
   }
 
   getPaymentEnums(): void {
-    this.profileService.getPaymentEnums().subscribe({
-      next: (enums) => {
-        this.paymentEnums = enums;
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Error fetching payment enums:', err)
-    });
-
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({ Authorization: token });
 

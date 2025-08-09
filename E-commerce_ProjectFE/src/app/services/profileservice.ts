@@ -27,7 +27,6 @@ export class ProfileService {
     });
   }
 
-  
   getUserAddresses(userId: number): Observable<any[]> {
     const headers = this.createHeaders();  
     return this.http.get<any[]>(`${this.userUrl}/get-address/${userId}`, { headers });
@@ -37,14 +36,12 @@ export class ProfileService {
     const headers = this.createHeaders();
     return this.http.get<{ [key: string]: string }[]>(`${this.userUrl}/get-user-payment/${userId}`, { headers });
   }  
-
   
   getProfile(userId: number): Observable<any> {
     const token = sessionStorage.getItem('authToken'); 
     if (!token) {
       throw new Error('No authentication token found');
     }
-    
     
     const headers = new HttpHeaders({
       'Authorization': `${token}`
@@ -70,9 +67,6 @@ export class ProfileService {
 
     return this.http.put<any>(`${this.userUrl}/update-admin/${userId}`, user, { headers });
   }
-  getPaymentEnums(): Observable<string[]> {
-    return this.http.get<string[]>(this.baseUrl); 
-  }
   getPaymentStatus() :Observable<string[]> {
     return this.http.get<string[]>(this.ordersUrl);
   }
@@ -82,9 +76,6 @@ export class ProfileService {
     return this.http.put<any>(`${this.baseUrl}/edit-address/${addressId}`, updatedAddress, { headers });
   }
 
-  addNewAddress(address: any, headers: HttpHeaders): Observable<any> {
-    return this.http.post<any>(`${this.userUrl}/add-address`, address, { headers });
-  }
   
   updateUser(userId: string, body: { userName: string; userEmail: string }) {
     const token = sessionStorage.getItem('authToken') || '';

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, MinLengthValidator } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../auth.service';
 import { NgZone, ChangeDetectorRef } from '@angular/core';
@@ -37,7 +37,6 @@ export class LoginPageComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private ngZone: NgZone,
     private cdRef: ChangeDetectorRef,
     private fb: FormBuilder
   ) {
@@ -47,12 +46,12 @@ export class LoginPageComponent {
   private initializeForms(): void {
     this.adminForm = this.fb.group({
       adminEmail: ['', [Validators.required, Validators.email]],
-      adminPassword: ['', [Validators.required, Validators.minLength(6)]]
+      adminPassword: ['', [Validators.required, Validators.minLength(5)]]
     });
 
     this.customerForm = this.fb.group({
       userEmail: ['', [Validators.required, Validators.email]],
-      userPassword: ['', [Validators.required, Validators.minLength(6)]]
+      userPassword: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
@@ -91,13 +90,13 @@ export class LoginPageComponent {
       return 'Unable to connect to server. Please check your internet connection and try again.';
     }
     switch (error.status) {
-      case 400: return error?.error?.message || 'Bad request. Please check your input and try again.';
       case 401: return error?.error?.message || 'Invalid credentials. Please check your email and password.';
       case 403: return error?.error?.message || 'Access forbidden. You do not have permission to access this resource.';
       case 404: return error?.error?.message || 'Account Not Found. Please register.';
       case 409: return error?.error?.message || 'Conflict occurred. Please try again.';
       case 422: return error?.error?.message || 'Invalid data provided. Please check your input.';
       case 500: return error?.error?.message || 'Internal server error. Please try again later.';
+      case 400: return error?.error?.message || 'Bad request. Please check your input and try again.';
       case 502: return 'Bad gateway. Server is temporarily unavailable.';
       case 503: return 'Service temporarily unavailable. Please try again later.';
       case 504: return 'Gateway timeout. Please try again.';
@@ -107,8 +106,7 @@ export class LoginPageComponent {
         return 'An unexpected error occurred. Please try again.';
     }
   }
-
-  // Helper methods for validation messages
+  
   getAdminEmailError(): string {
     const control = this.adminForm.get('adminEmail');
     if (control?.errors && (control.touched || this.adminSubmitted)) {
@@ -129,7 +127,7 @@ export class LoginPageComponent {
         return 'Password is required';
       }
       if (control.errors['minlength']) {
-        return 'Password must be at least 6 characters long';
+        return 'Password must be at least 5 characters long';
       }
     }
     return '';
@@ -155,13 +153,13 @@ export class LoginPageComponent {
         return 'Password is required';
       }
       if (control.errors['minlength']) {
-        return 'Password must be at least 6 characters long';
+        return 'Password must be at least 5 characters long';
       }
     }
     return '';
   }
 
-  // Check if field has error
+  
   hasAdminEmailError(): boolean {
     const control = this.adminForm.get('adminEmail');
     return !!(control?.errors && (control.touched || this.adminSubmitted));
@@ -182,15 +180,11 @@ export class LoginPageComponent {
     return !!(control?.errors && (control.touched || this.userSubmitted));
   }
 
-  // Add these debugging methods to your component to check why errors aren't showing
-
-// In your component, add console logs to debug:
 onAdminSubmit() {
   this.adminSubmitted = true;
   this.adminerrorMessage = '';
   console.log('Admin form submitted');
-
-  // Mark all fields as touched to show validation errors
+  
   this.adminForm.markAllAsTouched();
 
   if (this.adminForm.invalid) {
@@ -220,10 +214,8 @@ onAdminSubmit() {
       this.adminerrorMessage = this.getErrorMessage(error);
       console.log('Admin error message set to:', this.adminerrorMessage);
       
-      // Force change detection
       this.cdRef.detectChanges();
       
-      // Additional debug
       setTimeout(() => {
         console.log('Error message after timeout:', this.adminerrorMessage);
       }, 100);
@@ -235,8 +227,7 @@ onCustomerSubmit() {
   this.userSubmitted = true;
   this.usererrorMessage = '';
   console.log('Customer form submitted');
-
-  // Mark all fields as touched to show validation errors
+  
   this.customerForm.markAllAsTouched();
 
   if (this.customerForm.invalid) {
@@ -267,10 +258,10 @@ onCustomerSubmit() {
       this.usererrorMessage = this.getErrorMessage(error);
       console.log('Customer error message set to:', this.usererrorMessage);
       
-      // Force change detection
+      
       this.cdRef.detectChanges();
       
-      // Additional debug
+      
       setTimeout(() => {
         console.log('Error message after timeout:', this.usererrorMessage);
       }, 100);
@@ -278,7 +269,7 @@ onCustomerSubmit() {
   });
 }
 
-// Add this method to debug template rendering
+
 ngAfterViewChecked() {
   if (this.adminerrorMessage) {
     console.log('Admin error message in view:', this.adminerrorMessage);
@@ -288,7 +279,7 @@ ngAfterViewChecked() {
   }
 }
 
-  // Clear server error when user starts typing (not on other interactions)
+  
   onAdminEmailChange(): void {
     if (this.adminerrorMessage) {
       this.adminerrorMessage = '';

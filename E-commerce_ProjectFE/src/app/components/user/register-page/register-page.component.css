@@ -7,7 +7,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #5a6064, #5a6774, #578aa6);
+  background: linear-gradient(135deg, #383e42, #1c232b, #578aa6);
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -149,9 +149,10 @@
   border-radius: 8px;
   font-size: 14px;
   text-align: center;
-  background-color: rgba(255, 107, 107, 0.2);
-  color: #ff6b6b;
-  border: 1px solid rgba(255, 107, 107, 0.3);
+  background-color: rgba(95, 32, 32, 0.629);
+  color: #ffffff;
+  font-weight: 600;
+  border: 1px solid rgba(215, 23, 23, 0.3);
   backdrop-filter: blur(10px);
 }
 

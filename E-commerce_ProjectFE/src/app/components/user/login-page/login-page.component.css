@@ -353,7 +353,7 @@ input:focus {
   color: #999;
   font-size: 16px;
 }
-/* Error message styling - matching your gradient theme */
+
 .error-message {
   color: #e2dad9;
   font-size: 0.875rem;
@@ -374,7 +374,7 @@ input:focus {
   font-size: 14px;
 }
 
-/* Server error message styling - prominent display */
+
 .server-error {
   margin-bottom: 1.5rem;
   padding: 12px 16px;
@@ -392,7 +392,7 @@ input:focus {
   margin-right: 8px;
 }
 
-/* Input error styling - red borders matching your theme */
+
 .error-input input,
 .error-input input.error {
   border-bottom: 2px solid #e74c3c !important;
@@ -416,7 +416,7 @@ input:focus {
 }
 
 
-/* Form group spacing adjustment for error messages */
+
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -425,7 +425,7 @@ input:focus {
   margin-bottom: 2rem;
 }
 
-/* Enhanced input focus states matching your gradient theme */
+
 .input-wrapper input:focus {
   outline: none;
   border-bottom-color: #ffffff !important;
@@ -439,7 +439,7 @@ input:focus {
   background: rgba(231, 76, 60, 0.05);
 }
 
-/* Valid input styling - subtle green indication */
+
 .input-wrapper input:valid:not(:placeholder-shown):not(.error) {
   border-bottom-color: rgba(46, 204, 113, 0.8);
 }
@@ -449,7 +449,7 @@ input:focus {
   box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
 }
 
-/* Password toggle icon styling - enhanced for your theme */
+
 .password-toggle-icon {
   cursor: pointer;
   user-select: none;
