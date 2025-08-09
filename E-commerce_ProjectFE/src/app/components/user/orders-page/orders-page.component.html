@@ -84,8 +84,8 @@
                 <button
                   (click)="cancelOrder(order.orderId)"
                   class="cancel-btn"
-                  [disabled]="order.orderStatus === 'DELIVERED' || order.orderStatus === 'CANCELLED'"
-                  [class.disabled]="order.orderStatus === 'DELIVERED' || order.orderStatus === 'CANCELLED'">
+                  [disabled]="order.orderStatus === 'CANCELLED'"
+                  [class.disabled]="order.orderStatus === 'CANCELLED'">
                   Cancel Order
                 </button>
                 <button

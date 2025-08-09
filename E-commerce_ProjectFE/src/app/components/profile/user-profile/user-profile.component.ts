@@ -5,9 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
+import { Observable } from 'rxjs';
 
 import { EditAddressDialogComponent } from '../../dialog/edit-address-dialog/edit-address-dialog.component';
 import { UpdateUserDialogComponent } from '../../dialog/update-user-dialogcomponent/update-user-dialog.component';
+import { ProfileService } from '../../../services/profileservice';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -20,6 +23,7 @@ export class UserProfileComponent implements OnInit {
   userDetails: any;
   shippingAddresses: any[] = [];
   userPayments: any[] = [];
+  paymentEnums: string[] = [];
   newAddress = '';
   newPaymentMethod = '';
   newAccountDetails = '';
@@ -31,16 +35,38 @@ export class UserProfileComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private profileService: ProfileService // Uncomment and update import path
   ) {}
 
   ngOnInit(): void {
     this.getUserDetails();
     this.getUserAddresses();
     this.getUserPayments();
+    this.getPaymentEnums();
   }
 
-  
+  getPaymentEnums(): void {
+    this.profileService.getPaymentEnums().subscribe({
+      next: (enums) => {
+        this.paymentEnums = enums;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error fetching payment enums:', err)
+    });
+
+    const token = sessionStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({ Authorization: token });
+
+    this.http.get<string[]>('http://localhost:8080/users/get-payment-methods', { headers }).subscribe({
+      next: (enums) => {
+        this.paymentEnums = enums;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error('Error fetching payment enums:', err)
+    });
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
@@ -50,19 +76,16 @@ export class UserProfileComponent implements OnInit {
       this.isSettingsDropdownVisible = false;
     }
   }
-
   
   toggleSettingsDropdown(): void {
     this.isSettingsDropdownVisible = !this.isSettingsDropdownVisible;
   }
-
   
   navigateToChangePassword(): void {
     this.isSettingsDropdownVisible = false;
     this.router.navigate(['/change-password']);
   }
 
-  
   goToDashboard(): void {
     this.router.navigate(['/admin-dashboard']);
   }
@@ -84,7 +107,7 @@ export class UserProfileComponent implements OnInit {
   
         this.http.delete(`http://localhost:8080/users/delete-user-by-id/${this.userId}`, {
           headers,
-          responseType: 'text' // 👈 Accept plain text response
+          responseType: 'text'
         }).subscribe({
           next: (res: string) => {
             const message = res || 'Your account has been deleted.';
@@ -125,7 +148,6 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  
   getUserAddresses(): void {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({ Authorization: token });
@@ -138,7 +160,6 @@ export class UserProfileComponent implements OnInit {
       error: (err) => console.error('Error fetching addresses:', err)
     });
   }
-
   
   addNewAddress(): void {
     if (!this.newAddress.trim()) {
@@ -171,7 +192,6 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  
   editAddress(addressId: number): void {
     const address = this.shippingAddresses.find(a => a.addressId === addressId);
     const dialogRef = this.dialog.open(EditAddressDialogComponent, {
@@ -184,7 +204,6 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  
   getUserPayments(): void {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({ Authorization: token });
@@ -197,7 +216,6 @@ export class UserProfileComponent implements OnInit {
       error: (err) => console.error('Error fetching payments:', err)
     });
   }
-
   
   addPaymentMethod(): void {
     if (!this.newPaymentMethod || !this.newAccountDetails) {
@@ -227,7 +245,6 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  
   updateUserDetails(): void {
     const dialogRef = this.dialog.open(UpdateUserDialogComponent, {
       width: '400px',

@@ -1,3 +1,5 @@
+<!-- Make sure your template structure looks like this: -->
+
 <div class="login-container">
   <div class="toggle-container">
     <div class="toggle-wrapper">
@@ -8,54 +10,128 @@
       <span class="toggle-label" [class.active]="isAdminLogin">Admin</span>
     </div>
   </div>
-
+  
   <div class="login-form" [class.admin-mode]="isAdminLogin">
     <h2>{{ isAdminLogin ? 'Admin Login' : 'Customer Login' }}</h2>
+    
+    <!-- Admin Login Form -->
+    <form *ngIf="isAdminLogin" [formGroup]="adminForm" (ngSubmit)="onAdminSubmit()">
+      
+      <!-- IMPORTANT: Server error MUST be here, at the top, outside form fields -->
+      <div *ngIf="adminerrorMessage" class="error-message server-error">
+        <i class="fa fa-exclamation-circle"></i>
+        {{ adminerrorMessage }}
+      </div>
 
-    <form *ngIf="isAdminLogin" (ngSubmit)="onAdminSubmit()" #adminLoginForm="ngForm">
-      <div class="form-group input-icon-group">
+      <!-- Admin Email Field -->
+      <div class="form-group input-icon-group" [ngClass]="{'error-input': hasAdminEmailError()}">
         <div class="input-wrapper">
           <i class="fa fa-envelope icon"></i>
-          <input type="text" id="admin-username" placeholder="Email ID" name="username" [(ngModel)]="adminEmail"
-            required />
+          <input 
+            type="email" 
+            placeholder="Email ID" 
+            formControlName="adminEmail"
+            (input)="onAdminEmailChange()"
+            [class.error]="hasAdminEmailError()"
+          />
+        </div>
+        <!-- Inline validation error for email -->
+        <div *ngIf="hasAdminEmailError()" class="error-message">
+          <i class="fa fa-exclamation-circle"></i>
+          {{ getAdminEmailError() }}
         </div>
       </div>
 
-      <div class="form-group input-icon-group">
+      <!-- Admin Password Field -->
+      <div class="form-group input-icon-group" [ngClass]="{'error-input': hasAdminPasswordError()}">
         <div class="input-wrapper">
           <i class="fa fa-lock icon"></i>
-          <input [type]="showAdminPassword ? 'text' : 'password'" id="admin-password" placeholder="Password"
-            name="password" [(ngModel)]="adminPassword" required />
-          <i class="fa" [ngClass]="showAdminPassword ? 'fa-eye-slash' : 'fa-eye'"
-            (click)="toggleAdminPasswordVisibility()"></i>
+          <input 
+            [type]="showAdminPassword ? 'text' : 'password'" 
+            placeholder="Password" 
+            formControlName="adminPassword"
+            (input)="onAdminPasswordChange()"
+            [class.error]="hasAdminPasswordError()"
+          />
+          <i class="fa password-toggle-icon" 
+             [ngClass]="showAdminPassword ? 'fa-eye-slash' : 'fa-eye'"
+             (click)="toggleAdminPasswordVisibility($event)"></i>
+        </div>
+        <!-- Inline validation error for password -->
+        <div *ngIf="hasAdminPasswordError()" class="error-message">
+          <i class="fa fa-exclamation-circle"></i>
+          {{ getAdminPasswordError() }}
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" [disabled]="!adminLoginForm.form.valid">Login</button>
+      <button type="submit" class="btn btn-primary" [disabled]="isAdminLoading">
+        <span *ngIf="!isAdminLoading">Admin Login</span>
+        <span *ngIf="isAdminLoading"><i class="fa fa-spinner fa-spin"></i> Logging in...</span>
+      </button>
     </form>
 
-    <form *ngIf="!isAdminLogin" (ngSubmit)="onCustomerSubmit()" #customerLoginForm="ngForm">
-      <div class="form-group input-icon-group">
+    <!-- Customer Login Form -->
+    <form *ngIf="!isAdminLogin" [formGroup]="customerForm" (ngSubmit)="onCustomerSubmit()">
+      
+      <!-- IMPORTANT: Server error MUST be here, at the top, outside form fields -->
+      <div *ngIf="usererrorMessage" class="error-message server-error">
+        <i class="fa fa-exclamation-circle"></i>
+        {{ usererrorMessage }}
+      </div>
+
+      <!-- Customer Email Field -->
+      <div class="form-group input-icon-group" [ngClass]="{'error-input': hasUserEmailError()}">
         <div class="input-wrapper">
           <i class="fa fa-envelope icon"></i>
-          <input type="email" id="customer-username" placeholder="Email ID" name="loginEmail" [(ngModel)]="userEmail"
-            required />
+          <input 
+            type="email" 
+            placeholder="Email ID" 
+            formControlName="userEmail"
+            (input)="onUserEmailChange()"
+            [class.error]="hasUserEmailError()"
+          />
+        </div>
+        <!-- Inline validation error for email -->
+        <div *ngIf="hasUserEmailError()" class="error-message">
+          <i class="fa fa-exclamation-circle"></i>
+          {{ getUserEmailError() }}
         </div>
       </div>
 
-      <div class="form-group input-icon-group">
+      <!-- Customer Password Field -->
+      <div class="form-group input-icon-group" [ngClass]="{'error-input': hasUserPasswordError()}">
         <div class="input-wrapper">
           <i class="fa fa-lock icon"></i>
-          <input [type]="showUserPassword ? 'text' : 'password'" id="customer-password" placeholder="Password"
-            name="loginPassword" [(ngModel)]="userPassword" required />
-          <i class="fa" [ngClass]="showUserPassword ? 'fa-eye-slash' : 'fa-eye'"
-            (click)="toggleUserPasswordVisibility()"></i>
+          <input 
+            [type]="showUserPassword ? 'text' : 'password'" 
+            placeholder="Password" 
+            formControlName="userPassword"
+            (input)="onUserPasswordChange()"
+            [class.error]="hasUserPasswordError()"
+          />
+          <i class="fa password-toggle-icon" 
+             [ngClass]="showUserPassword ? 'fa-eye-slash' : 'fa-eye'"
+             (click)="toggleUserPasswordVisibility($event)"></i>
+        </div>
+        <!-- Inline validation error for password -->
+        <div *ngIf="hasUserPasswordError()" class="error-message">
+          <i class="fa fa-exclamation-circle"></i>
+          {{ getUserPasswordError() }}
         </div>
       </div>
 
-      <button type="submit" class="btn btn-primary" [disabled]="!customerLoginForm.form.valid">Login</button>
+      <button type="submit" class="btn btn-primary" [disabled]="isUserLoading">
+        <span *ngIf="!isUserLoading">Customer Login</span>
+        <span *ngIf="isUserLoading"><i class="fa fa-spinner fa-spin"></i> Logging in...</span>
+      </button>
+      
       <div class="register-link">
-        <p>Don't have an account?&nbsp; &nbsp; <a routerLink="/register"> Register Here</a></p>
+        <p>Don't have an account?&nbsp; &nbsp;
+          <a routerLink="/register" class="register-link-text">
+            <i class="fa fa-user-plus"></i>
+            Register Here
+          </a>
+        </p>
       </div>
     </form>
   </div>

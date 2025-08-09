@@ -1,115 +1,315 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';  // CommonModule for common directives (ngIf, ngFor)
-import { FormsModule } from '@angular/forms';  // FormsModule for two-way data binding
-import { Router, RouterModule } from '@angular/router'; // RouterModule for routing
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../auth.service';
-import { NgZone } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import Swal from 'sweetalert2';
+import { NgZone, ChangeDetectorRef } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-login-page',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     RouterModule,
   ],
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.css'],
 })
 export class LoginPageComponent {
-  isAdminLogin: boolean = false;
-  showUserPassword: boolean = false;
+  isAdminLogin = false;
+  showUserPassword = false;
+  showAdminPassword = false;
 
-  toggleUserPasswordVisibility(): void {
-    this.showUserPassword = !this.showUserPassword;
-  }
-  adminEmail = '';
-  adminPassword = '';
-  userEmail = '';
-  userPassword = '';
-  usererrorMessage: string = '';
-  adminerrorMessage: string = '';
-  showAdminPassword: boolean = false;
+  adminForm!: FormGroup;
+  customerForm!: FormGroup;
 
-  toggleAdminPasswordVisibility(): void {
-    this.showAdminPassword = !this.showAdminPassword;
-  }
+  usererrorMessage = '';
+  adminerrorMessage = '';
+
+  adminSubmitted = false;
+  userSubmitted = false;
+
+  isAdminLoading = false;
+  isUserLoading = false;
+
   constructor(
     private router: Router,
     private authService: AuthService,
     private ngZone: NgZone,
-    private cdRef: ChangeDetectorRef
-  ) { }
+    private cdRef: ChangeDetectorRef,
+    private fb: FormBuilder
+  ) {
+    this.initializeForms();
+  }
+
+  private initializeForms(): void {
+    this.adminForm = this.fb.group({
+      adminEmail: ['', [Validators.required, Validators.email]],
+      adminPassword: ['', [Validators.required, Validators.minLength(6)]]
+    });
+
+    this.customerForm = this.fb.group({
+      userEmail: ['', [Validators.required, Validators.email]],
+      userPassword: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  toggleUserPasswordVisibility(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.showUserPassword = !this.showUserPassword;
+  }
+
+  toggleAdminPasswordVisibility(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.showAdminPassword = !this.showAdminPassword;
+  }
 
   toggleLoginMode() {
     this.isAdminLogin = !this.isAdminLogin;
+    this.clearErrors();
+    this.clearForms();
+  }
+
+  private clearErrors(): void {
     this.adminerrorMessage = '';
     this.usererrorMessage = '';
-    this.adminEmail = '';
-    this.adminPassword = '';
-    this.userEmail = '';
-    this.userPassword = '';
   }
 
-  onAdminSubmit() {
-    const adminData = {
-      loginEmail: this.adminEmail,
-      loginPassword: this.adminPassword
-    };
-    this.authService.adminLogin(adminData).subscribe({
-      next: (response) => {
-        sessionStorage.setItem('authToken', response?.userToken);
-        sessionStorage.setItem('userId', response?.userId);
-        this.ngZone.run(() => {
-          this.adminerrorMessage = '';
-          this.router.navigate(['/admin-dashboard']);
-          this.cdRef.detectChanges();
-        });
-      },
-      error: (error) => {
-        const message = error?.error?.message || 'Invalid Admin credentials';
-        this.ngZone.run(() => {
-          this.adminerrorMessage = message;
-          Swal.fire({
-            icon: 'error',
-            title: 'Admin Login Failed',
-            text: message,
-          });
-          this.cdRef.detectChanges();
-        });
-      }
-    });
+  private clearForms(): void {
+    this.adminForm.reset();
+    this.customerForm.reset();
+    this.adminSubmitted = false;
+    this.userSubmitted = false;
   }
 
-  onCustomerSubmit() {
-    const userData = {
-      loginEmail: this.userEmail,
-      loginPassword: this.userPassword
-    };
-    this.authService.customerLogin(userData).subscribe({
-      next: (response) => {
-        sessionStorage.setItem('authToken', response?.userToken);
-        sessionStorage.setItem('userId', response?.userId);
-        this.usererrorMessage = '';
-        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-        this.router.navigate(['/home-page']).then(() => {
-          window.location.reload();
-        });
-      },
-      error: (error) => {
-        const message = error?.error?.message || 'Invalid customer credentials';
-        this.ngZone.run(() => {
-          this.usererrorMessage = message;
-          Swal.fire({
-            icon: 'error',
-            title: 'Customer Login Failed',
-            text: message,
-          });
-          this.cdRef.detectChanges();
-        });
+  private getErrorMessage(error: any): string {
+    if (error.status === 0) {
+      return 'Unable to connect to server. Please check your internet connection and try again.';
+    }
+    switch (error.status) {
+      case 400: return error?.error?.message || 'Bad request. Please check your input and try again.';
+      case 401: return error?.error?.message || 'Invalid credentials. Please check your email and password.';
+      case 403: return error?.error?.message || 'Access forbidden. You do not have permission to access this resource.';
+      case 404: return error?.error?.message || 'Account Not Found. Please register.';
+      case 409: return error?.error?.message || 'Conflict occurred. Please try again.';
+      case 422: return error?.error?.message || 'Invalid data provided. Please check your input.';
+      case 500: return error?.error?.message || 'Internal server error. Please try again later.';
+      case 502: return 'Bad gateway. Server is temporarily unavailable.';
+      case 503: return 'Service temporarily unavailable. Please try again later.';
+      case 504: return 'Gateway timeout. Please try again.';
+      default:
+        if (error?.error?.message) return error.error.message;
+        if (error?.error && typeof error.error === 'string') return error.error;
+        return 'An unexpected error occurred. Please try again.';
+    }
+  }
+
+  // Helper methods for validation messages
+  getAdminEmailError(): string {
+    const control = this.adminForm.get('adminEmail');
+    if (control?.errors && (control.touched || this.adminSubmitted)) {
+      if (control.errors['required']) {
+        return 'Email is required';
       }
-    });
+      if (control.errors['email']) {
+        return 'Please enter a valid email address';
+      }
+    }
+    return '';
+  }
+
+  getAdminPasswordError(): string {
+    const control = this.adminForm.get('adminPassword');
+    if (control?.errors && (control.touched || this.adminSubmitted)) {
+      if (control.errors['required']) {
+        return 'Password is required';
+      }
+      if (control.errors['minlength']) {
+        return 'Password must be at least 6 characters long';
+      }
+    }
+    return '';
+  }
+
+  getUserEmailError(): string {
+    const control = this.customerForm.get('userEmail');
+    if (control?.errors && (control.touched || this.userSubmitted)) {
+      if (control.errors['required']) {
+        return 'Email is required';
+      }
+      if (control.errors['email']) {
+        return 'Please enter a valid email address';
+      }
+    }
+    return '';
+  }
+
+  getUserPasswordError(): string {
+    const control = this.customerForm.get('userPassword');
+    if (control?.errors && (control.touched || this.userSubmitted)) {
+      if (control.errors['required']) {
+        return 'Password is required';
+      }
+      if (control.errors['minlength']) {
+        return 'Password must be at least 6 characters long';
+      }
+    }
+    return '';
+  }
+
+  // Check if field has error
+  hasAdminEmailError(): boolean {
+    const control = this.adminForm.get('adminEmail');
+    return !!(control?.errors && (control.touched || this.adminSubmitted));
+  }
+
+  hasAdminPasswordError(): boolean {
+    const control = this.adminForm.get('adminPassword');
+    return !!(control?.errors && (control.touched || this.adminSubmitted));
+  }
+
+  hasUserEmailError(): boolean {
+    const control = this.customerForm.get('userEmail');
+    return !!(control?.errors && (control.touched || this.userSubmitted));
+  }
+
+  hasUserPasswordError(): boolean {
+    const control = this.customerForm.get('userPassword');
+    return !!(control?.errors && (control.touched || this.userSubmitted));
+  }
+
+  // Add these debugging methods to your component to check why errors aren't showing
+
+// In your component, add console logs to debug:
+onAdminSubmit() {
+  this.adminSubmitted = true;
+  this.adminerrorMessage = '';
+  console.log('Admin form submitted');
+
+  // Mark all fields as touched to show validation errors
+  this.adminForm.markAllAsTouched();
+
+  if (this.adminForm.invalid) {
+    console.log('Admin form is invalid');
+    return;
+  }
+
+  this.isAdminLoading = true;
+  console.log('Admin login starting...');
+
+  const adminData = {
+    loginEmail: this.adminForm.get('adminEmail')?.value,
+    loginPassword: this.adminForm.get('adminPassword')?.value
+  };
+
+  this.authService.adminLogin(adminData).subscribe({
+    next: (response) => {
+      console.log('Admin login success');
+      this.isAdminLoading = false;
+      sessionStorage.setItem('authToken', response?.userToken);
+      sessionStorage.setItem('userId', response?.userId);
+      this.router.navigate(['/admin-dashboard']);
+    },
+    error: (error: HttpErrorResponse) => {
+      console.log('Admin login error:', error);
+      this.isAdminLoading = false;
+      this.adminerrorMessage = this.getErrorMessage(error);
+      console.log('Admin error message set to:', this.adminerrorMessage);
+      
+      // Force change detection
+      this.cdRef.detectChanges();
+      
+      // Additional debug
+      setTimeout(() => {
+        console.log('Error message after timeout:', this.adminerrorMessage);
+      }, 100);
+    }
+  });
+}
+
+onCustomerSubmit() {
+  this.userSubmitted = true;
+  this.usererrorMessage = '';
+  console.log('Customer form submitted');
+
+  // Mark all fields as touched to show validation errors
+  this.customerForm.markAllAsTouched();
+
+  if (this.customerForm.invalid) {
+    console.log('Customer form is invalid');
+    return;
+  }
+
+  this.isUserLoading = true;
+  console.log('Customer login starting...');
+
+  const userData = {
+    loginEmail: this.customerForm.get('userEmail')?.value,
+    loginPassword: this.customerForm.get('userPassword')?.value
+  };
+
+  this.authService.customerLogin(userData).subscribe({
+    next: (response) => {
+      console.log('Customer login success');
+      this.isUserLoading = false;
+      sessionStorage.setItem('authToken', response?.userToken);
+      sessionStorage.setItem('userId', response?.userId);
+      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+      this.router.navigate(['/home-page']).then(() => window.location.reload());
+    },
+    error: (error: HttpErrorResponse) => {
+      console.log('Customer login error:', error);
+      this.isUserLoading = false;
+      this.usererrorMessage = this.getErrorMessage(error);
+      console.log('Customer error message set to:', this.usererrorMessage);
+      
+      // Force change detection
+      this.cdRef.detectChanges();
+      
+      // Additional debug
+      setTimeout(() => {
+        console.log('Error message after timeout:', this.usererrorMessage);
+      }, 100);
+    }
+  });
+}
+
+// Add this method to debug template rendering
+ngAfterViewChecked() {
+  if (this.adminerrorMessage) {
+    console.log('Admin error message in view:', this.adminerrorMessage);
+  }
+  if (this.usererrorMessage) {
+    console.log('User error message in view:', this.usererrorMessage);
+  }
+}
+
+  // Clear server error when user starts typing (not on other interactions)
+  onAdminEmailChange(): void {
+    if (this.adminerrorMessage) {
+      this.adminerrorMessage = '';
+    }
+  }
+
+  onAdminPasswordChange(): void {
+    if (this.adminerrorMessage) {
+      this.adminerrorMessage = '';
+    }
+  }
+
+  onUserEmailChange(): void {
+    if (this.usererrorMessage) {
+      this.usererrorMessage = '';
+    }
+  }
+
+  onUserPasswordChange(): void {
+    if (this.usererrorMessage) {
+      this.usererrorMessage = '';
+    }
   }
 }

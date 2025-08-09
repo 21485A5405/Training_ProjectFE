@@ -1,11 +1,10 @@
-
 .profile-wrapper {
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-
+/* Header Styles */
 .profile-header {
   background: white;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -75,7 +74,7 @@
   transform: translateY(-1px);
 }
 
-
+/* Settings Dropdown */
 .settings-dropdown {
   position: relative;
   display: inline-block;
@@ -170,7 +169,7 @@
   color: #718096;
 }
 
-
+/* Main Content */
 .profile-main {
   max-width: 1200px;
   margin: 0 auto;
@@ -180,7 +179,7 @@
   gap: 24px;
 }
 
-
+/* Card Styles */
 .card {
   background: white;
   border-radius: 16px;
@@ -215,7 +214,7 @@
   padding: 24px 32px 32px;
 }
 
-
+/* Info Card */
 .info-card {
   margin-bottom: 8px;
 }
@@ -278,14 +277,14 @@
   letter-spacing: 0.5px;
 }
 
-
+/* Content Grid */
 .content-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
 }
 
-
+/* Address and Payment Lists */
 .address-list,
 .payment-list {
   display: flex;
@@ -354,7 +353,7 @@
   font-size: 18px;
 }
 
-
+/* Empty State */
 .empty-state {
   text-align: center;
   padding: 40px 20px;
@@ -372,7 +371,7 @@
   font-size: 14px;
 }
 
-
+/* Form Styles */
 .add-form {
   border-top: 1px solid #e2e8f0;
   padding-top: 24px;
@@ -402,6 +401,7 @@
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.2s ease;
+  background-color: white;
 }
 
 .form-input:focus {
@@ -410,8 +410,55 @@
   box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
 
+/* Select-specific styles */
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234a5568' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 12px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.form-select:hover {
+  border-color: #cbd5e0;
+}
+
+.form-select:focus {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%234299e1' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* Option styling for better visibility */
+.form-select option {
+  padding: 8px 12px;
+  background-color: white;
+  color: #1a202c;
+  font-size: 14px;
+}
+
+.form-select option:hover {
+  background-color: #f8fafc;
+}
+
+/* Disabled option styling */
+.form-select option:disabled {
+  color: #a0aec0;
+  font-style: italic;
+}
+
+/* Form for stacked layout when needed */
+.form-group.stacked {
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group.stacked .form-input {
+  width: 100%;
+}
+
 .form-submit-btn {
-  background: #4299e1;
+  background: #5a6d7c;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -427,11 +474,18 @@
 }
 
 .form-submit-btn:hover {
-  background: #3182ce;
+  background: #78848f;
   transform: translateY(-1px);
 }
 
+.form-submit-btn:disabled {
+  background: #cbd5e0;
+  color: #a0aec0;
+  cursor: not-allowed;
+  transform: none;
+}
 
+/* Danger Zone */
 .danger-card {
   border-color: #fed7d7;
   background: #fffafa;
@@ -487,7 +541,29 @@
   transform: translateY(-1px);
 }
 
+/* Loading State for Forms */
+.form-submit-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
 
+.form-submit-btn.loading i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Focus states for accessibility */
+.form-input:focus-visible,
+.form-select:focus-visible {
+  outline: 2px solid #4299e1;
+  outline-offset: 2px;
+}
+
+/* Responsive Design */
 @media (max-width: 1024px) {
   .content-grid {
     grid-template-columns: 1fr;
@@ -539,13 +615,18 @@
     align-items: stretch;
     text-align: center;
   }
-}
-
-@media (max-width: 480px) {
+  
   .form-group {
     flex-direction: column;
   }
   
+  .form-group .form-input,
+  .form-group .form-select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
   .header-actions {
     width: 100%;
     justify-content: flex-end;
@@ -553,5 +634,14 @@
   
   .action-btn span {
     display: none;
+  }
+  
+  .form-select {
+    min-height: 44px; 
+  }
+  
+  .card-header,
+  .card-body {
+    padding: 16px;
   }
 }

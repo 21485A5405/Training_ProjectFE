@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #5a6064, #5a6774, #578aa6);
+  background: linear-gradient(135deg, #383e42, #1c232b, #578aa6);
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -353,3 +353,117 @@ input:focus {
   color: #999;
   font-size: 16px;
 }
+/* Error message styling - matching your gradient theme */
+.error-message {
+  color: #e2dad9;
+  font-size: 0.875rem;
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: slideDown 0.3s ease-out;
+  background: rgba(231, 76, 60, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #e74c3c;
+  backdrop-filter: blur(10px);
+}
+
+.error-message i {
+  color: #fafafa;
+  font-size: 14px;
+}
+
+/* Server error message styling - prominent display */
+.server-error {
+  margin-bottom: 1.5rem;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(255, 107, 107, 0.1));
+  border: 1px solid rgba(231, 76, 60, 0.3);
+  border-radius: 10px;
+  color: #ffffff;
+  font-weight: 500;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.15);
+}
+
+.server-error i {
+  color: #c0392b;
+  margin-right: 8px;
+}
+
+/* Input error styling - red borders matching your theme */
+.error-input input,
+.error-input input.error {
+  border-bottom: 2px solid #e74c3c !important;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.2) !important;
+  animation: shake 0.3s ease-in-out;
+}
+
+.error-input .input-wrapper {
+  position: relative;
+}
+
+.error-input .input-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #e74c3c, #c0392b);
+  border-radius: 1px;
+}
+
+
+/* Form group spacing adjustment for error messages */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group.error-input {
+  margin-bottom: 2rem;
+}
+
+/* Enhanced input focus states matching your gradient theme */
+.input-wrapper input:focus {
+  outline: none;
+  border-bottom-color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.input-wrapper input.error:focus {
+  border-bottom-color: #f1ebea !important;
+  background: rgba(231, 76, 60, 0.05);
+}
+
+/* Valid input styling - subtle green indication */
+.input-wrapper input:valid:not(:placeholder-shown):not(.error) {
+  border-bottom-color: rgba(46, 204, 113, 0.8);
+}
+
+.input-wrapper input:valid:not(:placeholder-shown):not(.error):focus {
+  border-bottom-color: #2ecc71;
+  box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+}
+
+/* Password toggle icon styling - enhanced for your theme */
+.password-toggle-icon {
+  cursor: pointer;
+  user-select: none;
+  pointer-events: auto;
+  padding: 4px;
+  transition: all 0.2s ease;
+  border-radius: 3px;
+}
+
+.password-toggle-icon:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
+}
+
+
+
