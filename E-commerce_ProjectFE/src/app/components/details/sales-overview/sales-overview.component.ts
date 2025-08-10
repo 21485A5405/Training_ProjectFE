@@ -37,7 +37,6 @@ export class SalesOverviewComponent implements OnInit {
     this.fetchSalesData();
   }
 
-  // Existing method - keep as is
   fetchSalesData(): void {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({
@@ -135,6 +134,7 @@ export class SalesOverviewComponent implements OnInit {
   }
 
   getSortedDailyRevenue(): [string, number][] {
+    
     return Object.entries(this.dailyRevenue).sort((a, b) => a[0].localeCompare(b[0]));
   }
 

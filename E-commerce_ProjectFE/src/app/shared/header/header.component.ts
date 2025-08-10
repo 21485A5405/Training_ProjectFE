@@ -96,10 +96,6 @@ export class HeaderComponent {
   }
 
   logout(): void {
-    if (!this.isLoggedIn) {
-      this.router.navigate(['/login']);
-      return;
-    }
 
     let token = sessionStorage.getItem('authToken');
     if (token?.startsWith('Bearer ')) {
@@ -114,7 +110,6 @@ export class HeaderComponent {
       next: () => console.log('Logged out from backend'),
       error: (err: any) => console.error('Backend logout failed', err)
     });
-
     sessionStorage.clear();
     this.router.navigate(['/login']);
   }

@@ -1,32 +1,28 @@
 <div class="header-container">
   <h2 class="header-title" (click)="goHome()">Plan2Shop</h2>
 
-  
+
   <div class="search-box">
     <input type="text" placeholder="Search products..." [(ngModel)]="searchQuery" />
     <button (click)="onSearch()">Search</button>
   </div>
 
-  
   <div class="icon-section">
-    
+
     <div class="icon-wrapper" (click)="goHome()" title="Home">
       <i class="fas fa-house icon-style"></i>
     </div>
 
-    
     <div class="icon-dropdown-wrapper" (mouseenter)="isSettingsDropdownVisible = true"
       (mouseleave)="isSettingsDropdownVisible = false" title="Profile">
 
-      
       <div class="icon-wrapper">
         <i class="fas fa-user icon-style"></i>
       </div>
 
-      
       <div *ngIf="isSettingsDropdownVisible" class="settings-dropdown">
         <div class="settings-option" (click)="goToProfile()">Profile</div>
-        <div class = "order-setting" (click)="goToOrders()">My Orders</div>
+        <div class="order-setting" (click)="goToOrders()">My Orders</div>
         <div class="settings-option" (click)="logout()">
           {{ isLoggedIn ? 'Logout' : 'Login' }}
         </div>
