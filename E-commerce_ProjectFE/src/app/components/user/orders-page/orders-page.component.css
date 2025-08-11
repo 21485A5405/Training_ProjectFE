@@ -2,7 +2,7 @@
    ORDERS PAGE STYLES (USER ORDERS VIEW)
    ======================================== */
 
-/* Container & Layout */
+
 .orders-container {
   background-color: #f8f9fa;
   min-height: 100vh;
@@ -11,7 +11,7 @@
   color: #475569;
 }
 
-/* Orders Table */
+
 .orders-table {
   background: #ffffff;
   border-radius: 12px;
@@ -20,7 +20,7 @@
   border: 1px solid #e5e7eb;
 }
 
-/* Table Header */
+
 .table-header {
   background: #f9fafb;
   display: grid;
@@ -39,7 +39,7 @@
   align-items: center;
 }
 
-/* Column specific styles */
+
 .order-id-col {
   min-width: 180px;
 }
@@ -76,7 +76,7 @@
   min-width: 120px;
 }
 
-/* Table Body */
+
 .table-body {
   max-height: 600px;
   overflow-y: auto;
@@ -99,12 +99,14 @@
   align-items: center;
   min-height: 60px;
 }
-.total-col{
-  margin-left:10px;
+.total-col,.date-col{
+  margin-left:15px;
   
 }
+.payment-status-col{
+  margin-left:10px;
+}
 
-/* Order ID Section */
 .order-id-container {
   display: flex;
   flex-direction: column;
@@ -127,13 +129,13 @@
   margin-top: 2px;
 }
 
-/* Customer Info */
+
 .customer-name {
   font-weight: 500;
   color: #374151;
 }
 
-/* Location Info */
+
 .location-info {
   display: flex;
   align-items: center;
@@ -153,7 +155,7 @@
   font-size: 12px;
 }
 
-/* Delivery Info */
+
 .delivery-info {
   display: flex;
   flex-direction: column;
@@ -175,34 +177,36 @@
   border: 1px solid;
 }
 
-/* Order Date */
+
 .order-date {
   font-size: 13px;
   color: #374151;
   font-weight: 500;
 }
 
-/* Total Amount */
+
 .total-amount {
   font-weight: 600;
   color: #059669;
   font-size: 14px;
 }
 
-/* Status Badges */
+
 .status-badge {
+  border: 2px solid;
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 15px 2px 0px;
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.025em;
-  border: 1px solid;
-  min-width: 80px;
-  justify-content: center;
+  min-width: 120px;
+  white-space: nowrap;
 }
 
 .status-badge .status-dot {
@@ -276,7 +280,7 @@
   border: 2px solid #f59e0b !important;
 }
 
-/* Status Color Schemes for Delivery Status */
+
 .status-delivered,
 .delivery-status.status-delivered {
   background-color: #dcfce7;
@@ -326,7 +330,7 @@
   border-color: #6366f1;
 }
 
-/* Payment Status Colors */
+
 .payment-status.paid {
   background-color: #d1fae5;
   color: #065f46;
@@ -357,7 +361,7 @@
   border-color: #d946ef;
 }
 
-/* Action Buttons */
+
 .action-buttons {
   display: flex;
   gap: 8px;
@@ -417,7 +421,7 @@
   cursor: not-allowed;
 }
 
-/* Status Info */
+
 .status-info {
   font-size: 11px;
   font-weight: 500;
@@ -441,7 +445,7 @@
   border-color: #fed7aa;
 }
 
-/* Expanded Details */
+
 .expanded-details {
   grid-column: 1 / -1;
   background: #f9fafb;
@@ -509,7 +513,7 @@
   color: #059669;
 }
 
-/* Product Details Table */
+
 .product-details-table {
   width: 100%;
   border-collapse: collapse;
@@ -553,7 +557,7 @@
   color: #059669;
 }
 
-/* No Orders State */
+
 .no-orders {
   display: flex;
   justify-content: center;
@@ -585,7 +589,7 @@
   color: #6b7280;
 }
 
-/* Responsive Design */
+
 @media (max-width: 1200px) {
   .table-header,
   .table-row {

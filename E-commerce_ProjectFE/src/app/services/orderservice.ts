@@ -29,7 +29,8 @@ export class OrderService {
       Authorization: `${token}`, // Attach the token with "Bearer" prefix to the request headers
     });
   
-    return this.http.post<any>(this.orderUrl, orderData, { headers });
+    // Use the new endpoint that handles payment status
+    return this.http.post<any>(`${this.apiUrl}/place-order`, orderData, { headers });
   }
   // Update order status
   updateOrderStatus(orderId: number, status: string): Observable<any> {

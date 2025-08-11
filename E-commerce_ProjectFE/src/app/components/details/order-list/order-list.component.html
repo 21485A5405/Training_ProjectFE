@@ -62,7 +62,9 @@
                 class="btn-update-order"
                 (click)="toggleOrderStatusDropdown(order.orderId)"
                 [disabled]="!canEditOrderStatus(order)">
-                {{ order.orderStatus === 'DELIVERED' ? 'Delivered' : 'Edit Order' }}
+                {{ order.orderStatus === 'DELIVERED' ? 'Delivered' : 
+                   order.orderStatus === 'CANCELLED' ? 'Cancelled' :
+                   order.orderStatus === 'RETURNED' ? 'Returned' : 'Edit Order' }}
               </button>
              
               <div *ngIf="showOrderStatusDropdown[order.orderId]" class="dropdown-container fade-in">

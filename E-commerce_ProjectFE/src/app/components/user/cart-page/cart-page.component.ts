@@ -296,7 +296,6 @@ export class CartPageComponent implements OnInit {
       });
   }
 
-  // Payment option methods
   selectPaymentOption(option: 'PAY_NOW' | 'CASH_ON_DELIVERY'): void {
     this.paymentOption = option;
   }
@@ -382,7 +381,7 @@ export class CartPageComponent implements OnInit {
           confirmButtonText: 'Continue Shopping',
           allowOutsideClick: false
         }).then(() => {
-          this.router.navigate(['/welcome']);
+          this.router.navigate(['/home-page']);
         });
       },
       error: (err) => {

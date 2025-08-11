@@ -65,7 +65,7 @@ export class OrderListComponent implements OnInit {
   }
 
   canEditOrderStatus(order: any): boolean {
-    return order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED';
+    return order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'RETURNED';
   }
   
   canEditPaymentStatus(order: any): boolean {
