@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
+import { AnalyticsService, AnalyticsData } from '../../../services/analytics.service';
 
 @Component({
   selector: 'app-sales-overview',
@@ -28,10 +29,16 @@ export class SalesOverviewComponent implements OnInit {
   previousPeriodOrders: number = 0;
   totalVisitors: number = 0;
   previousPeriodVisitors: number = 0;
+  visitorsPerDay: { [key: string]: number } = {};
+  analyticsData: AnalyticsData | null = null;
 
   Math = Math;
 
-  constructor(private http: HttpClient, private cdr: ChangeDetectorRef) { }
+  constructor(
+    private http: HttpClient, 
+    private cdr: ChangeDetectorRef,
+    private analyticsService: AnalyticsService
+  ) { }
 
   ngOnInit(): void {
     this.fetchSalesData();
@@ -99,6 +106,63 @@ export class SalesOverviewComponent implements OnInit {
         this.dailyRevenue = data;
         this.cdr.detectChanges();
       });
+
+    
+    this.fetchVisitorAnalytics();
+  }
+
+  fetchVisitorAnalytics(): void {
+    
+    this.analyticsService.getTotalVisitors().subscribe({
+      next: (data) => {
+        this.totalVisitors = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to fetch total visitors:', err);
+        
+        this.totalVisitors = 0;
+      }
+    });
+
+    
+    this.analyticsService.getVisitorsByPeriod(this.selectedPeriod).subscribe({
+      next: (data) => {
+        this.previousPeriodVisitors = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to fetch previous period visitors:', err);
+        this.previousPeriodVisitors = 0;
+      }
+    });
+
+    
+    this.analyticsService.getVisitorsPerDay().subscribe({
+      next: (data) => {
+        this.visitorsPerDay = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to fetch visitors per day:', err);
+        this.visitorsPerDay = {};
+      }
+    });
+
+    
+    this.analyticsService.getAnalyticsData().subscribe({
+      next: (data) => {
+        this.analyticsData = data;
+        
+        this.totalVisitors = data.totalVisitors;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Failed to fetch analytics data:', err);
+        this.analyticsData = null;
+      }
+    });
+
   }
 
   getSortedTopProducts(): [string, number][] {
@@ -154,6 +218,7 @@ export class SalesOverviewComponent implements OnInit {
   onPeriodChange(event: any): void {
     this.selectedPeriod = event.target.value;
     this.fetchSalesData();
+    this.fetchVisitorAnalytics(); 
   }
 
   setActiveTab(tab: string): void {
@@ -276,12 +341,56 @@ export class SalesOverviewComponent implements OnInit {
     return unitsSold * 1299;
   }
 
-  // Additional action methods for new buttons
+  
+  getTotalVisitorDays(): number {
+    return Object.keys(this.visitorsPerDay).length;
+  }
+
+  getMaxVisitorsPerDay(): number {
+    const visitors = Object.values(this.visitorsPerDay);
+    return visitors.length > 0 ? Math.max(...visitors) : 0;
+  }
+
+  getAverageVisitorsPerDay(): number {
+    const visitors = Object.values(this.visitorsPerDay);
+    if (visitors.length === 0) return 0;
+
+    const total = visitors.reduce((sum, count) => sum + count, 0);
+    return total / visitors.length;
+  }
+
+  getSortedVisitorsPerDay(): [string, number][] {
+    return Object.entries(this.visitorsPerDay).sort((a, b) => a[0].localeCompare(b[0]));
+  }
+
+  getPeakVisitorDay(): string {
+    const sortedVisitors = this.getSortedVisitorsPerDay();
+    if (sortedVisitors.length === 0) return 'N/A';
+
+    const peakDay = sortedVisitors.reduce((max, current) =>
+      current[1] > max[1] ? current : max
+    );
+
+    return peakDay[0];
+  }
+
+  
+  getVisitorGrowth(): number {
+    if (this.previousPeriodVisitors === 0) return 0;
+    return ((this.totalVisitors - this.previousPeriodVisitors) / this.previousPeriodVisitors) * 100;
+  }
+
+  
   viewAllProducts(): void {
     console.log('Navigate to all products view');
   }
 
   manageInventory(): void {
     console.log('Navigate to inventory management');
+  }
+
+  refreshAnalytics(): void {
+    this.fetchSalesData();
+    this.fetchVisitorAnalytics();
   }
 }

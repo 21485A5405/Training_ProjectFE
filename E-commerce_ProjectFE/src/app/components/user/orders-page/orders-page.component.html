@@ -61,7 +61,11 @@
                      [ngClass]="{
                        'status-delivered': order.orderStatus === 'DELIVERED',
                        'status-cancelled': order.orderStatus === 'CANCELLED',
-                       'status-pending': order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED'
+                       'status-returned': order.orderStatus === 'RETURNED',
+                       'status-out-for-delivery': order.orderStatus === 'OUT_FOR_DELIVERY',
+                       'status-shipped': order.orderStatus === 'SHIPPED',
+                       'status-processing': order.orderStatus === 'PROCESSING',
+                       'status-pending': order.orderStatus === 'PENDING' || (order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'RETURNED' && order.orderStatus !== 'OUT_FOR_DELIVERY' && order.orderStatus !== 'SHIPPED' && order.orderStatus !== 'PROCESSING')
                      }">
                   {{ getDeliveryStatus(order.orderDate, order.orderStatus) }}
                 </div>
@@ -69,7 +73,7 @@
             </div>
             
             <div class="table-cell order-status-col">
-              <span class="status-badge order-status" [ngClass]="order.orderStatus.toLowerCase()">
+              <span class="status-badge order-status" [ngClass]="getOrderStatusClass(order.orderStatus)">
                 <span class="status-dot"></span>
                 {{ order.orderStatus }}
               </span>
@@ -81,13 +85,36 @@
             
             <div class="table-cell action-col">
               <div class="action-buttons">
+                
                 <button
+                  *ngIf="order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'RETURNED'"
                   (click)="cancelOrder(order.orderId)"
                   class="cancel-btn"
-                  [disabled]="order.orderStatus === 'CANCELLED'"
-                  [class.disabled]="order.orderStatus === 'CANCELLED'">
+                  title="Cancel this order">
                   Cancel Order
                 </button>
+                
+                
+                <button
+                  *ngIf="order.orderStatus === 'DELIVERED' && order.orderStatus !== 'RETURNED'"
+                  (click)="returnProduct(order.orderId)"
+                  class="return-btn"
+                  title="Return this product">
+                  Return Product
+                </button>
+                <span
+                  *ngIf="order.orderStatus === 'CANCELLED'"
+                  class="status-info cancelled-info">
+                  Order Cancelled
+                </span>
+                
+                <span
+                  *ngIf="order.orderStatus === 'RETURNED'"
+                  class="status-info returned-info">
+                  Product Returned
+                </span>
+                
+                
                 <button
                   class="details-btn"
                   (click)="toggleOrderDetails(order.orderId)">

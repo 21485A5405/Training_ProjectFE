@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { AnalyticsService } from '../../../services/analytics.service';
 @Component({
   selector: 'app-product',
   standalone: true,
@@ -28,13 +29,25 @@ export class ProductDetailsComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private router: Router,
-    private cdr: ChangeDetectorRef,private route: ActivatedRoute) {
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-      this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-    }
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private analyticsService: AnalyticsService
+  ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
 
   ngOnInit(): void {
     this.fetchProducts();
+    this.trackProductPageVisit();
+  }
+
+  private trackProductPageVisit(): void {
+    // Track product page visit
+    this.analyticsService.trackPageView('products').subscribe({
+      next: () => console.log('Product page visit tracked'),
+      error: (err) => console.log('Product page tracking failed:', err)
+    });
   }
   
   filterByHeaderSearch(): void {
@@ -81,6 +94,9 @@ export class ProductDetailsComponent implements OnInit {
   addToCart(product: any): void {
     const userId = sessionStorage.getItem('userId');
     if (!userId) {
+      // Track add to cart attempt without login
+      this.analyticsService.trackPageView('add-to-cart-no-login').subscribe();
+      
       Swal.fire({
         icon: 'warning',
         title: 'Login Required',
@@ -95,6 +111,9 @@ export class ProductDetailsComponent implements OnInit {
       return;
     }
 
+    // Track add to cart interaction
+    this.analyticsService.trackPageView('add-to-cart-success').subscribe();
+
     this.cartService.addToCart(userId, product.productId, 1).subscribe({
       next: () => {
         Swal.fire({
@@ -107,6 +126,8 @@ export class ProductDetailsComponent implements OnInit {
       },
       error: (err) => {
         console.error('Failed to add to cart:', err);
+        this.analyticsService.trackPageView('add-to-cart-error').subscribe();
+        
         Swal.fire({
           icon: 'error',
           title: 'Error',

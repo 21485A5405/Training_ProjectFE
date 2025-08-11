@@ -6,14 +6,14 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class CartService {
-  private baseUrl = 'http://localhost:8080/cart/';
+  private baseUrl = 'http://localhost:8080/cart';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getCartItems(userId: number): Observable<any> {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({
-      Authorization: token, 
+      Authorization: token,
     });
 
     return this.http.get<any>(`${this.baseUrl}/get-all-by-user/${userId}`, {
@@ -25,12 +25,12 @@ export class CartService {
 
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({
-      Authorization: token, 
+      Authorization: token,
     });
 
     return this.http.delete(`${this.baseUrl}/delete-by-cartid/${cartItemId}`, { headers });
   }
-  
+
 
   increaseCartQuantity(userId: number, productId: number): Observable<any> {
     const token = sessionStorage.getItem('authToken') || '';

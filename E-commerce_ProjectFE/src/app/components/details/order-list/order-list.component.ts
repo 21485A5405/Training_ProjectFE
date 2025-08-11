@@ -4,7 +4,6 @@ import { ProfileService } from '../../../services/profileservice';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 @Component({
   selector: 'app-order-list',
   standalone: true,
@@ -164,10 +163,14 @@ export class OrderListComponent implements OnInit {
         return 'status-processing';
       case 'SHIPPED':
         return 'status-shipped';
+      case 'OUT_FOR_DELIVERY':
+        return 'status-out-for-delivery';
       case 'DELIVERED':
         return 'status-delivered';
       case 'CANCELLED':
         return 'status-cancelled';
+      case 'RETURNED':
+        return 'status-returned';
       default:
         return 'status-pending';
     }
@@ -188,8 +191,20 @@ export class OrderListComponent implements OnInit {
     }
   }
 
-  getDeliveryDate(orderDate: string): string {
+  getDeliveryDate(orderDate: string, orderStatus?: string): string {
     const order = new Date(orderDate);
+    
+    // If order is returned, show today's date as return date
+    if (orderStatus === 'RETURNED') {
+      const returnDate = new Date(); // Current date as return date
+      return returnDate.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+      });
+    }
+    
+    // Otherwise show normal delivery date (order date + 7 days)
     const delivery = new Date(order);
     delivery.setDate(order.getDate() + 7);
     
@@ -201,30 +216,24 @@ export class OrderListComponent implements OnInit {
   }
 
   getDeliveryStatus(orderDate: string, orderStatus: string): string {
-    if (orderStatus === 'DELIVERED') {
-      return 'Delivered';
-    }
-    
-    if (orderStatus === 'CANCELLED') {
-      return 'Cancelled';
-    }
-    
-    const orderDateObj = new Date(orderDate);
-    const deliveryDate = new Date(orderDateObj);
-    deliveryDate.setDate(orderDateObj.getDate() + 7);
-    
-    const today = new Date();
-    const timeDiff = deliveryDate.getTime() - today.getTime();
-    const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    
-    if (daysDiff < 0) {
-      return 'Overdue';
-    } else if (daysDiff === 0) {
-      return 'Delivering Today';
-    } else if (daysDiff === 1) {
-      return 'Delivering Tomorrow';
-    } else {
-      return `${daysDiff} days to delivery`;
+    // Convert order status to display format
+    switch (orderStatus) {
+      case 'DELIVERED':
+        return 'Delivered';
+      case 'CANCELLED':
+        return 'Cancelled';
+      case 'RETURNED':
+        return 'Returned';
+      case 'OUT_FOR_DELIVERY':
+        return 'Out for Delivery';
+      case 'SHIPPED':
+        return 'Shipped';
+      case 'PROCESSING':
+        return 'Processing';
+      case 'PENDING':
+        return 'Pending';
+      default:
+        return orderStatus; // Return the actual status if not in the predefined list
     }
   }
 }

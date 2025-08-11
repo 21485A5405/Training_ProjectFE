@@ -840,3 +840,117 @@ body {
     align-self: flex-end;
   }
 }
+
+/* Payment Options Styling */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.payment-option {
+  border: 2px solid #e1e5e9;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #fff;
+}
+
+.payment-option:hover {
+  border-color: #007bff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15);
+}
+
+.payment-option.selected {
+  border-color: #007bff;
+  background: #f8f9ff;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.option-icon {
+  font-size: 32px;
+  min-width: 50px;
+  text-align: center;
+}
+
+.option-details {
+  flex: 1;
+}
+
+.option-details h4 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+}
+
+.option-details p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-badge.paid {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status-badge.pending {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.option-radio {
+  margin-left: auto;
+}
+
+.option-radio input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #007bff;
+}
+
+/* Responsive design for payment options */
+@media (max-width: 768px) {
+  .payment-option {
+    padding: 15px;
+  }
+  
+  .option-content {
+    gap: 12px;
+  }
+  
+  .option-icon {
+    font-size: 28px;
+    min-width: 40px;
+  }
+  
+  .option-details h4 {
+    font-size: 16px;
+  }
+  
+  .option-details p {
+    font-size: 13px;
+  }
+}

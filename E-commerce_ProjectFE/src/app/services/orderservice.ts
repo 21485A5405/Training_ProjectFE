@@ -40,6 +40,7 @@ export class OrderService {
 
     return this.http.put<any>(`${this.apiUrl}/update-orderstatus/${orderId}/${status}`, null, { headers });
   }
+  
   cancelOrder(orderId :number): Observable<any> {
     const token = sessionStorage.getItem('authToken') || ''; // Retrieve the token from sessionStorage
     const headers = new HttpHeaders({
@@ -47,5 +48,15 @@ export class OrderService {
     });
 
     return this.http.post<any>(`${this.apiUrl}/cancel-order/${orderId}`,null, { headers });
+  }
+
+  // Return product method
+  returnProduct(orderId :number): Observable<any> {
+    const token = sessionStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({
+      Authorization: `${token}`, 
+    });
+
+    return this.http.post<any>(`${this.apiUrl}/return-product/${orderId}`,null, { headers });
   }
 }

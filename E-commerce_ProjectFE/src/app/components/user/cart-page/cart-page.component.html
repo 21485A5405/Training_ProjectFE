@@ -63,8 +63,8 @@
               <span class="qty-display">{{ item.productQuantity }}</span>
               <button class="qty-btn plus" (click)="increaseQuantity(item)">+</button>
             </div>
-            <div class="item-price">{{ item.product.productPrice |currency:'INR'}}</div>
-            <div class="item-total">{{ item.totalPrice |currency:'INR' }}</div>
+            <div class="item-price">{{ item.product.productPrice | currency:'INR':'symbol':'1.2-2' }}</div>
+            <div class="item-total">{{ item.totalPrice | currency:'INR':'symbol':'1.2-2' }}</div>
             <div class="item-selection">
               <label>
                 <input type="checkbox" (change)="toggleSelection(item, $event)">
@@ -96,7 +96,12 @@
       
       <div class="summary-row">
         <span>ITEMS {{ selectedItemsCount > 0 ? selectedItemsCount : totalItemsCount }}</span>
-        <span>{{ selectedItemsCount > 0 ? selectedItemsTotal.toFixed(2) : totalPrice.toFixed(2) |currency:'INR' }}</span>
+        <span>{{ (selectedItemsCount > 0 ? selectedItemsTotal : totalPrice) | currency:'INR':'symbol':'1.2-2' }}</span>
+      </div>
+
+      <div class="summary-row">
+        <span>SHIPPING</span>
+        <span>{{ shippingCost | currency:'INR':'symbol':'1.2-2' }}</span>
       </div>
 
       
@@ -155,47 +160,49 @@
       
       <div class="payment-section" *ngIf="selectedAddressId">
         <div class="summary-row">
-          <span>PAYMENT METHOD</span>
-          <button class="add-new-btn" (click)="toggleAddPaymentForm()" type="button">
-            <i class="fas fa-plus"></i> Add New
-          </button>
+          <span>PAYMENT OPTIONS</span>
         </div>
         
-        <!-- Payment Method Selection Dropdown -->
-        <div class="payment-dropdown" *ngIf="!showAddPaymentForm">
-          <select [(ngModel)]="selectedPaymentMethod">
-            <option value="" disabled>Select a method</option>
-            <option *ngFor="let method of paymentMethods" [ngValue]="method">
-              {{ method.type }} - {{ method.value }}
-            </option>
-          </select>
-        </div>
+        <!-- Payment Options -->
+        <div class="payment-options">
+          <div class="payment-option" 
+               [class.selected]="paymentOption === 'PAY_NOW'"
+               (click)="selectPaymentOption('PAY_NOW')">
+            <div class="option-content">
+              <div class="option-icon">💳</div>
+              <div class="option-details">
+                <h4>Pay Now</h4>
+                <p>Complete payment online (Card/UPI/Net Banking)</p>
+                <span class="status-badge paid">Payment: PAID</span>
+              </div>
+              <div class="option-radio">
+                <input type="radio" 
+                       name="paymentOption" 
+                       value="PAY_NOW"
+                       [checked]="paymentOption === 'PAY_NOW'"
+                       (change)="selectPaymentOption('PAY_NOW')">
+              </div>
+            </div>
+          </div>
 
-        <!-- Add New Payment Method Form -->
-        <div class="add-form-section" *ngIf="showAddPaymentForm">
-          <div class="form-group">
-            <select class="form-input form-select" [(ngModel)]="newPaymentMethod" required>
-              <option value="" disabled>Select payment method</option>
-              <option *ngFor="let enumValue of paymentEnums" [value]="enumValue">
-                {{ enumValue }}
-              </option>
-            </select>
-          </div>
-          <div class="form-group">
-            <input 
-              type="text" 
-              class="form-input" 
-              [(ngModel)]="newAccountDetails"
-              placeholder="Account details (e.g., ****-****-****-1234)" 
-            />
-          </div>
-          <div class="form-actions">
-            <button class="form-submit-btn" (click)="addPaymentMethod()">
-              <i class="fas fa-plus"></i> Add Payment
-            </button>
-            <button class="form-cancel-btn" (click)="toggleAddPaymentForm()">
-              <i class="fas fa-times"></i> Cancel
-            </button>
+          <div class="payment-option" 
+               [class.selected]="paymentOption === 'CASH_ON_DELIVERY'"
+               (click)="selectPaymentOption('CASH_ON_DELIVERY')">
+            <div class="option-content">
+              <div class="option-icon">💵</div>
+              <div class="option-details">
+                <h4>Cash on Delivery</h4>
+                <p>Pay when your order is delivered</p>
+                <span class="status-badge pending">Payment: PENDING</span>
+              </div>
+              <div class="option-radio">
+                <input type="radio" 
+                       name="paymentOption" 
+                       value="CASH_ON_DELIVERY"
+                       [checked]="paymentOption === 'CASH_ON_DELIVERY'"
+                       (change)="selectPaymentOption('CASH_ON_DELIVERY')">
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -203,12 +210,12 @@
       <div class="total-section">
         <div class="summary-row total-row">
           <span>TOTAL COST</span>
-          <span>{{ selectedItemsCount > 0 ? getFinalTotal().toFixed(2) : getAllItemsTotal().toFixed(2) |currency:'INR' }}</span>
+          <span>{{ (selectedItemsCount > 0 ? getFinalTotal() : getAllItemsTotal()) | currency:'INR':'symbol':'1.2-2' }}</span>
         </div>
       </div>
       <button class="checkout-btn" 
               (click)="placeOrder()" 
-              [disabled]="!selectedPaymentMethod || selectedItems.length === 0">
+              [disabled]="!selectedAddressId || selectedItems.length === 0">
         CHECKOUT
       </button>
     </div>

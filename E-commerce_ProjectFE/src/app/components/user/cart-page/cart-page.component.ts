@@ -24,8 +24,8 @@ export class CartPageComponent implements OnInit {
   selectedItems: any[] = [];
   userAddresses: any[] = [];
   selectedAddressId: number = 0;
-  paymentMethods: { type: string; value: string }[] = [];
-  selectedPaymentMethod: { type: string; value: string } | null = null;
+  // paymentMethods: { type: string; value: string }[] = [];
+  // selectedPaymentMethod: { type: string; value: string } | null = null;
   
   totalItemsCount: number = 0;
   totalPrice: number = 0;
@@ -33,6 +33,8 @@ export class CartPageComponent implements OnInit {
   selectedItemsTotal: number = 0;
   shippingCost: number = 5.00;
 
+  // Payment option properties
+  paymentOption: 'PAY_NOW' | 'CASH_ON_DELIVERY' = 'CASH_ON_DELIVERY';
   
   showAddAddressForm: boolean = false;
   showAddPaymentForm: boolean = false;
@@ -55,8 +57,8 @@ export class CartPageComponent implements OnInit {
     this.userId = storedUserId ? +storedUserId : 0;
     this.fetchCartItems(); 
     this.getAddresses();
-    this.loadUserPaymentMethods();
-    this.getPaymentEnums();
+    // this.loadUserPaymentMethods();
+    // this.getPaymentEnums();
   }
 
   
@@ -294,6 +296,15 @@ export class CartPageComponent implements OnInit {
       });
   }
 
+  // Payment option methods
+  selectPaymentOption(option: 'PAY_NOW' | 'CASH_ON_DELIVERY'): void {
+    this.paymentOption = option;
+  }
+
+  getPaymentStatus(): 'PAID' | 'PENDING' {
+    return this.paymentOption === 'PAY_NOW' ? 'PAID' : 'PENDING';
+  }
+
   placeOrder(): void {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({
@@ -306,17 +317,15 @@ export class CartPageComponent implements OnInit {
       return;
     }
   
-    if (!this.selectedPaymentMethod) {
-      Swal.fire('Error', 'Please select a payment method.', 'error');
-      return;
-    }
+    // Remove payment method validation since we're using payment options
     
     const orderData = this.selectedItems.map(item => ({
       userId: this.userId,
       addressId: this.selectedAddressId,
       productId: item.product.productId,
       quantity: item.productQuantity,
-      paymentType: this.selectedPaymentMethod?.type
+      paymentOption: this.paymentOption,
+      paymentStatus: this.getPaymentStatus()
     }));
   
     if (orderData.length === 0) {
@@ -326,42 +335,59 @@ export class CartPageComponent implements OnInit {
   
     const deliveryDate = this.getDeliveryDate();
     
+    // Show different confirmation based on payment option
+    if (this.paymentOption === 'PAY_NOW') {
+      // For Pay Now, show payment processing
+      Swal.fire({
+        title: 'Processing Payment...',
+        text: 'Please wait while we process your payment.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+      
+      // Simulate payment processing delay
+      setTimeout(() => {
+        this.processOrder(orderData, deliveryDate);
+      }, 2000);
+    } else {
+      // For Cash on Delivery, process immediately
+      this.processOrder(orderData, deliveryDate);
+    }
+  }
+
+  private processOrder(orderData: any[], deliveryDate: string): void {
     this.orderService.placeOrder(orderData).subscribe({
       next: () => {
+        const paymentMessage = this.paymentOption === 'PAY_NOW' 
+          ? 'Payment completed successfully!' 
+          : 'Order placed! Payment will be collected on delivery.';
+        
         Swal.fire({
           icon: 'success',
           title: 'Order Placed Successfully!',
           html: `
             <div style="text-align: left; margin: 20px 0;">
+              <p><strong>Payment Method:</strong> ${this.paymentOption === 'PAY_NOW' ? 'Paid Online' : 'Cash on Delivery'}</p>
+              <p><strong>Payment Status:</strong> ${this.getPaymentStatus()}</p>
               <p><strong>Order Total:</strong> ${this.formatCurrency(this.getFinalTotal())}</p>
               <p><strong>Items Ordered:</strong> ${this.selectedItemsCount} items</p>
               <p><strong>Expected Delivery:</strong> <span style="color: #28a745; font-weight: bold;">${deliveryDate}</span></p>
               <p style="margin-top: 15px; color: #666; font-size: 14px;">
-                📦 Your order will be delivered within 7 business days
+                📦 ${paymentMessage}
               </p>
             </div>
           `,
-          confirmButtonText: 'View Orders',
-          showCancelButton: true,
-          cancelButtonText: 'Continue Shopping',
-          confirmButtonColor: '#28a745',
-          cancelButtonColor: '#6c757d'
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToOrders();
-          }
-        });
-        
-        this.cartService.getCartItems(this.userId).subscribe((updatedCart) => {
-          this.cartItems = updatedCart.data;
-          this.selectedItems = []; 
-          this.calculateTotals(); 
-          this.cdr.detectChanges();
+          confirmButtonText: 'Continue Shopping',
+          allowOutsideClick: false
+        }).then(() => {
+          this.router.navigate(['/welcome']);
         });
       },
-      error: (error) => {
-        console.error('Order failed:', error);
-        Swal.fire('Error', 'Failed to place order', 'error');
+      error: (err) => {
+        console.error('Error placing order:', err);
+        Swal.fire('Error', 'Failed to place order. Please try again.', 'error');
       }
     });
   }
@@ -369,10 +395,10 @@ export class CartPageComponent implements OnInit {
   loadUserPaymentMethods(): void {
     this.profileService.getUserPaymentMethods(this.userId).subscribe({
       next: (methods) => {
-        this.paymentMethods = methods.map(methodMap => {
-          const [type, value] = Object.entries(methodMap)[0];
-          return { type, value };
-        });
+        // this.paymentMethods = methods.map(methodMap => {
+        //   const [type, value] = Object.entries(methodMap)[0];
+        //   return { type, value };
+        // });
       },
       error: (err) => console.error('Error fetching user payment methods', err),
     });
@@ -383,7 +409,12 @@ export class CartPageComponent implements OnInit {
   }
   
   formatCurrency(amount: number): string {
-    return `₹${amount.toFixed(2)}`;
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).format(amount);
   }
 
   updateShippingCost(event: any): void {

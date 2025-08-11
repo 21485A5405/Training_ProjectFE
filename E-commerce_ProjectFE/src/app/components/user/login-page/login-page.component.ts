@@ -87,7 +87,7 @@ export class LoginPageComponent {
 
   private getErrorMessage(error: any): string {
     if (error.status === 0) {
-      return 'Unable to connect to server. Please check your internet connection and try again.';
+      return 'Unable to connect to server. Please check your connection and try again.';
     }
     switch (error.status) {
       case 401: return error?.error?.message || 'Invalid credentials. Please check your email and password.';
@@ -269,7 +269,6 @@ onCustomerSubmit() {
   });
 }
 
-
 ngAfterViewChecked() {
   if (this.adminerrorMessage) {
     console.log('Admin error message in view:', this.adminerrorMessage);
@@ -278,7 +277,6 @@ ngAfterViewChecked() {
     console.log('User error message in view:', this.usererrorMessage);
   }
 }
-
   
   onAdminEmailChange(): void {
     if (this.adminerrorMessage) {

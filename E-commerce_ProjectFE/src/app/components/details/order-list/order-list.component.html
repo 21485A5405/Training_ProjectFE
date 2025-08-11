@@ -24,13 +24,17 @@
           <td class="delivery-info-cell">
             <div class="delivery-info">
               <div class="delivery-date">
-                <strong>{{ getDeliveryDate(order.orderDate) }}</strong>
+                <strong>{{ getDeliveryDate(order.orderDate, order.orderStatus) }}</strong>
               </div>
               <div class="delivery-status" 
                    [ngClass]="{
                      'status-delivered': order.orderStatus === 'DELIVERED',
                      'status-cancelled': order.orderStatus === 'CANCELLED',
-                     'status-pending': order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED'
+                     'status-returned': order.orderStatus === 'RETURNED',
+                     'status-out-for-delivery': order.orderStatus === 'OUT_FOR_DELIVERY',
+                     'status-shipped': order.orderStatus === 'SHIPPED',
+                     'status-processing': order.orderStatus === 'PROCESSING',
+                     'status-pending': order.orderStatus === 'PENDING' || (order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'RETURNED' && order.orderStatus !== 'OUT_FOR_DELIVERY' && order.orderStatus !== 'SHIPPED' && order.orderStatus !== 'PROCESSING')
                    }">
                 {{ getDeliveryStatus(order.orderDate, order.orderStatus) }}
               </div>

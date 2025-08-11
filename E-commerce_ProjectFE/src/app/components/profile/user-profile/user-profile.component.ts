@@ -5,11 +5,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
 
 import { EditAddressDialogComponent } from '../../dialog/edit-address-dialog/edit-address-dialog.component';
 import { UpdateUserDialogComponent } from '../../dialog/update-user-dialogcomponent/update-user-dialog.component';
-import { ProfileService } from '../../../services/profileservice';
 
 
 @Component({
@@ -36,7 +34,6 @@ export class UserProfileComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
-    private profileService: ProfileService // Uncomment and update import path
   ) {}
 
   ngOnInit(): void {

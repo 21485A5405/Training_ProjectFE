@@ -72,19 +72,45 @@ export class OrderPageComponent implements OnInit, OnDestroy {
 
  
   getDeliveryStatus(orderDate: string, orderStatus: string): string {
-    if (orderStatus === 'DELIVERED') return 'Delivered';
-    if (orderStatus === 'CANCELLED') return 'Cancelled';
-    
-    const order = new Date(orderDate);
-    const deliveryDate = new Date(order);
-    deliveryDate.setDate(order.getDate() + 7);
-    const today = new Date();
-    
-    if (today >= deliveryDate) {
-      return 'Ready for Delivery';
-    } else {
-      const daysLeft = Math.ceil((deliveryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-      return `Arriving in ${daysLeft} day${daysLeft !== 1 ? 's' : ''}`;
+    // Convert order status to display format
+    switch (orderStatus) {
+      case 'DELIVERED':
+        return 'Delivered';
+      case 'CANCELLED':
+        return 'Cancelled';
+      case 'RETURNED':
+        return 'Returned';
+      case 'OUT_FOR_DELIVERY':
+        return 'Out for Delivery';
+      case 'SHIPPED':
+        return 'Shipped';
+      case 'PROCESSING':
+        return 'Processing';
+      case 'PENDING':
+        return 'Pending';
+      default:
+        return orderStatus; // Return the actual status if not in the predefined list
+    }
+  }
+
+  getOrderStatusClass(status: string): string {
+    switch (status?.toUpperCase()) {
+      case 'PENDING':
+        return 'pending';
+      case 'PROCESSING':
+        return 'processing';
+      case 'SHIPPED':
+        return 'shipped';
+      case 'OUT_FOR_DELIVERY':
+        return 'out-for-delivery';
+      case 'DELIVERED':
+        return 'delivered';
+      case 'CANCELLED':
+        return 'cancelled';
+      case 'RETURNED':
+        return 'returned';
+      default:
+        return status?.toLowerCase() || 'pending';
     }
   }
 
@@ -176,4 +202,52 @@ export class OrderPageComponent implements OnInit, OnDestroy {
       }
     });
   }
-}
+
+  returnProduct(orderId: number) {
+   
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to reutrn order #${orderId}. Do you want to continue?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, return it!',
+      cancelButtonText: 'No, keep it',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading = true;
+
+       
+        this.orderService.returnProduct(orderId).subscribe(
+          (response) => {
+            this.loading = false;
+           
+            this.orders = this.orders.filter(order => order.orderId !== orderId);
+            Swal.fire(
+              'Returned!',
+              'Your order has been returned.',
+              'success'
+            );
+          },
+          (error) => {
+            this.loading = false;
+            console.error('Error returning order', error);
+            Swal.fire(
+              'Failed!',
+              'Failed to return your order. Please try again later.',
+              'error'
+            );
+          }
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+       
+        Swal.fire(
+          'Returned',
+          'Order Not Returned',
+          'info'
+        );
+      }
+    });
+  }
+
+  }

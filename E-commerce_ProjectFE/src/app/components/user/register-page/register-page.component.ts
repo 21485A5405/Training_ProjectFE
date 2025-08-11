@@ -61,7 +61,6 @@ export class RegisterPageComponent {
             text: this.registerSuccessMessage,
             confirmButtonText: 'OK'
           }).then(() => {
-            // Optional: redirect to login page
             this.router.navigate(['/login']);
           });
         });
