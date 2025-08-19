@@ -113,15 +113,15 @@
           </button>
         </div>
         
-        <!-- Address Selection Dropdown -->
-        <div class="address-dropdown" *ngIf="!showAddAddressForm">
-          <select class="form-control" [(ngModel)]="selectedAddressId">
-            <option value="">-- Select an address --</option>
-            <option *ngFor="let address of userAddresses" [value]="address.addressId">
-              {{ address.fullAddress }}
-            </option>
-          </select>
-        </div>
+                 <!-- Address Selection Dropdown -->
+         <div class="address-dropdown" *ngIf="!showAddAddressForm">
+           <select class="form-control" [(ngModel)]="selectedAddressId" (change)="onAddressChange()">
+             <option value="">-- Select an address --</option>
+             <option *ngFor="let address of userAddresses" [value]="address.addressId">
+               {{ address.fullAddress }}
+             </option>
+           </select>
+         </div>
 
         <!-- Add New Address Form -->
         <div class="add-form-section" *ngIf="showAddAddressForm">
@@ -158,52 +158,112 @@
       </div>
 
       
-      <div class="payment-section" *ngIf="selectedAddressId">
-        <div class="summary-row">
-          <span>PAYMENT OPTIONS</span>
-        </div>
-        
-        <!-- Payment Options -->
-        <div class="payment-options">
-          <div class="payment-option" 
-               [class.selected]="paymentOption === 'PAY_NOW'"
-               (click)="selectPaymentOption('PAY_NOW')">
-            <div class="option-content">
-              <div class="option-icon">💳</div>
-              <div class="option-details">
-                <h4>Pay Now</h4>
-                <p>Complete payment online (Card/UPI/Net Banking)</p>
-                <span class="status-badge paid">Payment: PAID</span>
+             <!-- Payment Section - Only show if address is selected -->
+       <div class="payment-section" *ngIf="selectedAddressId">
+         <h4>Payment Options</h4>
+
+         <div class="payment-options">
+           <div class="payment-option">
+             <input type="radio" id="payNow" name="payment" value="PAY_NOW" 
+                    [(ngModel)]="paymentOption" (change)="selectPaymentOption('PAY_NOW')">
+             <label for="payNow">Pay Now</label>
+           </div>
+           <div class="payment-option">
+             <input type="radio" id="cod" name="payment" value="CASH_ON_DELIVERY" 
+                    [(ngModel)]="paymentOption" (change)="selectPaymentOption('CASH_ON_DELIVERY')">
+             <label for="cod">Cash on Delivery</label>
+           </div>
+         </div>
+
+        <div *ngIf="paymentOption === 'PAY_NOW'" class="payment-method-selection">
+          <div class="form-group">
+            <label class="form-label">Payment Method:</label>
+            <select class="payment-method-dropdown" 
+                    [(ngModel)]="selectedPaymentMethod" 
+                    (change)="onPaymentMethodChange()">
+              <option value="">Select payment method</option>
+              <option *ngFor="let method of paymentEnums" [value]="method">
+                {{ method }}
+              </option>
+            </select>
+          </div>
+
+            <!-- Show saved payment methods for selected payment type -->
+            <div *ngIf="selectedPaymentMethod && getFilteredSavedPayments().length > 0" class="saved-payments-section">
+              <div class="saved-payments-header">
+                <h5>Saved {{ selectedPaymentMethod }} Payment Methods</h5>
+                <button class="add-new-payment-btn" (click)="toggleAddNewPayment()">
+                  <i class="fas fa-plus"></i> Add New
+                </button>
               </div>
-              <div class="option-radio">
-                <input type="radio" 
-                       name="paymentOption" 
-                       value="PAY_NOW"
-                       [checked]="paymentOption === 'PAY_NOW'"
-                       (change)="selectPaymentOption('PAY_NOW')">
+
+              <div class="form-group">
+                <select class="saved-payment-dropdown" 
+                        [(ngModel)]="selectedSavedPayment" 
+                        (change)="onSavedPaymentSelect()">
+                  <option [ngValue]="null">Select {{ selectedPaymentMethod }} payment</option>
+                  <option *ngFor="let payment of getFilteredSavedPayments()" [ngValue]="payment">
+                    {{ maskAccountDetails(payment.accountDetails) }}
+                  </option>
+                </select>
               </div>
+            </div>
+
+            <div *ngIf="selectedPaymentMethod && getFilteredSavedPayments().length === 0 && !showAddNewPayment" class="manual-entry-section">
+              <h6>No saved {{ selectedPaymentMethod }} payments found</h6>
+              <div class="form-group">
+                <label class="form-label">{{ getAccountDetailsLabel() }}:</label>
+                <input type="text" 
+                       class="account-details-input"
+                       [(ngModel)]="selectedAccountDetails"
+                       [placeholder]="getAccountDetailsPlaceholder()">
+                <small class="payment-help-text">This payment will not be saved. Click "Add New" to save for future use.</small>
+              </div>
+              <button class="add-new-payment-btn" (click)="toggleAddNewPayment()">
+                <i class="fas fa-plus"></i> Add New Payment
+              </button>
+            </div>
+
+            <div *ngIf="selectedPaymentMethod && getFilteredSavedPayments().length > 0 && !selectedSavedPayment && !showAddNewPayment" class="manual-entry-section">
+              <h6>Or enter payment details manually</h6>
+              <div class="form-group">
+                <label class="form-label">{{ getAccountDetailsLabel() }}:</label>
+                <input type="text" 
+                       class="account-details-input"
+                       [(ngModel)]="selectedAccountDetails"
+                       [placeholder]="getAccountDetailsPlaceholder()">
+                <small class="payment-help-text">This payment will not be saved. Click "Add New" to save for future use.</small>
+              </div>
+            </div>
+
+          <div *ngIf="showAddNewPayment" class="add-new-payment-form">
+            <h5 class="form-title">Add New Payment Method</h5>
+            <div class="form-group">
+              <label class="form-label">Payment Method:</label>
+              <select class="payment-method-select" [(ngModel)]="newPaymentMethod" required>
+                <option value="" disabled>Select payment method</option>
+                <option *ngFor="let method of paymentEnums" [value]="method">
+                  {{ method }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Account Details:</label>
+              <input type="text" 
+                     class="account-details-input"
+                     [(ngModel)]="newAccountDetails"
+                     [placeholder]="getNewPaymentPlaceholder()">
+            </div>
+            <div class="payment-form-actions">
+              <button class="save-payment-btn" (click)="addNewPaymentMethod()">
+                <i class="fas fa-save"></i> Add Payment
+              </button>
+              <button class="cancel-payment-btn" (click)="cancelAddNewPayment()">
+                <i class="fas fa-times"></i> Cancel
+              </button>
             </div>
           </div>
 
-          <div class="payment-option" 
-               [class.selected]="paymentOption === 'CASH_ON_DELIVERY'"
-               (click)="selectPaymentOption('CASH_ON_DELIVERY')">
-            <div class="option-content">
-              <div class="option-icon">💵</div>
-              <div class="option-details">
-                <h4>Cash on Delivery</h4>
-                <p>Pay when your order is delivered</p>
-                <span class="status-badge pending">Payment: PENDING</span>
-              </div>
-              <div class="option-radio">
-                <input type="radio" 
-                       name="paymentOption" 
-                       value="CASH_ON_DELIVERY"
-                       [checked]="paymentOption === 'CASH_ON_DELIVERY'"
-                       (change)="selectPaymentOption('CASH_ON_DELIVERY')">
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -215,7 +275,7 @@
       </div>
       <button class="checkout-btn" 
               (click)="placeOrder()" 
-              [disabled]="!selectedAddressId || selectedItems.length === 0">
+              [disabled]="!isCheckoutEnabled()">
         CHECKOUT
       </button>
     </div>

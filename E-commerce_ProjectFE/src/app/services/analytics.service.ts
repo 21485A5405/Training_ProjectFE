@@ -35,7 +35,7 @@ export class AnalyticsService {
   }
 
   
-  trackVisitor(page: string = 'home'): Observable<any> {
+  trackVisitor(page: string = 'home-page'): Observable<any> {
     const sessionId = this.getOrCreateSessionId();
     
     const visitorData: VisitorData = {

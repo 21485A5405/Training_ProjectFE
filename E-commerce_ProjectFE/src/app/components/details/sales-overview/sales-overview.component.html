@@ -30,7 +30,7 @@
         <div class="metric-content">
           <h3 class="metric-label">Total Revenue</h3>
           <p class="metric-value">{{ formatCurrency(totalRevenue) }}</p>
-          <div class="metric-change"
+          <div class="metric-change" *ngIf="getRevenueGrowth() !== 0"
             [ngClass]="{'positive': getRevenueGrowth() > 0, 'negative': getRevenueGrowth() < 0}">
             <i class="fas"
               [ngClass]="{'fa-arrow-up': getRevenueGrowth() > 0, 'fa-arrow-down': getRevenueGrowth() < 0}"></i>
@@ -53,7 +53,7 @@
         <div class="metric-content">
           <h3 class="metric-label">Total Orders</h3>
           <p class="metric-value">{{ formatNumber(totalOrders) }}</p>
-          <div class="metric-change" [ngClass]="{'positive': getOrdersGrowth() > 0, 'negative': getOrdersGrowth() < 0}">
+          <div class="metric-change" *ngIf="getOrdersGrowth() !== 0" [ngClass]="{'positive': getOrdersGrowth() > 0, 'negative': getOrdersGrowth() < 0}">
             <i class="fas"
               [ngClass]="{'fa-arrow-up': getOrdersGrowth() > 0, 'fa-arrow-down': getOrdersGrowth() < 0}"></i>
             <span>{{ Math.abs(getOrdersGrowth()) | number:'1.1-1' }}% from last period</span>
@@ -75,7 +75,7 @@
         <div class="metric-content">
           <h3 class="metric-label">Avg Order Value</h3>
           <p class="metric-value">{{ formatCurrency(getAverageOrderValue()) }}</p>
-          <div class="metric-change" [ngClass]="{'positive': getAOVGrowth() > 0, 'negative': getAOVGrowth() < 0}">
+          <div class="metric-change" *ngIf="getAOVGrowth() !== 0" [ngClass]="{'positive': getAOVGrowth() > 0, 'negative': getAOVGrowth() < 0}">
             <i class="fas" [ngClass]="{'fa-arrow-up': getAOVGrowth() > 0, 'fa-arrow-down': getAOVGrowth() < 0}"></i>
             <span>{{ Math.abs(getAOVGrowth()) | number:'1.1-1' }}% from last period</span>
           </div>
@@ -96,7 +96,7 @@
         <div class="metric-content">
           <h3 class="metric-label">Conversion Rate</h3>
           <p class="metric-value">{{ getConversionRate() | number:'1.1-1' }}%</p>
-          <div class="metric-change"
+          <div class="metric-change" *ngIf="getConversionGrowth() !== 0"
             [ngClass]="{'positive': getConversionGrowth() > 0, 'negative': getConversionGrowth() < 0}">
             <i class="fas"
               [ngClass]="{'fa-arrow-up': getConversionGrowth() > 0, 'fa-arrow-down': getConversionGrowth() < 0}"></i>
@@ -123,7 +123,7 @@
         <div class="metric-content">
           <h3 class="metric-label">Total Visitors</h3>
           <p class="metric-value">{{ formatNumber(totalVisitors) }}</p>
-          <div class="metric-change"
+          <div class="metric-change" *ngIf="getVisitorGrowth() !== 0"
             [ngClass]="{'positive': getVisitorGrowth() > 0, 'negative': getVisitorGrowth() < 0}">
             <i class="fas"
               [ngClass]="{'fa-arrow-up': getVisitorGrowth() > 0, 'fa-arrow-down': getVisitorGrowth() < 0}"></i>

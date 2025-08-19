@@ -4,6 +4,72 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Welcome Banner Styles */
+.welcome-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.welcome-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.welcome-text {
+  flex: 1;
+}
+
+.welcome-greeting {
+  margin: 0 0 8px 0;
+  font-size: 32px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+}
+
+.welcome-greeting i {
+  font-size: 28px;
+  animation: glow 3s ease-in-out infinite;
+}
+
+/* Animations */
+@keyframes glow {
+  0%, 100% { 
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% { 
+    transform: scale(1.1);
+    filter: brightness(1.3);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.1); opacity: 0.5; }
+}
+
+.welcome-message {
+  margin: 0;
+  font-size: 16px;
+  opacity: 0.9;
+  font-weight: 400;
+}
+
+.welcome-icon {
+  font-size: 48px;
+  opacity: 0.3;
+  animation: pulse 3s ease-in-out infinite;
+}
+
 /* Header Styles */
 .profile-header {
   background: white;
@@ -575,6 +641,26 @@
 }
 
 @media (max-width: 768px) {
+  .welcome-content {
+    padding: 20px 24px;
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .welcome-greeting {
+    font-size: 28px;
+    justify-content: center;
+  }
+
+  .welcome-message {
+    font-size: 15px;
+  }
+
+  .welcome-icon {
+    font-size: 36px;
+  }
+
   .header-content {
     padding: 16px 24px;
     flex-direction: column;
@@ -627,6 +713,27 @@
 }
 
 @media (max-width: 480px) {
+  .welcome-content {
+    padding: 16px 20px;
+  }
+
+  .welcome-greeting {
+    font-size: 24px;
+    gap: 8px;
+  }
+
+  .welcome-greeting i {
+    font-size: 22px;
+  }
+
+  .welcome-message {
+    font-size: 14px;
+  }
+
+  .welcome-icon {
+    font-size: 32px;
+  }
+
   .header-actions {
     width: 100%;
     justify-content: flex-end;

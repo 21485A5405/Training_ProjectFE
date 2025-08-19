@@ -95,10 +95,18 @@ export class SalesOverviewComponent implements OnInit {
         this.cdr.detectChanges();
       });
 
-    this.http.get<number>('http://localhost:8080/orders-count/RETURNED', { headers })
-      .subscribe(data => {
-        this.returnedOrder = data;
-        this.cdr.detectChanges();
+    this.http.get<number>('http://localhost:8080/sales/orders-count/RETURNED', { headers })
+      .subscribe({
+        next: (data) => {
+          this.returnedOrder = data;
+          this.cdr.detectChanges();
+          console.log('Returned orders count:', data);
+        },
+        error: (error) => {
+          console.error('Error fetching returned orders:', error);
+          this.returnedOrder = 0;
+          this.cdr.detectChanges();
+        }
       });
 
     this.http.get<{ [key: string]: number }>('http://localhost:8080/sales/daily-revenue', { headers })

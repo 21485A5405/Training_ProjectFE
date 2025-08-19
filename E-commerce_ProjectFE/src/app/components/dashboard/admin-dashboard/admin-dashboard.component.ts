@@ -63,7 +63,7 @@ export class AdminDashboardComponent {
         token = token.slice(7);
       }
   
-      this.http.delete('http://localhost:8080/users/logout-user', {
+      this.http.delete(`http://localhost:8080/users/logout-user/${token}`, {
         headers: {
           Authorization: token || ''
         }

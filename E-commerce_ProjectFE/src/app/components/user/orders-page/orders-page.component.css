@@ -11,82 +11,87 @@
   color: #475569;
 }
 
-
+/* Remove table wrapper - no horizontal scroll needed */
 .orders-table {
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
   border: 1px solid #e5e7eb;
+  overflow: hidden;
+  width: 100%; /* Fit to screen width */
 }
-
 
 .table-header {
   background: #f9fafb;
   display: grid;
-  grid-template-columns: 180px 130px 180px 120px 100px 160px 120px 90px 120px;
+  grid-template-columns: 1.2fr 1fr 1.3fr 1.1fr 0.9fr 1.2fr 1.1fr 0.8fr 1fr; /* Flexible proportional columns */
+  gap: 15px; /* Add gap between columns */
   border-bottom: 1px solid #e5e7eb;
   font-weight: 600;
   font-size: 12px;
   color: #6b7280;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  padding: 0 20px; /* Add side padding */
 }
 
 .header-cell {
-  padding: 16px 15px;
+  padding: 16px 0; /* Remove horizontal padding, use grid gap */
   display: flex;
   align-items: center;
 }
 
-
+/* Column width adjustments for better spacing */
 .order-id-col {
-  min-width: 180px;
+  /* Removed fixed width - using flexible grid */
 }
 
 .customer-col {
-  min-width: 130px;
+  /* Removed fixed width - using flexible grid */
 }
 
 .location-col {
-  min-width: 180px;
+  /* Removed fixed width - using flexible grid */
 }
 
 .payment-status-col {
-  min-width: 120px;
+  /* Removed fixed width - using flexible grid */
 }
 
 .date-col {
-  min-width: 100px;
+  /* Removed fixed width - using flexible grid */
 }
 
 .delivery-col {
-  min-width: 160px;
+  /* Removed fixed width - using flexible grid */
 }
 
 .order-status-col {
-  min-width: 120px;
+  /* Removed fixed width - using flexible grid */
 }
 
 .total-col {
-  min-width: 90px;
+  /* Removed fixed width - using flexible grid */
 }
 
 .action-col {
-  min-width: 120px;
+  /* Removed fixed width - using flexible grid */
 }
 
 
 .table-body {
   max-height: 600px;
   overflow-y: auto;
+  overflow-x: visible; /* Ensure horizontal content is visible */
 }
 
 .table-row {
   display: grid;
-  grid-template-columns: 180px 130px 180px 120px 100px 160px 120px 90px 120px;
+  grid-template-columns: 1.2fr 1fr 1.3fr 1.1fr 0.9fr 1.2fr 1.1fr 0.8fr 1fr; /* Match header columns */
+  gap: 15px; /* Add gap between columns */
   border-bottom: 1px solid #f3f4f6;
   transition: background-color 0.2s ease;
+  padding: 0 20px; /* Add side padding */
 }
 
 .table-row:hover {
@@ -94,17 +99,20 @@
 }
 
 .table-cell {
-  padding: 20px 12px;
+  padding: 20px 0; /* Remove horizontal padding, use grid gap */
   display: flex;
   align-items: center;
   min-height: 60px;
 }
-.total-col,.date-col{
-  margin-left:15px;
-  
+
+/* Remove manual margin adjustments - let grid gap handle spacing */
+.total-col,
+.date-col {
+  /* Remove manual margins */
 }
-.payment-status-col{
-  margin-left:10px;
+
+.payment-status-col {
+  /* Remove manual margins */
 }
 
 .order-id-container {
@@ -593,7 +601,14 @@
 @media (max-width: 1200px) {
   .table-header,
   .table-row {
-    grid-template-columns: 150px 120px 150px 100px 90px 140px 100px 80px 100px;
+    grid-template-columns: 1.1fr 0.9fr 1.2fr 1fr 0.8fr 1.1fr 1fr 0.7fr 0.9fr; /* Adjust proportions for smaller screens */
+    gap: 12px; /* Reduce gap slightly for smaller screens */
+    padding: 0 15px; /* Reduce side padding */
+  }
+
+  .header-cell,
+  .table-cell {
+    padding: 16px 0; /* Maintain vertical padding */
   }
 }
 
@@ -602,15 +617,35 @@
     padding: 12px;
   }
 
+  .orders-table {
+    border-radius: 8px;
+  }
+
   .table-header,
   .table-row {
-    grid-template-columns: 1fr;
-    gap: 10px;
+    grid-template-columns: 1fr; /* Single column on mobile */
+    gap: 5px;
+    padding: 0 15px;
   }
 
   .table-cell {
-    padding: 8px 12px;
+    padding: 12px 0; /* Maintain consistent padding */
     border-bottom: 1px solid #e5e7eb;
+  }
+
+  .header-cell {
+    padding: 12px 0;
+  }
+
+  /* Add labels for mobile view */
+  .table-cell:before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #6b7280;
+    font-size: 11px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: block;
   }
 
   .expanded-details {

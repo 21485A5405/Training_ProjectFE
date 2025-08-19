@@ -91,7 +91,7 @@ export class ProductListComponent implements OnInit {
   }
 
   cancelEdit() {
-    this.closeModal(); // Also closes the modal
+    this.closeModal(); 
   }
 
 
@@ -161,3 +161,4 @@ export class ProductListComponent implements OnInit {
     });
   }
 }
+

@@ -25,7 +25,7 @@ export class OrderPageComponent implements OnInit, OnDestroy {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private cdr: ChangeDetectorRef ,// Inject ChangeDetectorRef
+    private cdr: ChangeDetectorRef ,
     private orderService : OrderService
   ) {}
 
@@ -72,7 +72,7 @@ export class OrderPageComponent implements OnInit, OnDestroy {
 
  
   getDeliveryStatus(orderDate: string, orderStatus: string): string {
-    // Convert order status to display format
+    
     switch (orderStatus) {
       case 'DELIVERED':
         return 'Delivered';
@@ -89,7 +89,7 @@ export class OrderPageComponent implements OnInit, OnDestroy {
       case 'PENDING':
         return 'Pending';
       default:
-        return orderStatus; // Return the actual status if not in the predefined list
+        return orderStatus; 
     }
   }
 

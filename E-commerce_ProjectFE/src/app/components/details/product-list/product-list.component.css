@@ -55,6 +55,12 @@
   text-align: center;
 }
 
+/* Center align headers for quantity and status columns */
+.product-table th:nth-child(6), /* Product Quantity column */
+.product-table th:nth-child(7) { /* Stock Status column */
+  text-align: center;
+}
+
 .product-table td {
   padding: 15px 12px;
   border-bottom: 1px solid #f0f0f0;
@@ -150,6 +156,37 @@
 .status-badge.sold-out {
   background-color: #f8d7da;
   color: #721c24;
+}
+
+/* Product Quantity */
+.product-quantity {
+  text-align: center;
+  width: 120px;
+}
+
+.quantity-number {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 40px;
+  text-align: center;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(244, 67, 54, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 67, 54, 0);
+  }
 }
 
 /* Action Cell */
@@ -285,11 +322,21 @@
   }
   
   .product-table {
-    min-width: 700px;
+    min-width: 800px; /* Increased width to accommodate new column */
   }
   
   .product-name-cell {
     width: 200px;
+  }
+
+  .product-quantity {
+    width: 90px; /* Smaller width on mobile */
+  }
+
+  .quantity-number {
+    padding: 4px 8px;
+    font-size: 12px;
+    min-width: 30px;
   }
   
   .modal-content {

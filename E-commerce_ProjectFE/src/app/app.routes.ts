@@ -35,3 +35,4 @@ export const routes: Routes = [
   { path: '404', component: PageNotFoundComponent },
   { path: '**', redirectTo: '404' }
 ];
+

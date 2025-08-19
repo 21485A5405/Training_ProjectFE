@@ -1,5 +1,21 @@
 <div class="profile-wrapper">
 
+  <!-- Welcome Banner -->
+  <div class="welcome-banner" *ngIf="userDetails">
+    <div class="welcome-content">
+      <div class="welcome-text">
+        <h2 class="welcome-greeting">
+          <i [class]="getTimeBasedIcon()"></i>
+          {{ getTimeBasedGreeting() }}, {{ userDetails.userName }}!
+        </h2>
+        <p class="welcome-message">{{ getWelcomeMessage() }}</p>
+      </div>
+      <div class="welcome-icon">
+        <i class="fas fa-smile-beam"></i>
+      </div>
+    </div>
+  </div>
+
   <div class="profile-header">
     <div class="header-content">
       <div class="header-left">

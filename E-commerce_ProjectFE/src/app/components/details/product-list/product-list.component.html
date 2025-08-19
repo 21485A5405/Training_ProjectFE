@@ -12,6 +12,7 @@
         <th>Product Name</th>
         <th>Categories</th>
         <th>Price</th>
+        <th>Product Quantity</th>
         <th>Stock Status</th>
         <th>Action</th>
       </tr>
@@ -29,6 +30,15 @@
         </td>
         <td class="product-category">{{ product.productCategory }}</td>
         <td class="product-price">₹{{ product.productPrice | number:'1.0-0' }}</td>
+        <td class="product-quantity">
+          <span class="quantity-number" [ngClass]="{
+            'high-quantity': product.productQuantity > 16,
+            'medium-quantity': product.productQuantity > 0 && product.productQuantity <= 15,
+            'zero-quantity': product.productQuantity === 0
+          }">
+            {{ product.productQuantity }}
+          </span>
+        </td>
         <td class="stock-status">
           <span class="status-badge" [ngClass]="{
             'in-stock': product.productQuantity > 16,

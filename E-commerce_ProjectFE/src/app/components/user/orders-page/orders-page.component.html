@@ -1,6 +1,6 @@
 <div class="orders-container">
   <div *ngIf="!loading && orders.length > 0; else noOrders">
-    
+
     <div class="orders-table">
       <div class="table-header">
         <div class="header-cell order-id-col">Order ID</div>
@@ -14,51 +14,50 @@
         <div class="header-cell action-col">Action</div>
       </div>
 
-      
-      <div class="table-body">
-        <ng-container *ngFor="let order of orders">
-          
-          <div class="table-row">
-            
-            <div class="table-cell order-id-col">
-              <div class="order-id-container">
-                <div class="order-info">
-                  <div class="order-number">Order ID : {{ order.orderId }}</div>
-                  <div class="item-count" [title]="getProductNames(order)">
-                    {{ order.products.length }} items
+
+        <div class="table-body">
+          <ng-container *ngFor="let order of orders">
+
+            <div class="table-row">
+
+              <div class="table-cell order-id-col">
+                <div class="order-id-container">
+                  <div class="order-info">
+                    <div class="order-number">Order ID : {{ order.orderId }}</div>
+                    <div class="item-count" [title]="getProductNames(order)">
+                      {{ order.products.length }} items
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            
-            <div class="table-cell customer-col">
-              <span class="customer-name">User {{ order.userId }}</span>
-            </div>
-            
-            <div class="table-cell location-col">
-              <div class="location-info">
-                <span class="location-text">{{ order.shippingAddress }}</span>
-                <i class="location-icon">📍</i>
+
+              <div class="table-cell customer-col">
+                <span class="customer-name">User {{ order.userId }}</span>
               </div>
-            </div>
-            
-            <div class="table-cell payment-status-col">
-              <span class="status-badge payment-status" [ngClass]="order.paymentStatus.toLowerCase()">
-                {{ order.paymentStatus }}
-              </span>
-            </div>
-            
-            <div class="table-cell date-col">
-              <span class="order-date">{{ order.orderDate | date: 'dd MMM, yyyy' }}</span>
-            </div>
-            
-            <div class="table-cell delivery-col">
-              <div class="delivery-info">
-                <div class="delivery-date">
-                  <strong>{{ getDeliveryDate(order.orderDate) }}</strong>
+
+              <div class="table-cell location-col">
+                <div class="location-info">
+                  <span class="location-text">{{ order.shippingAddress }}</span>
+                  <i class="location-icon">📍</i>
                 </div>
-                <div class="delivery-status" 
-                     [ngClass]="{
+              </div>
+
+              <div class="table-cell payment-status-col">
+                <span class="status-badge payment-status" [ngClass]="order.paymentStatus.toLowerCase()">
+                  {{ order.paymentStatus }}
+                </span>
+              </div>
+
+              <div class="table-cell date-col">
+                <span class="order-date">{{ order.orderDate | date: 'dd MMM, yyyy' }}</span>
+              </div>
+
+              <div class="table-cell delivery-col">
+                <div class="delivery-info">
+                  <div class="delivery-date">
+                    <strong>{{ getDeliveryDate(order.orderDate) }}</strong>
+                  </div>
+                  <div class="delivery-status" [ngClass]="{
                        'status-delivered': order.orderStatus === 'DELIVERED',
                        'status-cancelled': order.orderStatus === 'CANCELLED',
                        'status-returned': order.orderStatus === 'RETURNED',
@@ -67,105 +66,94 @@
                        'status-processing': order.orderStatus === 'PROCESSING',
                        'status-pending': order.orderStatus === 'PENDING' || (order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'RETURNED' && order.orderStatus !== 'OUT_FOR_DELIVERY' && order.orderStatus !== 'SHIPPED' && order.orderStatus !== 'PROCESSING')
                      }">
-                  {{ getDeliveryStatus(order.orderDate, order.orderStatus) }}
-                </div>
-              </div>
-            </div>
-            
-            <div class="table-cell order-status-col">
-              <span class="status-badge order-status" [ngClass]="getOrderStatusClass(order.orderStatus)">
-                <span class="status-dot"></span>
-                {{ order.orderStatus }}
-              </span>
-            </div>
-            
-            <div class="table-cell total-col">
-              <span class="total-amount">{{ order.totalPrice | currency:'INR'}}</span>
-            </div>
-            
-            <div class="table-cell action-col">
-              <div class="action-buttons">
-                
-                <button
-                  *ngIf="order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'RETURNED'"
-                  (click)="cancelOrder(order.orderId)"
-                  class="cancel-btn"
-                  title="Cancel this order">
-                  Cancel Order
-                </button>
-                
-                
-                <button
-                  *ngIf="order.orderStatus === 'DELIVERED' && order.orderStatus !== 'RETURNED'"
-                  (click)="returnProduct(order.orderId)"
-                  class="return-btn"
-                  title="Return this product">
-                  Return Product
-                </button>
-                <span
-                  *ngIf="order.orderStatus === 'CANCELLED'"
-                  class="status-info cancelled-info">
-                  Order Cancelled
-                </span>
-                
-                <span
-                  *ngIf="order.orderStatus === 'RETURNED'"
-                  class="status-info returned-info">
-                  Product Returned
-                </span>
-                
-                
-                <button
-                  class="details-btn"
-                  (click)="toggleOrderDetails(order.orderId)">
-                  {{ expandedOrderId === order.orderId ? 'Hide Details' : 'View Details' }}
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div *ngIf="expandedOrderId === order.orderId" class="expanded-details">
-            <div class="product-details-container">
-              <div class="details-header">
-                <h4 class="details-title">Order Details</h4>
-                <div class="delivery-summary">
-                  <div class="delivery-summary-item">
-                    <span class="delivery-label">📅 Order Date:</span>
-                    <span class="delivery-value">{{ order.orderDate | date: 'dd MMM, yyyy' }}</span>
-                  </div>
-                  <div class="delivery-summary-item">
-                    <span class="delivery-label">🚚 Expected Delivery:</span>
-                    <span class="delivery-value delivery-highlight">{{ getDeliveryDate(order.orderDate) }}</span>
-                  </div>
-                  <div class="delivery-summary-item">
-                    <span class="delivery-label">📦 Status:</span>
-                    <span class="delivery-value">{{ getDeliveryStatus(order.orderDate, order.orderStatus) }}</span>
+                    {{ getDeliveryStatus(order.orderDate, order.orderStatus) }}
                   </div>
                 </div>
               </div>
-              
-              <table class="product-details-table">
-                <thead>
-                  <tr>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let product of order.products">
-                    <td class="product-name">{{ product.productName }}</td>
-                    <td class="product-price">{{ product.productPrice | currency:'INR'}}</td>
-                    <td class="product-quantity">{{ product.quantity }}</td>
-                    <td class="product-subtotal">{{ (product.productPrice * product.quantity) | currency:'INR'}}</td>
-                  </tr>
-                </tbody>
-              </table>
+
+              <div class="table-cell order-status-col">
+                <span class="status-badge order-status" [ngClass]="getOrderStatusClass(order.orderStatus)">
+                  <span class="status-dot"></span>
+                  {{ order.orderStatus }}
+                </span>
+              </div>
+
+              <div class="table-cell total-col">
+                <span class="total-amount">{{ order.totalPrice | currency:'INR'}}</span>
+              </div>
+
+              <div class="table-cell action-col">
+                <div class="action-buttons">
+
+                  <button
+                    *ngIf="order.orderStatus !== 'CANCELLED' && order.orderStatus !== 'DELIVERED' && order.orderStatus !== 'RETURNED'"
+                    (click)="cancelOrder(order.orderId)" class="cancel-btn" title="Cancel this order">
+                    Cancel Order
+                  </button>
+
+
+                  <button *ngIf="order.orderStatus === 'DELIVERED' && order.orderStatus !== 'RETURNED'"
+                    (click)="returnProduct(order.orderId)" class="return-btn" title="Return this product">
+                    Return Product
+                  </button>
+                  <span *ngIf="order.orderStatus === 'CANCELLED'" class="status-info cancelled-info">
+                    Order Cancelled
+                  </span>
+
+                  <span *ngIf="order.orderStatus === 'RETURNED'" class="status-info returned-info">
+                    Product Returned
+                  </span>
+
+
+                  <button class="details-btn" (click)="toggleOrderDetails(order.orderId)">
+                    {{ expandedOrderId === order.orderId ? 'Hide Details' : 'View Details' }}
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-        </ng-container>
-      </div>
+
+            <div *ngIf="expandedOrderId === order.orderId" class="expanded-details">
+              <div class="product-details-container">
+                <div class="details-header">
+                  <h4 class="details-title">Order Details</h4>
+                  <div class="delivery-summary">
+                    <div class="delivery-summary-item">
+                      <span class="delivery-label">📅 Order Date:</span>
+                      <span class="delivery-value">{{ order.orderDate | date: 'dd MMM, yyyy' }}</span>
+                    </div>
+                    <div class="delivery-summary-item">
+                      <span class="delivery-label">🚚 Expected Delivery:</span>
+                      <span class="delivery-value delivery-highlight">{{ getDeliveryDate(order.orderDate) }}</span>
+                    </div>
+                    <div class="delivery-summary-item">
+                      <span class="delivery-label">📦 Status:</span>
+                      <span class="delivery-value">{{ getDeliveryStatus(order.orderDate, order.orderStatus) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <table class="product-details-table">
+                  <thead>
+                    <tr>
+                      <th>Product Name</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let product of order.products">
+                      <td class="product-name">{{ product.productName }}</td>
+                      <td class="product-price">{{ product.productPrice | currency:'INR'}}</td>
+                      <td class="product-quantity">{{ product.quantity }}</td>
+                      <td class="product-subtotal">{{ (product.productPrice * product.quantity) | currency:'INR'}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </ng-container>
+        </div>
     </div>
   </div>
 

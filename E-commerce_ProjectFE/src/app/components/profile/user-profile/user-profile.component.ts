@@ -43,6 +43,52 @@ export class UserProfileComponent implements OnInit {
     this.getPaymentEnums();
   }
 
+  
+  getTimeBasedGreeting(): string {
+    const hour = new Date().getHours();
+    
+    if (hour < 12) {
+      return 'Good Morning';
+    } else if (hour < 17) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
+    }
+  }
+
+  
+  getTimeBasedIcon(): string {
+    const hour = new Date().getHours();
+    
+    if (hour < 12) {
+      return 'fas fa-sun'; 
+    } else if (hour < 17) {
+      return 'fas fa-cloud-sun'; 
+    } else {
+      return 'fas fa-moon'; 
+    }
+  }
+
+  
+  getWelcomeMessage(): string {
+    const messages = [
+      'Welcome back to your profile. Have a great day! ✨',
+      'Hope you\'re having a wonderful day! 🌟',
+      'Great to see you again! ',
+      'Ready to manage your account? ',
+      'Your profile dashboard awaits! '
+    ];
+    
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return 'Hope you have a productive day ahead! ';
+    } else if (hour < 17) {
+      return 'Hope your day is going well! ';
+    } else {
+      return 'Hope you had a great day! ';
+    }
+  }
+
   getPaymentEnums(): void {
     const token = sessionStorage.getItem('authToken') || '';
     const headers = new HttpHeaders({ Authorization: token });

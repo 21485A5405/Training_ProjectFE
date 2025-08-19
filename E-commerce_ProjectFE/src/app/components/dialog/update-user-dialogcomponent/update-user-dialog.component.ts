@@ -44,7 +44,7 @@ export class UpdateUserDialogComponent {
     this.profileService.updateUser(this.data.userId, requestBody).subscribe(
       () => {
         Swal.fire('Success', 'User details updated successfully!', 'success');
-        this.dialogRef.close(requestBody); // Return updated data
+        this.dialogRef.close(requestBody); 
       },
       (error) => {
         console.error('Update failed:', error);
@@ -57,3 +57,4 @@ export class UpdateUserDialogComponent {
     this.dialogRef.close();
   }
 }
+
